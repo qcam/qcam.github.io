@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>hqc.io | My Heroku Checklist</title>
+  <meta name="og:title" content="hqc.io | My Heroku Checklist" >
+
+  <meta name="og:site_name" content="Cẩm Huỳnh">
+
+  
+  <meta name="description" content="Heroku makes deployment dead easy for developer. This is my checklist to ensure I won't miss out any stupid things." >
+  
+
+  <meta name="author" content="Cẩm Huỳnh" >
+  <meta name="og:url" content="https://hqc.io/2014/09/19/heroku-checklist.html" >
+  <meta name="og:type" content="article" >
+
+  
+  <meta name="og:image" content="https://c3.staticflickr.com/9/8583/28318985330_8f464b5a12_b.jpg" >
+  
+
+  <meta name="og:locale" content="en_US" >
+
+  <meta name="keywords" content="rails,heroku,deployment,checklist" >
+  <meta name="language" content="en_US" >
+  <meta name="url" content="https://hqc.io/2014/09/19/heroku-checklist.html" >
+
+  <link rel="canonical" href="https://hqc.io/2014/09/19/heroku-checklist.html" >
+  <link rel="alternate" type="application/rss+xml" title="hqc.io" href="https://hqc.io/feed.xml" >
+
+  <link rel="stylesheet" href="/assets/css/main.css" >
+</head>
+
+  <body>
+    <header class="header">
+  <div class="header-content">
+    <div class="brand">
+      <a href="/">hqc.io</a>
+    </div>
+  </div>
+</header>
+
+    <div class="site">
+      <div class="site__content">
+        <article class="post post--detail">
+  <header class="post__header">
+    <h1 class="page-heading post__title" itemprop="name headline">My Heroku Checklist</h1>
+    <p class="post__metadata">
+      Published on <time datetime="2014-09-19T00:00:00+02:00" itemprop="datePublished">Sep 19, 2014</time>
+      
+      <span>
+        by
+        <i class="fa fa-user"></i>
+        <span itemprop="name">Cẩm Huỳnh</span>
+      </span>
+      
+    </p>
+    <p>
+      <span class="tagging">
+        
+          <a href="/tags/heroku" class="tagging__item">
+            #heroku
+          </a>
+        
+          <a href="/tags/rails" class="tagging__item">
+            #rails
+          </a>
+        
+      </span>
+    </p>
+  </header>
+  <div class="post__content">
+    <p><a href="http://heroku.com">Heroku</a> makes deployment dead easy for developer, but sometimes checklist
+is a great thing to ensure I won’t miss out any stupid things.</p>
+
+<ul>
+  <li>
+    <p>Make sure you have <code class="highlighter-rouge">rails_12factor</code> gem included in your Gemfile.</p>
+  </li>
+  <li>
+    <p>Use <a href="https://github.com/defunkt/unicorn">Unicorn</a>, <a href="https://www.phusionpassenger.com/">Passenger</a>
+or <a href="http://puma.io/">Puma</a> kind of server, don’t use WEBrick the default Rails server.
+It is only suitable for development and can only one request at a time.</p>
+
+    <p>Click <a href="https://devcenter.heroku.com/articles/rails-unicorn">here</a> to see how to setup Unicorn on Heroku.</p>
+  </li>
+  <li>
+    <p>Sign up for a log service. (Loggy, PaperTrail)</p>
+  </li>
+  <li>
+    <p>Make sure you have environment variables set properly in your app.</p>
+
+    <p>Sometimes your app was broken mysteriously and you will spend an hour to figure out that’s because of those unset variables.
+So please make sure you have them set properly.</p>
+  </li>
+  <li>
+    <p>Ensure there is no redundant gem in the Gemfile.</p>
+  </li>
+  <li>
+    <p>If your application has Facebook, Google authentication, make sure you have configured them correctly.</p>
+
+    <p>Go config your Facebook, Google app, make sure the app url, callback works on production.</p>
+  </li>
+  <li>
+    <p>Register for a Mailing service (SendGrid).</p>
+  </li>
+  <li>
+    <p>Tag the release in your commit so we know exactly which code in running in production.</p>
+  </li>
+  <li>
+    <p>Check your scheduler, background tasks, cron jobs settings.</p>
+  </li>
+  <li>
+    <p>Ensure there is no <strong>PASSWORD</strong>, <strong>TOKEN</strong> in the source code.</p>
+
+    <p>Put them into your environment variables.</p>
+  </li>
+</ul>
+
+  </div>
+  
+    <div id="disqus_thread"></div>
+<script>
+  /**
+   * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+   * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+   */
+/*
+ var disqus_config = function () {
+ this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+ this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+ };
+ */
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+
+  s.src = '//huynhquancam.disqus.com/embed.js';
+
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  
+</article>
+
+      </div>
+    </div>
+
+    
+      <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', "UA-71343659-1", 'auto');
+  ga('send', 'pageview');
+</script>
+
+    
+    <footer>
+  <ul class="pages">
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <li>
+      <a href="/about">About</a>
+    </li>
+    <li>
+      <a href="https://github.com/qcam?tab=repositories">Projects</a>
+    </li>
+    <li>
+      <a href="/essays">Posts</a>
+    </li>
+    <li>
+      <a href="/rbcv">Resume</a>
+    </li>
+  </ul>
+</footer>
+
+  </body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>hqc.io | Monkey Patching for good</title>
+  <meta name="og:title" content="hqc.io | Monkey Patching for good" >
+
+  <meta name="og:site_name" content="Cẩm Huỳnh">
+
+  
+  <meta name="description" content="Monkey-patching has been widely considered as bad practice in software engineering, in terms of source code management and maintainability." >
+  
+
+  <meta name="author" content="Cẩm Huỳnh" >
+  <meta name="og:url" content="https://hqc.io/2016/04/10/monkey-patching-for-good.html" >
+  <meta name="og:type" content="article" >
+
+  
+  <meta name="og:image" content="/assets/images/monkey_patch.jpg" >
+  
+
+  <meta name="og:locale" content="en_US" >
+
+  <meta name="keywords" content="monkey-patching,ruby" >
+  <meta name="language" content="en_US" >
+  <meta name="url" content="https://hqc.io/2016/04/10/monkey-patching-for-good.html" >
+
+  <link rel="canonical" href="https://hqc.io/2016/04/10/monkey-patching-for-good.html" >
+  <link rel="alternate" type="application/rss+xml" title="hqc.io" href="https://hqc.io/feed.xml" >
+
+  <link rel="stylesheet" href="/assets/css/main.css" >
+</head>
+
+  <body>
+    <header class="header">
+  <div class="header-content">
+    <div class="brand">
+      <a href="/">hqc.io</a>
+    </div>
+  </div>
+</header>
+
+    <div class="site">
+      <div class="site__content">
+        <article class="post post--detail">
+  <header class="post__header">
+    <h1 class="page-heading post__title" itemprop="name headline">Monkey Patching for good</h1>
+    <p class="post__metadata">
+      Published on <time datetime="2016-04-10T00:00:00+02:00" itemprop="datePublished">Apr 10, 2016</time>
+      
+      <span>
+        by
+        <i class="fa fa-user"></i>
+        <span itemprop="name">Cẩm Huỳnh</span>
+      </span>
+      
+    </p>
+    <p>
+      <span class="tagging">
+        
+          <a href="/tags/ruby" class="tagging__item">
+            #ruby
+          </a>
+        
+          <a href="/tags/productivity" class="tagging__item">
+            #productivity
+          </a>
+        
+      </span>
+    </p>
+  </header>
+  <div class="post__content">
+    <p>Monkey-patching has been widely considered as bad practice in software development, in terms of source code management and maintainability.</p>
+
+<p><img src="/assets/images/monkey_patch.jpg" alt="Monkey Patch For Good" /></p>
+
+<p>Anyway, I believe everything has its own reason to exist, and below are something might change your mind about Monkey Patching.</p>
+
+<h3 id="find-yourself-in-development-environment">Find yourself in development environment</h3>
+
+<p>Tired of keep typing something like <code class="highlighter-rouge">User.find_by_username('jack')</code> in Rails console? Use this.</p>
+
+<p>Monkey patch your object class in <code class="highlighter-rouge">.irbrc</code></p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="c1">#!/usr/bin/ruby</span>
+
+<span class="nb">require</span> <span class="s1">'irb/completion'</span>
+<span class="nb">require</span> <span class="s1">'irb/ext/save-history'</span>
+
+<span class="k">class</span> <span class="nc">Object</span>
+  <span class="k">def</span> <span class="nf">find_me</span>
+    <span class="nb">self</span><span class="p">.</span><span class="nf">find_by_username</span> <span class="s1">'cam@example.com'</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<p>Then now <code class="highlighter-rouge">User.find_me</code> will return your favourite test user.</p>
+
+<h3 id="inspect-object">Inspect Object</h3>
+
+<p>Tired of keep typing this?</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="n">users</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">all</span>
+<span class="nb">p</span> <span class="n">users</span><span class="p">.</span><span class="nf">to_sql</span>
+<span class="n">users</span> <span class="o">=</span> <span class="n">users</span><span class="p">.</span><span class="nf">order</span><span class="p">(</span><span class="ss">username: :desc</span><span class="p">)</span>
+<span class="nb">p</span> <span class="n">users</span><span class="p">.</span><span class="nf">to_sql</span>
+</code></pre>
+</div>
+
+<p>Then this might save your time.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Object</span>
+  <span class="k">def</span> <span class="nf">show_me</span><span class="p">(</span><span class="nb">method</span><span class="p">)</span>
+    <span class="n">tap</span> <span class="p">{</span> <span class="o">|</span><span class="n">obj</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">obj</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="nb">method</span><span class="p">)</span> <span class="p">}</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># then now</span>
+<span class="no">User</span><span class="p">.</span><span class="nf">all</span><span class="p">.</span><span class="nf">show_me</span><span class="p">(</span><span class="ss">:to_sql</span><span class="p">).</span><span class="nf">order</span><span class="p">(</span><span class="ss">username: :desc</span><span class="p">).</span><span class="nf">show_me</span><span class="p">(</span><span class="ss">:to_a</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Convinced yet? Leave your thoughts below!</p>
+
+  </div>
+  
+    <div id="disqus_thread"></div>
+<script>
+  /**
+   * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+   * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+   */
+/*
+ var disqus_config = function () {
+ this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+ this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+ };
+ */
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+
+  s.src = '//huynhquancam.disqus.com/embed.js';
+
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  
+</article>
+
+      </div>
+    </div>
+
+    
+      <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', "UA-71343659-1", 'auto');
+  ga('send', 'pageview');
+</script>
+
+    
+    <footer>
+  <ul class="pages">
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <li>
+      <a href="/about">About</a>
+    </li>
+    <li>
+      <a href="https://github.com/qcam?tab=repositories">Projects</a>
+    </li>
+    <li>
+      <a href="/essays">Posts</a>
+    </li>
+    <li>
+      <a href="/rbcv">Resume</a>
+    </li>
+  </ul>
+</footer>
+
+  </body>
+</html>

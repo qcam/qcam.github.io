@@ -1,0 +1,877 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hqc.io</title>
+    <description>Cẩm Huỳnh is a Chelsea fan and full-stack developer with four-year experience working in web development field. He is currently based in Sai Gon, Vietnam. He loves reading books, playing soccer, listening to C-pop (he idolizes Jay Chou). Contact him at: huynhquancam at gmail dot com
+</description>
+    <link>https://hqc.io/</link>
+    <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Thu, 26 Jan 2017 22:35:39 +0100</pubDate>
+    <lastBuildDate>Thu, 26 Jan 2017 22:35:39 +0100</lastBuildDate>
+    <generator>Jekyll v3.3.1</generator>
+    
+      <item>
+        <title>Five Rails Gotchas</title>
+        <description>&lt;p&gt;It’s undeniable that Rails is a great framework to speedily build up your application.
+However, despite of its handiness, like other frameworks, Rails has its own flaws and
+is never a silver bullet. This post is going to show you some of the gotchas (or pitfalls you name it)
+I encountered while working with Rails.&lt;/p&gt;
+
+&lt;h3 id=&quot;associations-writer&quot;&gt;associations writer&lt;/h3&gt;
+
+&lt;p&gt;The code below is supposed to assign posts to a specific user.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:posts&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;belongs_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;find_by_name&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'John'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;save!&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Of course it works (perfectly)! Then you might ask what’s the problem?  Good question.
+When do you think the posts will get saved?&lt;/p&gt;
+
+&lt;p&gt;For a common people with common sense, &lt;code class=&quot;highlighter-rouge&quot;&gt;posts&lt;/code&gt; will be persisted when you
+invoke &lt;code class=&quot;highlighter-rouge&quot;&gt;user.save!&lt;/code&gt;, then you’re trapped. Right after &lt;code class=&quot;highlighter-rouge&quot;&gt;user.posts&lt;/code&gt; was assigned,
+the persistence will be invoked, so calling &lt;code class=&quot;highlighter-rouge&quot;&gt;User#save!&lt;/code&gt; here is redundant.&lt;/p&gt;
+
+&lt;h3 id=&quot;after_save-callback&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;after_save&lt;/code&gt; callback&lt;/h3&gt;
+
+&lt;p&gt;I always recommend people not to use Rails callbacks but if you DO have to, use
+&lt;code class=&quot;highlighter-rouge&quot;&gt;after_commit&lt;/code&gt; instead.&lt;/p&gt;
+
+&lt;p&gt;A lot of people has written about this, see
+&lt;a href=&quot;http://www.justinweiss.com/articles/a-couple-callback-gotchas-and-a-rails-5-fix/&quot;&gt;what Justin Weiss said&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;auto-reloading&quot;&gt;auto-(re)loading&lt;/h3&gt;
+
+&lt;p&gt;In the example below, if you invoke &lt;code class=&quot;highlighter-rouge&quot;&gt;User.foo&lt;/code&gt; without preloading
+&lt;code class=&quot;highlighter-rouge&quot;&gt;lib/user/bar.rb&lt;/code&gt;, your code blows up (probably in development environment) with a constant
+not found exception.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# app/models/user.rb&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;
+    &lt;span class=&quot;no&quot;&gt;Bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xyz&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# lib/user/bar.rb&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Bar&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;xyz&lt;/span&gt;
+      &lt;span class=&quot;s2&quot;&gt;&quot;foot&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;But why, didn’t I already define &lt;code class=&quot;highlighter-rouge&quot;&gt;User::Bar&lt;/code&gt; under &lt;code class=&quot;highlighter-rouge&quot;&gt;lib&lt;/code&gt; directory?&lt;/p&gt;
+
+&lt;p&gt;The reason is because Rails treats all missing constants as &lt;code class=&quot;highlighter-rouge&quot;&gt;TOP_LEVEL&lt;/code&gt;
+constants. So when &lt;code class=&quot;highlighter-rouge&quot;&gt;User#foo&lt;/code&gt;, since &lt;code class=&quot;highlighter-rouge&quot;&gt;Bar&lt;/code&gt; is not yet defined, Rails will look
+up in &lt;code class=&quot;highlighter-rouge&quot;&gt;app/models/bar.rb&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;lib/bar.rb&lt;/code&gt;. That’s why &lt;code class=&quot;highlighter-rouge&quot;&gt;Bar&lt;/code&gt; (of course) cannot be found.&lt;/p&gt;
+
+&lt;p&gt;To fix this you can explicitly tell Rails its parent module/class.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# app/models/user.rb&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xyz&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;eager-loading&quot;&gt;eager-loading&lt;/h3&gt;
+
+&lt;p&gt;How to avoid N+1 query in Rails? Typically this is how many people will do.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;includes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;But do you know how on earth it works?&lt;/p&gt;
+
+&lt;p&gt;First ActiveRecord will fetch all users, then map them to ActiveRecord::Base
+objects and hold them in memory.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`users`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then it fetches all posts related to those user IDs, and holds them in memory.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`posts`&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`posts`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;`user_id`&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;...,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;N&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then it automatically does some “posts-to-user” mapping using Ruby Enumerator.&lt;/p&gt;
+
+&lt;p&gt;For instance, here’s the pseudo code of how &lt;code class=&quot;highlighter-rouge&quot;&gt;includes&lt;/code&gt; works.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;all&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;user_id: &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;pluck&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;user_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This works seamlessly most of the time, but when you reach 100_000 users with 1_000
+posts each, this strategy might not be so efficient, as it consumes up a great
+deal of memory. (Yeah, if you’re gonna debate how cheap hardware is, go convince your
+boss!)&lt;/p&gt;
+
+&lt;h3 id=&quot;sprockets-depend_on&quot;&gt;Sprockets &lt;code class=&quot;highlighter-rouge&quot;&gt;depend_on&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;Probably you’re using SASS &lt;code class=&quot;highlighter-rouge&quot;&gt;@import&lt;/code&gt; instead of traditional &lt;code class=&quot;highlighter-rouge&quot;&gt;//= require&lt;/code&gt; to import
+CSS sub-files. To know why &lt;code class=&quot;highlighter-rouge&quot;&gt;@import&lt;/code&gt; is preferable, see @iain’s comment below.&lt;/p&gt;
+
+&lt;div class=&quot;language-sass highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// app/assets/stylesheets/application.css
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;users/index&quot;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;users/show&quot;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;foo&quot;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;bar&quot;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;But you will find that your &lt;code class=&quot;highlighter-rouge&quot;&gt;application.css&lt;/code&gt; is not re-precompiled after you made some
+changes to the sub-files e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;users/index&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;foo&lt;/code&gt;, etc.&lt;/p&gt;
+
+&lt;p&gt;That is because of Rails Sprockets’ underlying caching mechanism, which is supposed to
+re-precompile your asset if the file has literally changed. On top of that, the caching
+framework also observes all dependent files to invalidate cache accordingly. However,
+the mechanism doesn’t work with SASS’s @import, but its own &lt;code class=&quot;highlighter-rouge&quot;&gt;require&lt;/code&gt; directive.&lt;/p&gt;
+
+&lt;p&gt;To fix the cache invalidation problem above, you need to explicitly declare which files
+Sprockets should observe, by using Sprockets offered &lt;code class=&quot;highlighter-rouge&quot;&gt;depend_on&lt;/code&gt; directive.&lt;/p&gt;
+
+&lt;div class=&quot;language-sass highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// app/assets/stylesheets/application.css
+//= depend_on &quot;users/index&quot;;
+//= depend_on &quot;users/show&quot;;
+//= depend_on &quot;foo&quot;;
+//= depend_on &quot;bar&quot;;
+&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;users/index&quot;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;users/show&quot;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;foo&quot;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;bar&quot;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;lessons&quot;&gt;Lessons&lt;/h3&gt;
+
+&lt;p&gt;Good understanding on your tool’s pros/cons is one of the essential things to be a good programmer.&lt;/p&gt;
+
+&lt;h5 id=&quot;happing-programming&quot;&gt;Happing Programming!!!&lt;/h5&gt;
+</description>
+        <pubDate>Wed, 07 Sep 2016 00:00:00 +0200</pubDate>
+        <link>https://hqc.io/2016/09/07/five-rails-gotchas.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/09/07/five-rails-gotchas.html</guid>
+        
+        <category>ruby</category>
+        
+        <category>rails</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>First seven jobs</title>
+        <description>&lt;p&gt;Bảy công việc đầu tiên của tôi.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Thơ máy.&lt;/li&gt;
+  &lt;li&gt;Thợ tiện.&lt;/li&gt;
+  &lt;li&gt;Thợ máy.&lt;/li&gt;
+  &lt;li&gt;Giữ xe.&lt;/li&gt;
+  &lt;li&gt;Gia sư.&lt;/li&gt;
+  &lt;li&gt;Lập trình viên.&lt;/li&gt;
+  &lt;li&gt;Lập trình viên.&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Wed, 17 Aug 2016 00:00:00 +0200</pubDate>
+        <link>https://hqc.io/2016/08/17/first-seven-jobs.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/08/17/first-seven-jobs.html</guid>
+        
+        <category>thoughts</category>
+        
+        <category>vietnamese</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Mạn đàm về Tây Tạng (Tibet) và bài học tôi rút ra</title>
+        <description>&lt;p&gt;Gần đây khi Trung Quốc dỡ bỏ học viện Phật giáo lớn nhất thế giới ở Tây Tạng (Tibet),
+nhiều người đã lên tiếng chỉ trích việc Trung Quốc chiếm đoạt Tây Tạng là ngang nhiên trắng trợn và vô sỉ.
+Nhiều người còn kêu gọi nhân dân Tây Tạng hãy đứng lên đấu tranh vì một Tây Tạng tự do.&lt;/p&gt;
+
+&lt;p&gt;Tôi cũng là một trong số những người ủng hộ Tây Tạng (và cả Đài Loan, HongKong) độc lập tách rời khỏi
+Cộng hoà nhân dân Trung Hoa (PRC). Nhưng việc họ có giành được độc lập không lại là một chuyện khác.&lt;/p&gt;
+
+&lt;p&gt;Từ xưa đến nay thế giới luôn tồn tại những vụ cướp đất chiếm đai trắng trợn giống như thế.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Miền Trung và miền Nam Việt Nam hiện nay đã bị nhà Nguyễn chiếm đoạt trắng trợn từ các vương quốc Champa và Cambodia,
+dưới danh nghĩa khai hoang và mở rộng bờ cõi.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Hầu hết châu Mĩ bị ngang nhiên tước đoạt khỏi tay người Indian (Native American), Maya,
+dưới ngọn cờ của người da trắng đặc quyền.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Bản thân Trung Quốc vốn là nước rất giỏi trong việc thôn tính các nước khác. Bạn nên biết là
+họ đã làm điều đó liên tục hàng ngàn năm nay. Dưới thời nhà Hạ, triều đại đầu tiên trong lịch sử Trung Hoa,
+lãnh thổ Trung Quốc chỉ là một nhúm nhỏ (như trong hình).
+Trải qua bao thế kỉ, các quốc gia lân cận Trung Quốc đã từng tồn tại trong lịch sử như Đại Lý, Tây Hạ, Kim, Liêu, Hung Nô …
+đều đã bị thôn tính, và hình thành nên một Trung Quốc rộng lớn của ngày hôm nay.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/xia-dynasty-china.png&quot; alt=&quot;xia dynasty's China&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Nguồn: &lt;a href=&quot;https://zh.wikipedia.org/wiki/%E5%A4%8F%E6%9C%9D&quot;&gt;Wikipedia&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Chính sách sau thôn tính của Trung Quốc đối với các quốc gia chiếm được là cho người Hán ồ ạt sang ở,
+ép kết hôn với người Hán, bắt học chữ Hán, không cho dân thuộc địa ở cùng nhau. Và thế rồi dần dần họ mất đi tiếng nói,
+chữ viết và quan trọng hơn cả là ý chí phục quốc. Đó cũng là những gì đang xảy ra ở Tây Tạng ngày nay.&lt;/p&gt;
+
+&lt;p&gt;Ngày xưa khi Quân Giải Phóng Nhân Dân Trung Hoa (PLA) tiến hành chiến dịch Xương Đô
+(còn gọi là &lt;a href=&quot;https://en.wikipedia.org/wiki/Battle_of_Chamdo&quot;&gt;Battle of Chamdo&lt;/a&gt; hay 
+&lt;a href=&quot;https://zh.wikipedia.org/wiki/%E8%A5%BF%E8%97%8F%E5%92%8C%E5%B9%B3%E8%A7%A3%E6%94%BE&quot;&gt;西藏和平解放&lt;/a&gt;,
+tạm dịch: Cuộc giải phóng Tây Tạng hòa bình)
+nhằm chiếm đoạt Tây Tạng bằng vũ lực, những người đứng đầu Tây Tạng đã chủ trương không
+đấu tranh vũ trang mà kêu gọi sự giúp đỡ lên tiếng của cộng đồng yêu chuộng hoà bình trên
+khắp thế giới (một phần vì giáo lý nhà Phật luôn dạy Phật tử không nên liên quan đến chính trị),
+để rồi giờ đây dù có muốn, nhân dân Tây Tạng cũng không còn “tâm” và “lực” nữa.&lt;/p&gt;
+
+&lt;p&gt;Số phận của một nước giáp ranh với Trung Quốc tôi tạm kết luận là: &lt;strong&gt;hoặc bạn mạnh như Hàn, Nhật, Ấn, Đại Việt thời nhà Trần Lê,
+hoặc là bạn bị chiếm&lt;/strong&gt;, gần như không có ngoại lệ trong lịch sử. Khi xảy ra xung đột,
+chả có thế lực bên ngoài nào đi giúp bạn để gây xích mích với Trung Quốc cả,
+nhất là khi nó giàu và mạnh thế kia.&lt;/p&gt;
+
+&lt;h2 id=&quot;bài-học-rút-ra&quot;&gt;Bài học rút ra&lt;/h2&gt;
+
+&lt;p&gt;Nếu bạn là một quốc gia, hãy cố trở nên mạnh khi còn cơ hội.&lt;/p&gt;
+
+&lt;p&gt;Còn nếu bạn là một cá nhân, và quốc gia bạn đang ở không thể làm được điều ở trên, hãy tìm một quốc gia mạnh khác để ở…&lt;/p&gt;
+
+&lt;p&gt;Còn không, hãy tập cam chịu sống như một người Trung Quốc.&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 28 Jul 2016 00:00:00 +0200</pubDate>
+        <link>https://hqc.io/2016/07/28/man-dam-ve-tay-tang.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/07/28/man-dam-ve-tay-tang.html</guid>
+        
+        <category>thoughts</category>
+        
+        <category>vietnamese</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Worque - CLI that manages your daily notes</title>
+        <description>&lt;p&gt;I would like to introduce &lt;a href=&quot;https://github.com/qcam/worque&quot;&gt;Worque&lt;/a&gt; (pronounced as &lt;code class=&quot;highlighter-rouge&quot;&gt;work&lt;/code&gt;),
+which is a CLI to manage all your daily notes like a boss, with vim integration.&lt;/p&gt;
+
+&lt;h3 id=&quot;why-worque&quot;&gt;Why Worque?&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Coders hate report. Yes, let me recap: CODERS HATE REPORT!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Ever got stunned when your boss suddenly asked what you’ve done yesterday?&lt;/li&gt;
+  &lt;li&gt;To look back at your tasks for today without leaving your beloved terminal and VIM.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If so, worque might be a fit for you.&lt;/p&gt;
+
+&lt;h3 id=&quot;installation&quot;&gt;Installation&lt;/h3&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;gem install worque
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;how-to-use-worque&quot;&gt;How to use Worque?&lt;/h3&gt;
+
+&lt;p&gt;Add this to your &lt;code class=&quot;highlighter-rouge&quot;&gt;.bash_profile&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/path/to/your/lovely/notes'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Personally I’d like to map it to my Dropbox.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'~/Dropbox/Notes/Todos'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After that, executing the command below will create a today’s note for you&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;worque todo --for&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;today
+&lt;span class=&quot;c&quot;&gt;# ~/notes/checklist-2016-07-19.md&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Or look back what’s done yesterday.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;workque todo --for yebsterday
+&lt;span class=&quot;c&quot;&gt;# ~/notes/checklist-2016-07-18.md&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Oops! Today is Monday? No worries, worque got you covered&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# If today is Monday 25-07-2016&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;workque todo --for yesterday
+&lt;span class=&quot;c&quot;&gt;# ~/notes/checklist-2016-07-22.md&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;It’s chain-able with other commands&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;vim worque
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;vim &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yesterday&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;cat &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yesterday&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt; | grep pending
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Anyway this is how I alias it in my &lt;code class=&quot;highlighter-rouge&quot;&gt;.zshrc&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;.bash_profile&lt;/code&gt;.
+See &lt;a href=&quot;https://github.com/qcam/dotfiles/blob/master/zsh/aliases.zsh#L35&quot;&gt;https://github.com/qcam/dotfiles/blob/master/zsh/aliases.zsh#L35&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;today&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;vim &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for today&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; +':cd &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;'&quot;&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ytd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;vim &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for yesterday&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; +':cd &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;'&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;slack-integration&quot;&gt;Slack Integration&lt;/h3&gt;
+
+&lt;p&gt;Yes, you can publish your daily notes to Slack too!&lt;/p&gt;
+
+&lt;p&gt;Just make sure you have set &lt;code class=&quot;highlighter-rouge&quot;&gt;SLACK_API_TOKEN&lt;/code&gt; accordingly to spare your fingers typing everytime. See &lt;a href=&quot;https://get.slack.help/hc/en-us/articles/215770388-Creating-and-regenerating-API-tokens&quot;&gt;this post&lt;/a&gt; to get an idea of how to generate Slack API Token.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SLACK_API_TOKEN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;something-very-secret&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then you can use &lt;code class=&quot;highlighter-rouge&quot;&gt;worque push&lt;/code&gt; to push your notes to Slack&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;worque push --channel&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;daily-report
+
+&lt;span class=&quot;c&quot;&gt;# or forgot do it yesterday? No worries!&lt;/span&gt;
+
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;worque push --channel&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;daily-report --for&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yesterday
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;vim-integration&quot;&gt;VIM Integration&lt;/h3&gt;
+
+&lt;p&gt;Yes, &lt;strong&gt;&lt;em&gt;worque&lt;/em&gt;&lt;/strong&gt; loves VIM too!!!&lt;/p&gt;
+
+&lt;p&gt;Add this to your vimrc&lt;/p&gt;
+
+&lt;div class=&quot;language-viml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Plug &lt;span class=&quot;s1&quot;&gt;'qcam/vim-worque'&lt;/span&gt; # &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; you'&lt;span class=&quot;k&quot;&gt;re&lt;/span&gt; using &lt;span class=&quot;k&quot;&gt;vim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;plug
+Plugin &lt;span class=&quot;s1&quot;&gt;'qcam/vim-worque'&lt;/span&gt; # or Vundle
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then try &lt;code class=&quot;highlighter-rouge&quot;&gt;:TD&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;:YTD&lt;/code&gt; in your VIM to view the notes for today and yesterday respectively&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;Read more about &lt;a href=&quot;https://github.com/qcam/worque&quot;&gt;worque&lt;/a&gt;.
+Read more about &lt;a href=&quot;https://github.com/qcam/vim-worque&quot;&gt;vim-worque&lt;/a&gt;.
+View more in my &lt;a href=&quot;https://github.com/qcam/dotfiles&quot;&gt;dotfiles&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Happy Reporting!!!&lt;/p&gt;
+
+&lt;p&gt;Any thoughts or ideas are welcome!!!&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 21 Jul 2016 00:00:00 +0200</pubDate>
+        <link>https://hqc.io/2016/07/21/introduce-worque.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/07/21/introduce-worque.html</guid>
+        
+        <category>ruby</category>
+        
+        <category>productivity</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Sign Git commits with Keybase</title>
+        <description>&lt;p&gt;Keybase is an public key crypto for everyone, maps your identity to your public keys, and vice versa.&lt;/p&gt;
+
+&lt;p&gt;This post will show you how to sign your Git commit with Keybase GPG key, and how to publish your key to Github&lt;/p&gt;
+
+&lt;h2 id=&quot;generate-a-new-gpg-key&quot;&gt;Generate a new GPG key&lt;/h2&gt;
+
+&lt;p&gt;In case you haven’t had any GPG keys on Keybase&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;keybase pgp gen --multi
+
+&lt;span class=&quot;c&quot;&gt;# then follow the instruction, select &quot;Upload your key to Keybase&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;import-gpg-key-from-keybase&quot;&gt;Import GPG key from Keybase&lt;/h2&gt;
+
+&lt;p&gt;In case you already have GPG keys on Keybase&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Import secret key from keybase&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;keybase pgp &lt;span class=&quot;nb&quot;&gt;export&lt;/span&gt; --secret | gpg --allow-secret-key-import --import
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;To check if your key has been imported into your local GPG secret keys&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;gpg --list-secret-keys
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This is how it looks like if successfully imported.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Private key basic information&lt;/span&gt;
+
+sec   4096R/BC775C77 2016-04-09 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;expires: 2032-04-05]
+uid                  John Doe &amp;lt;john.doe@gmail.com&amp;gt;
+ssb   4096R/7BDF34CD 2016-04-09
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;sign-git-commit&quot;&gt;Sign Git commit&lt;/h2&gt;
+
+&lt;p&gt;If you want to sign your Git commit with the key generated/imported&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;git config --global user.signingkey &amp;lt;key-id&amp;gt;
+&lt;span class=&quot;c&quot;&gt;# key-id is **BC775C77** for the sample private key above&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;import-public-key-to-github&quot;&gt;Import Public key to Github&lt;/h2&gt;
+
+&lt;p&gt;To get your commit verified by Github like below&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/87b504be-fa41-11e5-9140-6dc8b7203c31.png_6xb7qpwfxi&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To get your public key&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;keybase pgp &lt;span class=&quot;nb&quot;&gt;export&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then attach the key to Github&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/gpg-key-paste.png_p3u0cg5vcw&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That’s it! Feel free to leave your comments.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 03 Jul 2016 00:00:00 +0200</pubDate>
+        <link>https://hqc.io/2016/07/03/sign-git-commit-with-keybase.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/07/03/sign-git-commit-with-keybase.html</guid>
+        
+        <category>productivity</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>You don't need RVM gemset</title>
+        <description>&lt;p&gt;We can’t deny the contribution RVM gemset gave up to the Ruby community, but do we really need gemsets to isolate our project dependencies these days?&lt;/p&gt;
+
+&lt;h3 id=&quot;where-the-idea-of-gemset-came-from&quot;&gt;Where the idea of gemset came from?&lt;/h3&gt;
+
+&lt;p&gt;In around 2010, RVM introduced gemset, a huge improvement which changes how the whole Ruby world deals with dependency isolation. From then on, separating Ruby environments on local computers wasn’t tough anymore. Just imagine you’re starting a fresh Rails 5 project while maintaining a Rails 2.3 application, without gemset.&lt;/p&gt;
+
+&lt;p&gt;Read &lt;a href=&quot;http://everydayrails.com/2010/09/13/rvm-project-gemsets.html&quot;&gt;this post&lt;/a&gt; and you will understand the excitement RVM gemset brought to the world at that moment.&lt;/p&gt;
+
+&lt;h3 id=&quot;but-you-dont-need-that-anymore&quot;&gt;But you don’t need that anymore&lt;/h3&gt;
+
+&lt;p&gt;Because &lt;code class=&quot;highlighter-rouge&quot;&gt;bundler&lt;/code&gt; only got you covered with bundle path.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# This will install all gems into vendor/gems directory of your current project root, and this is a remembered option.&lt;/span&gt;
+bundle install --path vendor/gems --retry 3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You might want to setup an alias to save your time remembering the path.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# in your .zshrc&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;bi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;bundler install --path vendor/gems --retry 3 --jobs 4
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;be&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;bundler &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Any thoughts are welcomed!&lt;/p&gt;
+</description>
+        <pubDate>Wed, 04 May 2016 00:00:00 +0200</pubDate>
+        <link>https://hqc.io/2016/05/04/you-dont-need-rvm-gemset.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/05/04/you-dont-need-rvm-gemset.html</guid>
+        
+        <category>ruby</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Using Factory Girl with Hanami model</title>
+        <description>&lt;p&gt;Hanami is one of the most popular and trending Ruby frameworks today, well-known for its clean architecture and testability. In this post we are going to explore how we can use Hanami Model with Factory for fast testing data generation.&lt;/p&gt;
+
+&lt;h1 id=&quot;data-persistence-in-hanami&quot;&gt;Data Persistence in Hanami&lt;/h1&gt;
+
+&lt;p&gt;Model is one of the best features of Hanami, with the separation of Entity and Repository, following the architecture of Domain Driven Design. Entity holds the domain logic, whilst Repository is responsible for persistence.&lt;/p&gt;
+
+&lt;p&gt;Here is the code example to persist data with Hanami Model.&lt;/p&gt;
+
+&lt;div class=&quot;language-rb highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Book&lt;/span&gt;
+  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Hanami&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Entity&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;attribute&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:author&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BookRepository&lt;/span&gt;
+  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Hanami&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Repository&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# And to persist&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;book&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Book&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;title: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Ruby Under a Microscope'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;author: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Pat Shaughnessy'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;BookRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;book&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;using-factory-girl-for-test-data-production&quot;&gt;Using Factory Girl for test data production&lt;/h1&gt;
+
+&lt;p&gt;Factory Girl has been widely adopted for testing data production by the Ruby on Rails community, but it could be used in PORO way. So let’s see how we can integrate Factory Girl in our Hanami application for testing.&lt;/p&gt;
+
+&lt;p&gt;Generally here is how you generate data with Factory Girl in RSpec.&lt;/p&gt;
+
+&lt;div class=&quot;language-rb highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;no&quot;&gt;FactoryGirl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:book&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'The sample book'&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'John Cena'&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Book&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'does something'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;book&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:book&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;By default, Factory Girl will call the &lt;code class=&quot;highlighter-rouge&quot;&gt;#save!&lt;/code&gt; method of the instance. But in Hanami we use Repository to persist data, as mentioned above.&lt;/p&gt;
+
+&lt;p&gt;But Factory Girl already got you covered.&lt;/p&gt;
+
+&lt;div class=&quot;language-rb highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;no&quot;&gt;FactoryGirl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:book&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'The sample book'&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'John Cena'&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Add your custom method here to persist object&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;to_create&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;BookRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;That’s it! Enjoy coding!&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 12 Apr 2016 00:00:00 +0200</pubDate>
+        <link>https://hqc.io/2016/04/12/factory-girl-with-hanami.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/04/12/factory-girl-with-hanami.html</guid>
+        
+        <category>testing</category>
+        
+        <category>ruby</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Monkey Patching for good</title>
+        <description>&lt;p&gt;Monkey-patching has been widely considered as bad practice in software development, in terms of source code management and maintainability.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/monkey_patch.jpg&quot; alt=&quot;Monkey Patch For Good&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Anyway, I believe everything has its own reason to exist, and below are something might change your mind about Monkey Patching.&lt;/p&gt;
+
+&lt;h3 id=&quot;find-yourself-in-development-environment&quot;&gt;Find yourself in development environment&lt;/h3&gt;
+
+&lt;p&gt;Tired of keep typing something like &lt;code class=&quot;highlighter-rouge&quot;&gt;User.find_by_username('jack')&lt;/code&gt; in Rails console? Use this.&lt;/p&gt;
+
+&lt;p&gt;Monkey patch your object class in &lt;code class=&quot;highlighter-rouge&quot;&gt;.irbrc&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/ruby&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'irb/completion'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'irb/ext/save-history'&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;find_me&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;find_by_username&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'cam@example.com'&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then now &lt;code class=&quot;highlighter-rouge&quot;&gt;User.find_me&lt;/code&gt; will return your favourite test user.&lt;/p&gt;
+
+&lt;h3 id=&quot;inspect-object&quot;&gt;Inspect Object&lt;/h3&gt;
+
+&lt;p&gt;Tired of keep typing this?&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;all&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_sql&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;username: :desc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_sql&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then this might save your time.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;show_me&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;tap&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# then now&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;show_me&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:to_sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;username: :desc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;show_me&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:to_a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Convinced yet? Leave your thoughts below!&lt;/p&gt;
+</description>
+        <pubDate>Sun, 10 Apr 2016 00:00:00 +0200</pubDate>
+        <link>https://hqc.io/2016/04/10/monkey-patching-for-good.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/04/10/monkey-patching-for-good.html</guid>
+        
+        <category>ruby</category>
+        
+        <category>productivity</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Provision AliCloud</title>
+        <description>&lt;p&gt;Last month we @ Dadadee were pretty excited to start moving off from &lt;a href=&quot;https://aws.amazon.com/&quot;&gt;Amazon Web Service&lt;/a&gt; to &lt;a href=&quot;https://intl.aliyun.com/&quot;&gt;AliCloud&lt;/a&gt;.
+This post shares how our application, written in Ruby on Rails, is built and deployed.&lt;/p&gt;
+
+&lt;p&gt;Note: I assume you have some experience with Ansible and Docker.&lt;/p&gt;
+
+&lt;h3 id=&quot;create-your-instance-on-alicloud&quot;&gt;Create your instance on AliCloud&lt;/h3&gt;
+
+&lt;p&gt;Let’s initiate a Generation II, 2-core and 4GB RAM instance.&lt;/p&gt;
+
+&lt;p&gt;Although sometimes the console is buggy, generally AliCloud is quite easy to start off.&lt;/p&gt;
+
+&lt;p&gt;Please note to set your root password, in order to SSH later.&lt;/p&gt;
+
+&lt;h3 id=&quot;provision-your-server-with-ansible&quot;&gt;Provision your server with Ansible&lt;/h3&gt;
+
+&lt;p&gt;As of I wrote this post, AliCloud’s apt mirror was still inaccessible, so we will need to choose another alternative mirror&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: Update sources.list
+  copy: src=&quot;sources.list&quot; dest=&quot;/etc/apt/sources.list&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Your sources.list could be like this&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Created by Ansible
+
+deb http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Let’s set up some prerequisite packages&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: update apt cache
+  apt: update_cache=yes
+  tags:
+    - setup
+
+- name: install curl
+  apt: name=curl state=present
+  tags:
+    - setup
+
+- name: install python-dev
+  apt: name=python-dev state=present
+  tags:
+    - setup
+
+- name: install pip
+  apt: name=python-pip state=present
+  tags:
+    - setup
+
+- name: update pip to latest version
+  pip: name=pip state=latest
+  tags:
+    - setup
+
+- name: setup ansible env
+  setup:
+  tags:
+    - setup
+
+- name: make sure pt-transport-https is installed
+  apt: name=apt-transport-https state=installed
+  tags:
+    - setup
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then let’s install Docker&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: add docker server and host key
+  apt_key: keyserver=&quot;hkp://p80.pool.sks-keyservers.net:80&quot; id=&quot;58118E89F3A912897C070ADBF76221572C52609D&quot; state=present
+
+- name: add docker repo and update apt cache
+  apt_repository: repo=&quot;deb https://apt.dockerproject.org/repo ubuntu-trusty main&quot; update_cache=yes state=present
+
+- name: install docker
+  apt: name=docker-engine state=present
+
+- name: install docker-py
+  pip: name=docker-py version=1.1.0 state=present
+
+- name: create deploy user (this is optional)
+  user:
+    name: &quot;john&quot;
+    comment: &quot;john&quot;
+    group: sudo
+    password: &quot;pa$$w0rd&quot;
+    generate_ssh_key: &quot;yes&quot;
+    createhome: &quot;yes&quot;
+    state: &quot;present&quot;
+
+- name: set authorized key (this is optional)
+  authorized_key:
+    user: &quot;john&quot;
+    key: &quot;&quot;
+    state: &quot;present&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;OK, let’s pull our docker image from Registry (AWS ECR, Docker Hub or Quay, etc.)&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: login to ECR registry
+  shell: &quot;$(aws ecr get-login --region us-east-1)&quot;
+
+- name: pull Docker image from ECR
+  shell: &quot;docker pull your-hub.io/your-app:latest&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Run the image&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: Up the version
+  docker:
+    image: &quot;your-hub.io/your-app:latest&quot;
+    name: &quot;your-app&quot;
+    state: reloaded
+    expose: 5000
+    port:
+      - &quot;80:5000&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;That’s it! Feel free to leave your comments below! :-)&lt;/p&gt;
+</description>
+        <pubDate>Mon, 14 Mar 2016 00:00:00 +0100</pubDate>
+        <link>https://hqc.io/2016/03/14/provision-alicloud.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/03/14/provision-alicloud.html</guid>
+        
+        <category>devops</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>My Heroku Checklist</title>
+        <description>&lt;p&gt;&lt;a href=&quot;http://heroku.com&quot;&gt;Heroku&lt;/a&gt; makes deployment dead easy for developer, but sometimes checklist
+is a great thing to ensure I won’t miss out any stupid things.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Make sure you have &lt;code class=&quot;highlighter-rouge&quot;&gt;rails_12factor&lt;/code&gt; gem included in your Gemfile.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Use &lt;a href=&quot;https://github.com/defunkt/unicorn&quot;&gt;Unicorn&lt;/a&gt;, &lt;a href=&quot;https://www.phusionpassenger.com/&quot;&gt;Passenger&lt;/a&gt;
+or &lt;a href=&quot;http://puma.io/&quot;&gt;Puma&lt;/a&gt; kind of server, don’t use WEBrick the default Rails server.
+It is only suitable for development and can only one request at a time.&lt;/p&gt;
+
+    &lt;p&gt;Click &lt;a href=&quot;https://devcenter.heroku.com/articles/rails-unicorn&quot;&gt;here&lt;/a&gt; to see how to setup Unicorn on Heroku.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Sign up for a log service. (Loggy, PaperTrail)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Make sure you have environment variables set properly in your app.&lt;/p&gt;
+
+    &lt;p&gt;Sometimes your app was broken mysteriously and you will spend an hour to figure out that’s because of those unset variables.
+So please make sure you have them set properly.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Ensure there is no redundant gem in the Gemfile.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;If your application has Facebook, Google authentication, make sure you have configured them correctly.&lt;/p&gt;
+
+    &lt;p&gt;Go config your Facebook, Google app, make sure the app url, callback works on production.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Register for a Mailing service (SendGrid).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Tag the release in your commit so we know exactly which code in running in production.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Check your scheduler, background tasks, cron jobs settings.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Ensure there is no &lt;strong&gt;PASSWORD&lt;/strong&gt;, &lt;strong&gt;TOKEN&lt;/strong&gt; in the source code.&lt;/p&gt;
+
+    &lt;p&gt;Put them into your environment variables.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Fri, 19 Sep 2014 00:00:00 +0200</pubDate>
+        <link>https://hqc.io/2014/09/19/heroku-checklist.html</link>
+        <guid isPermaLink="true">https://hqc.io/2014/09/19/heroku-checklist.html</guid>
+        
+        <category>heroku</category>
+        
+        <category>rails</category>
+        
+        
+      </item>
+    
+  </channel>
+</rss>

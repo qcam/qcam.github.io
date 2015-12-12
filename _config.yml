@@ -1,20 +1,48 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely need to edit after that.
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'jekyll serve'. If you change this file, please restart the server process.
+title: "hqc.io"
+site_name: "Cẩm Huỳnh"
+email: "huynhquancam@gmail.com"
+author: "Cẩm Huỳnh"
+description: >
+  Cẩm Huỳnh is a Chelsea fan and full-stack developer with four-year experience working in web development field. He is currently based in Sai Gon, Vietnam.
+  He loves reading books, playing soccer, listening to C-pop (he idolizes Jay Chou). Contact him at: huynhquancam at gmail dot com
 
-# Site settings
-title: Cam Huynh
-email: cam@hqc.me
-description: > # this means to ignore newlines until "baseurl:"
-  Cam Huynh is a True Blue (Chelsea fan) and a full-stack developer based in Saigon Vietnam having four-year experience working in web development field.
-  He loves reading books, playing soccer, listening to C-pop (he idolizes Jay Chou). Contact him at: cam@hqc.me
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://hqc.me" # the base hostname & protocol for your site
-twitter_username: huynhquancam
-github_username:  huynhquancam
+# Serve settings
+baseurl: ""
+url: "https://hqc.io"
+image_url: "https://c3.staticflickr.com/9/8583/28318985330_8f464b5a12_b.jpg"
+profile_photo: "/assets/images/avatar.png"
 
 # Build settings
 markdown: kramdown
+destination: "_site"
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - Rakefile
+paginate: 5
+paginate_path: "/essays/page/:num"
+
+# SASS settings
+sass:
+  style: compressed
+  sass_dir: _sass
+
+gems:
+  - bourbon
+  - jekyll-paginate
+
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      author: "Cẩm Huỳnh"
+      email: "huynhquancam@gmail.com"
+      locale: "en_US"
+
+# Extra settings
+extras:
+  handler:
+    global: huynhquancam
+    github: qcam
+    twitter: hqcam

@@ -1,10 +1,11 @@
 ---
-layout: default
----
+layout: home
+title: Cẩm Huỳnh
 
-<div class="home">
+---
+<div class="site site--home">
   <a class="avatar" href="">
-    <img width="200" height="200" alt="huynhquancam" src="https://scontent-sin1-1.xx.fbcdn.net/hphotos-xtf1/v/t1.0-9/10422366_898967243457131_6573292780961140653_n.jpg?oh=8ce7927604d4b56a15f5433d69eca22a&oe=56E261EF" />
+    <img width="200" height="200" alt="huynhquancam" src="{{ site.profile_photo | prepend: site.baseurl }}" />
     <span class="overlay">
       <span class="overlay-center">
         <i class="fa fa-home"></i>
@@ -12,35 +13,19 @@ layout: default
     </span>
   </a>
   <h1 class="name">
-    <span class="first-name">Cam</span>
-    <span class="last-name">Huynh</span>
+    <span class="first-name">Cẩm</span>
+    <span class="last-name">Huỳnh</span>
   </h1>
-  <p class="username">@huynhquancam</p>
+  <p class="username">@{{ site.extras.handler.global }}</p>
   <p class="title">
-    Software Engineer / Wonton Maker
+    Software Enbugger / Dumplings Maker
   </p>
   <div class="social-links">
-    <a href="https://github.com/huynhquancam" target="blank">
+    <a href="https://github.com/{{ site.extras.handler.github }}" target="blank">
       <i class="fa fa-github"></i>
     </a>
-    <a href="https://fb.me/huynhquancam" target="blank">
-      <i class="fa fa-facebook"></i>
-    </a>
-    <a href="https://twitter.com/huynhquancam" target="blank">
-      <span>
-        <i class="fa fa-twitter"></i>
-      </span>
+    <a href="https://twitter.com/{{ site.extras.handler.twitter }}" target="blank">
+      <i class="fa fa-twitter"></i>
     </a>
   </div>
-  <ul class="pages">
-    <li>
-      <a href="{{ '/about' | prepend: site.baseurl }}">About</a>
-    </li>
-    <li>
-      <a href="http://kipalog.com/users/hqc/mypage" target="_blank">Blog</a>
-    </li>
-    <li>
-      <a href="{{ '/rbcv' | prepend: site.baseurl }}">Resume</a>
-    </li>
-  </ul>
 </div>

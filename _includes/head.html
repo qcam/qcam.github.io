@@ -3,12 +3,35 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
-  <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+  <title>{{ site.title | append: ' | ' | append: page.title }}</title>
+  <meta name="og:title" content="{{ site.title | append: ' | ' | append: page.title }}" >
 
-  <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
-  <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
-  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-  <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+  <meta name="og:site_name" content="{{ site.site_name }}">
+
+  {% if page.description %}
+  <meta name="description" content="{{ page.description }}" >
+  {% else %}
+  <meta name="description" content="{{ site.description }}" >
+  {% endif %}
+
+  <meta name="author" content="{{ page.author }}" >
+  <meta name="og:url" content="{{ page.url | prepend: site.baseurl | prepend: site.url }}" >
+  <meta name="og:type" content="article" >
+
+  {% if page.intro_image %}
+  <meta name="og:image" content="{{ page.intro_image }}" >
+  {% else %}
+  <meta name="og:image" content="{{ site.image_url }}" >
+  {% endif %}
+
+  <meta name="og:locale" content="{{ page.locale }}" >
+
+  <meta name="keywords" content="{{ page.keywords | join:"," }}" >
+  <meta name="language" content="{{ page.locale }}" >
+  <meta name="url" content="{{ page.url | prepend: site.baseurl | prepend: site.url }}" >
+
+  <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" >
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}" >
+
+  <link rel="stylesheet" href="{{ "/assets/css/main.css" | prepend: site.baseurl }}" >
 </head>

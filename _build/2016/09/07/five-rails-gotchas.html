@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>hqc.io | Five Rails Gotchas</title>
+  <meta name="og:title" content="hqc.io | Five Rails Gotchas" >
+
+  <meta name="og:site_name" content="Cẩm Huỳnh">
+
+  
+  <meta name="description" content="Five pitfalls in Rails that might trap you." >
+  
+
+  <meta name="author" content="Cẩm Huỳnh" >
+  <meta name="og:url" content="https://hqc.io/2016/09/07/five-rails-gotchas.html" >
+  <meta name="og:type" content="article" >
+
+  
+  <meta name="og:image" content="https://c3.staticflickr.com/9/8583/28318985330_8f464b5a12_b.jpg" >
+  
+
+  <meta name="og:locale" content="en_US" >
+
+  <meta name="keywords" content="rails pitfalls" >
+  <meta name="language" content="en_US" >
+  <meta name="url" content="https://hqc.io/2016/09/07/five-rails-gotchas.html" >
+
+  <link rel="canonical" href="https://hqc.io/2016/09/07/five-rails-gotchas.html" >
+  <link rel="alternate" type="application/rss+xml" title="hqc.io" href="https://hqc.io/feed.xml" >
+
+  <link rel="stylesheet" href="/assets/css/main.css" >
+</head>
+
+  <body>
+    <header class="header">
+  <div class="header-content">
+    <div class="brand">
+      <a href="/">hqc.io</a>
+    </div>
+  </div>
+</header>
+
+    <div class="site">
+      <div class="site__content">
+        <article class="post post--detail">
+  <header class="post__header">
+    <h1 class="page-heading post__title" itemprop="name headline">Five Rails Gotchas</h1>
+    <p class="post__metadata">
+      Published on <time datetime="2016-09-07T00:00:00+02:00" itemprop="datePublished">Sep 7, 2016</time>
+      
+      <span>
+        by
+        <i class="fa fa-user"></i>
+        <span itemprop="name">Cẩm Huỳnh</span>
+      </span>
+      
+    </p>
+    <p>
+      <span class="tagging">
+        
+          <a href="/tags/ruby" class="tagging__item">
+            #ruby
+          </a>
+        
+          <a href="/tags/rails" class="tagging__item">
+            #rails
+          </a>
+        
+      </span>
+    </p>
+  </header>
+  <div class="post__content">
+    <p>It’s undeniable that Rails is a great framework to speedily build up your application.
+However, despite of its handiness, like other frameworks, Rails has its own flaws and
+is never a silver bullet. This post is going to show you some of the gotchas (or pitfalls you name it)
+I encountered while working with Rails.</p>
+
+<h3 id="associations-writer">associations writer</h3>
+
+<p>The code below is supposed to assign posts to a specific user.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">has_many</span> <span class="ss">:posts</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">belongs_to</span> <span class="ss">:user</span>
+<span class="k">end</span>
+
+<span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">find_by_name</span> <span class="s1">'John'</span>
+<span class="n">user</span><span class="p">.</span><span class="nf">posts</span> <span class="o">=</span> <span class="p">[</span><span class="no">Post</span><span class="p">,</span> <span class="no">Post</span><span class="p">,</span> <span class="no">Post</span><span class="p">]</span>
+<span class="n">user</span><span class="p">.</span><span class="nf">save!</span>
+</code></pre>
+</div>
+
+<p>Of course it works (perfectly)! Then you might ask what’s the problem?  Good question.
+When do you think the posts will get saved?</p>
+
+<p>For a common people with common sense, <code class="highlighter-rouge">posts</code> will be persisted when you
+invoke <code class="highlighter-rouge">user.save!</code>, then you’re trapped. Right after <code class="highlighter-rouge">user.posts</code> was assigned,
+the persistence will be invoked, so calling <code class="highlighter-rouge">User#save!</code> here is redundant.</p>
+
+<h3 id="after_save-callback"><code class="highlighter-rouge">after_save</code> callback</h3>
+
+<p>I always recommend people not to use Rails callbacks but if you DO have to, use
+<code class="highlighter-rouge">after_commit</code> instead.</p>
+
+<p>A lot of people has written about this, see
+<a href="http://www.justinweiss.com/articles/a-couple-callback-gotchas-and-a-rails-5-fix/">what Justin Weiss said</a>.</p>
+
+<h3 id="auto-reloading">auto-(re)loading</h3>
+
+<p>In the example below, if you invoke <code class="highlighter-rouge">User.foo</code> without preloading
+<code class="highlighter-rouge">lib/user/bar.rb</code>, your code blows up (probably in development environment) with a constant
+not found exception.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="c1"># app/models/user.rb</span>
+<span class="k">class</span> <span class="nc">User</span>
+  <span class="k">def</span> <span class="nf">foo</span>
+    <span class="no">Bar</span><span class="p">.</span><span class="nf">xyz</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># lib/user/bar.rb</span>
+<span class="k">class</span> <span class="nc">User</span>
+  <span class="k">class</span> <span class="nc">Bar</span>
+    <span class="k">def</span> <span class="nf">xyz</span>
+      <span class="s2">"foot"</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<p>But why, didn’t I already define <code class="highlighter-rouge">User::Bar</code> under <code class="highlighter-rouge">lib</code> directory?</p>
+
+<p>The reason is because Rails treats all missing constants as <code class="highlighter-rouge">TOP_LEVEL</code>
+constants. So when <code class="highlighter-rouge">User#foo</code>, since <code class="highlighter-rouge">Bar</code> is not yet defined, Rails will look
+up in <code class="highlighter-rouge">app/models/bar.rb</code> and <code class="highlighter-rouge">lib/bar.rb</code>. That’s why <code class="highlighter-rouge">Bar</code> (of course) cannot be found.</p>
+
+<p>To fix this you can explicitly tell Rails its parent module/class.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="c1"># app/models/user.rb</span>
+<span class="k">class</span> <span class="nc">User</span>
+  <span class="k">def</span> <span class="nf">foo</span>
+    <span class="o">::</span><span class="no">User</span><span class="o">::</span><span class="no">Bar</span><span class="p">.</span><span class="nf">xyz</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<h3 id="eager-loading">eager-loading</h3>
+
+<p>How to avoid N+1 query in Rails? Typically this is how many people will do.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="no">User</span><span class="p">.</span><span class="nf">all</span><span class="p">.</span><span class="nf">includes</span><span class="p">(</span><span class="ss">:posts</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>But do you know how on earth it works?</p>
+
+<p>First ActiveRecord will fetch all users, then map them to ActiveRecord::Base
+objects and hold them in memory.</p>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="nv">`users`</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>Then it fetches all posts related to those user IDs, and holds them in memory.</p>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="nv">`posts`</span> <span class="k">WHERE</span> <span class="nv">`posts`</span><span class="p">.</span><span class="nv">`user_id`</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="p">...,</span> <span class="n">N</span><span class="p">]</span>
+</code></pre>
+</div>
+
+<p>Then it automatically does some “posts-to-user” mapping using Ruby Enumerator.</p>
+
+<p>For instance, here’s the pseudo code of how <code class="highlighter-rouge">includes</code> works.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="n">users</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">all</span>
+<span class="n">posts</span> <span class="o">=</span> <span class="no">Post</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">user_id: </span><span class="n">users</span><span class="p">.</span><span class="nf">pluck</span><span class="p">(</span><span class="ss">:id</span><span class="p">))</span>
+
+<span class="n">users</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">user</span><span class="o">|</span>
+  <span class="n">user</span><span class="p">.</span><span class="nf">posts</span> <span class="o">=</span> <span class="n">posts</span><span class="p">.</span><span class="nf">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span> <span class="n">post</span><span class="p">.</span><span class="nf">user_id</span> <span class="o">==</span> <span class="n">user</span><span class="p">.</span><span class="nf">id</span> <span class="p">}</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<p>This works seamlessly most of the time, but when you reach 100_000 users with 1_000
+posts each, this strategy might not be so efficient, as it consumes up a great
+deal of memory. (Yeah, if you’re gonna debate how cheap hardware is, go convince your
+boss!)</p>
+
+<h3 id="sprockets-depend_on">Sprockets <code class="highlighter-rouge">depend_on</code></h3>
+
+<p>Probably you’re using SASS <code class="highlighter-rouge">@import</code> instead of traditional <code class="highlighter-rouge">//= require</code> to import
+CSS sub-files. To know why <code class="highlighter-rouge">@import</code> is preferable, see @iain’s comment below.</p>
+
+<div class="language-sass highlighter-rouge"><pre class="highlight"><code><span class="c1">// app/assets/stylesheets/application.css
+</span><span class="k">@import</span> <span class="s">"users/index";</span>
+<span class="k">@import</span> <span class="s">"users/show";</span>
+<span class="k">@import</span> <span class="s">"foo";</span>
+<span class="k">@import</span> <span class="s">"bar";</span>
+</code></pre>
+</div>
+
+<p>But you will find that your <code class="highlighter-rouge">application.css</code> is not re-precompiled after you made some
+changes to the sub-files e.g. <code class="highlighter-rouge">users/index</code>, <code class="highlighter-rouge">foo</code>, etc.</p>
+
+<p>That is because of Rails Sprockets’ underlying caching mechanism, which is supposed to
+re-precompile your asset if the file has literally changed. On top of that, the caching
+framework also observes all dependent files to invalidate cache accordingly. However,
+the mechanism doesn’t work with SASS’s @import, but its own <code class="highlighter-rouge">require</code> directive.</p>
+
+<p>To fix the cache invalidation problem above, you need to explicitly declare which files
+Sprockets should observe, by using Sprockets offered <code class="highlighter-rouge">depend_on</code> directive.</p>
+
+<div class="language-sass highlighter-rouge"><pre class="highlight"><code><span class="c1">// app/assets/stylesheets/application.css
+//= depend_on "users/index";
+//= depend_on "users/show";
+//= depend_on "foo";
+//= depend_on "bar";
+</span>
+<span class="k">@import</span> <span class="s">"users/index";</span>
+<span class="k">@import</span> <span class="s">"users/show";</span>
+<span class="k">@import</span> <span class="s">"foo";</span>
+<span class="k">@import</span> <span class="s">"bar";</span>
+</code></pre>
+</div>
+
+<h3 id="lessons">Lessons</h3>
+
+<p>Good understanding on your tool’s pros/cons is one of the essential things to be a good programmer.</p>
+
+<h5 id="happing-programming">Happing Programming!!!</h5>
+
+  </div>
+  
+    <div id="disqus_thread"></div>
+<script>
+  /**
+   * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+   * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+   */
+/*
+ var disqus_config = function () {
+ this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+ this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+ };
+ */
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+
+  s.src = '//huynhquancam.disqus.com/embed.js';
+
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  
+</article>
+
+      </div>
+    </div>
+
+    
+      <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', "UA-71343659-1", 'auto');
+  ga('send', 'pageview');
+</script>
+
+    
+    <footer>
+  <ul class="pages">
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <li>
+      <a href="/about">About</a>
+    </li>
+    <li>
+      <a href="https://github.com/qcam?tab=repositories">Projects</a>
+    </li>
+    <li>
+      <a href="/essays">Posts</a>
+    </li>
+    <li>
+      <a href="/rbcv">Resume</a>
+    </li>
+  </ul>
+</footer>
+
+  </body>
+</html>

@@ -1,15 +1,33 @@
 ---
 layout: default
 ---
-<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-
-  <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">{{ page.title }}</h1>
-    <p class="post-meta"><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>{% if page.author %} • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span>{% endif %}</p>
+<article class="post post--detail">
+  <header class="post__header">
+    <h1 class="page-heading post__title" itemprop="name headline">{{ page.title }}</h1>
+    <p class="post__metadata">
+      Published on <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>
+      {% if page.author %}
+      <span>
+        by
+        <i class="fa fa-user"></i>
+        <span itemprop="name">{{ page.author }}</span>
+      </span>
+      {% endif %}
+    </p>
+    <p>
+      <span class="tagging">
+        {% for tag in page.tags %}
+          <a href="{{ tag | tag_url }}" class="tagging__item">
+            {{ tag | tag_name | prepend: site.baseurl }}
+          </a>
+        {% endfor %}
+      </span>
+    </p>
   </header>
-
-  <div class="post-content" itemprop="articleBody">
+  <div class="post__content">
     {{ content }}
   </div>
-
+  {% if jekyll.environment == "production" %}
+    {% include disqus.html %}
+  {% endif %}
 </article>
