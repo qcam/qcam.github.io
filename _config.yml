@@ -12,7 +12,7 @@ description: > # this means to ignore newlines until "baseurl:"
   Cam Huynh is a True Blue (Chelsea fan) and a full-stack developer based in Saigon Vietnam having four-year experience working in web development field.
   He loves reading books, playing soccer, listening to C-pop (he idolizes Jay Chou). Contact him at: cam@hqc.me
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://hqc.io" # the base hostname & protocol for your site
+url: "http://hqc.io" # the base hostname & protocol for your site
 twitter_username: huynhquancam
 github_username:  huynhquancam
 
