@@ -1,5 +1,6 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
-gem 'jekyll', '3.0.1'
+gem 'jekyll', '~> 3.1.2'
+gem 'jekyll-gist'
 gem 'bourbon'
