@@ -2,11 +2,14 @@
 layout: "post"
 author: Cam Huynh
 title: Monkey Patching for good
+description: "Monkey-patching has been widely considered as bad practice in software development, in terms of source code management and maintainability."
+intro_image: "/assets/monkey_patch.jpg"
+
 ---
 
-![Monkey Patch For Good](/assets/monkey_patch.jpg)
-
 Monkey-patching has been widely considered as bad practice in software development, in terms of source code management and maintainability.
+
+![Monkey Patch For Good](/assets/monkey_patch.jpg)
 
 Anyway, I believe everything has its own reason to exist, and below are something might change your mind about Monkey Patching.
 
