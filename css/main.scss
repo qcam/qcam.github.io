@@ -103,6 +103,8 @@ header.header {
   max-width: 1070px;
   text-align: center;
   padding-top: 36pt;
+  padding-left: 15px;
+  padding-right: 15px;
   margin: 0 auto;
 
   .name {
@@ -202,8 +204,10 @@ header.header {
 }
 
 .posts {
-  width: 1024px;
+  max-width: 1024px;
   margin: 0 auto;
+  padding-left: 15px;
+  padding-right: 15px;
 
   .post-title {
     font-size: 16pt;
@@ -211,10 +215,12 @@ header.header {
 }
 
 .post-detail {
-  width: 1024px;
+  max-width: 1024px;
   margin: 0 auto;
   margin-top: 20px;
   padding-bottom: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
 
   .post-header {
     margin-bottom: 30px;
