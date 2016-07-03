@@ -239,5 +239,9 @@ header.header {
 
   .post-content {
     line-height: 150%;
+
+    img {
+      max-width: 100%;
+    }
   }
 }
