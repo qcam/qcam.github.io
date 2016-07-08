@@ -5,15 +5,14 @@ permalink: /about/
 ---
 
 ### Hello forks!
-Hello folks!
 
-My name is Cẩm, but my non-vietnamese friends usually call me Jack, as they found the Vietnamese pronunciation of my name is just horribly difficult, like any Vietnamese names else.
+My name is Cẩm (or Cam if you feel it better to pronounce my name in this way), a Vietnamese developer working in Gothenburg, Sweden.
+
+I graduated from Ho Chi Minh University of Industry, major in Computer Science.
 
 I am a die-hard fan of [Chelsea FC](http://chelseafc.com), and the coach, Jóse Mourinho, has been my lifelong idol.
 
-I am an enthusiastic and passionate back-end developer, based in Saigon, Vietnam. Currently focused on big data, distributed computing and functional programming.
-
-Right now I am working as Lead Software Engineer at [Dadadee](https://dadadee.com), a trusted community marketplace for people to list, buy or sell goods and services online in bulk, by tapping on crowd-buying and reverse-auction, where I spend everyday observing NewRelic Dashboard, mining Ruby gems and fixing bugs. Yeah of course, I build features too!
+Right now I am working as a Backend Engineer at [Football Addicts](https://footballaddicts.com), the home of [Forza Football](http://www.footballaddicts.com/apps/).
 
 Chinese history intrigues me especially the character, Cao Cao, albeit he was considered unrighteous!
 
