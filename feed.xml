@@ -1,30 +1,844 @@
----
-layout: null
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>{{ site.title | xml_escape }}</title>
-    <description>{{ site.description | xml_escape }}</description>
-    <link>{{ site.url }}{{ site.baseurl }}/</link>
-    <atom:link href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}" rel="self" type="application/rss+xml"/>
-    <pubDate>{{ site.time | date_to_rfc822 }}</pubDate>
-    <lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
-    <generator>Jekyll v{{ jekyll.version }}</generator>
-    {% for post in site.posts limit:10 %}
+    <title>hqc.io | Cẩm Huỳnh</title>
+    <description>Cẩm Huỳnh is a True Blue (Chelsea fan) and a full-stack developer based in Saigon Vietnam having four-year experience working in web development field. He loves reading books, playing soccer, listening to C-pop (he idolizes Jay Chou). Contact him at: cam@hqc.me
+</description>
+    <link>https://hqc.io/</link>
+    <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 26 Jul 2016 20:03:09 +0700</pubDate>
+    <lastBuildDate>Tue, 26 Jul 2016 20:03:09 +0700</lastBuildDate>
+    <generator>Jekyll v3.1.6</generator>
+    
       <item>
-        <title>{{ post.title | xml_escape }}</title>
-        <description>{{ post.content | xml_escape }}</description>
-        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
-        <link>{{ post.url | prepend: site.baseurl | prepend: site.url }}</link>
-        <guid isPermaLink="true">{{ post.url | prepend: site.baseurl | prepend: site.url }}</guid>
-        {% for tag in post.tags %}
-        <category>{{ tag | xml_escape }}</category>
-        {% endfor %}
-        {% for cat in post.categories %}
-        <category>{{ cat | xml_escape }}</category>
-        {% endfor %}
+        <title>Worque - CLI that manages your daily notes</title>
+        <description>&lt;p&gt;I would like to introduce &lt;a href=&quot;https://github.com/huynhquancam/worque&quot;&gt;Worque&lt;/a&gt; (pronounced as &lt;code class=&quot;highlighter-rouge&quot;&gt;work&lt;/code&gt;),
+which is a CLI to manage all your daily notes like a boss, with vim integration.&lt;/p&gt;
+
+&lt;h3 id=&quot;why-worque&quot;&gt;Why Worque?&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Coders hate report. Yes, let me recap: CODERS HATE REPORT!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Ever got stunned when your boss suddenly asked what you’ve done yesterday?&lt;/li&gt;
+  &lt;li&gt;To look back at your tasks for today without leaving your beloved terminal and VIM.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If so, worque might be a fit for you.&lt;/p&gt;
+
+&lt;h3 id=&quot;installation&quot;&gt;Installation&lt;/h3&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gem install worque
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;how-to-use-worque&quot;&gt;How to use Worque?&lt;/h3&gt;
+
+&lt;p&gt;Add this to your &lt;code class=&quot;highlighter-rouge&quot;&gt;.bash_profile&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;/path/to/your/lovely/notes&#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Personally I’d like to map it to my Dropbox.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;~/Dropbox/Notes/Todos&#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After that, executing the command below will create a today’s note for you&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;worque todo --for&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;today
+&lt;span class=&quot;c&quot;&gt;# ~/notes/checklist-2016-07-19.md&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Or look back what’s done yesterday.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;workque todo --for yebsterday
+&lt;span class=&quot;c&quot;&gt;# ~/notes/checklist-2016-07-18.md&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Oops! Today is Monday? No worries, worque got you covered&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# If today is Monday 25-07-2016&lt;/span&gt;
+workque todo --for yesterday
+&lt;span class=&quot;c&quot;&gt;# ~/notes/checklist-2016-07-22.md&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;It’s chain-able with other commands&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vim worque
+vim &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yesterday&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+cat &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yesterday&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt; | grep pending
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Anyway this is how I alias it in my &lt;code class=&quot;highlighter-rouge&quot;&gt;.zshrc&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;.bash_profile&lt;/code&gt;.
+See &lt;a href=&quot;https://github.com/huynhquancam/dotfiles/blob/master/zsh/aliases.zsh#L35&quot;&gt;https://github.com/huynhquancam/dotfiles/blob/master/zsh/aliases.zsh#L35&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;today&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;vim &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for today&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; +&#39;:cd &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&#39;&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ytd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;vim &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for yesterday&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; +&#39;:cd &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&#39;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;slack-integration&quot;&gt;Slack Integration&lt;/h3&gt;
+
+&lt;p&gt;Yes, you can publish your daily notes to Slack too!&lt;/p&gt;
+
+&lt;p&gt;Just make sure you have set &lt;code class=&quot;highlighter-rouge&quot;&gt;SLACK_API_TOKEN&lt;/code&gt; accordingly to spare your fingers typing everytime. See &lt;a href=&quot;https://get.slack.help/hc/en-us/articles/215770388-Creating-and-regenerating-API-tokens&quot;&gt;this post&lt;/a&gt; to get an idea of how to generate Slack API Token.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SLACK_API_TOKEN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;something-very-secret&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then you can use &lt;code class=&quot;highlighter-rouge&quot;&gt;worque push&lt;/code&gt; to push your notes to Slack&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;worque push --channel&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;daily-report
+
+&lt;span class=&quot;c&quot;&gt;# or forgot do it yesterday? No worries!&lt;/span&gt;
+
+worque push --channel&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;daily-report --for&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yesterday
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;vim-integration&quot;&gt;VIM Integration&lt;/h3&gt;
+
+&lt;p&gt;Yes, &lt;strong&gt;&lt;em&gt;worque&lt;/em&gt;&lt;/strong&gt; loves VIM too!!!&lt;/p&gt;
+
+&lt;p&gt;Add this to your vimrc&lt;/p&gt;
+
+&lt;div class=&quot;language-viml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Plug &lt;span class=&quot;s1&quot;&gt;&#39;huynhquancam/vim-worque&#39;&lt;/span&gt; # &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; you&#39;&lt;span class=&quot;k&quot;&gt;re&lt;/span&gt; using &lt;span class=&quot;k&quot;&gt;vim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;plug
+Plugin &lt;span class=&quot;s1&quot;&gt;&#39;huynhquancam/vim-worque&#39;&lt;/span&gt; # or Vundle
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then try &lt;code class=&quot;highlighter-rouge&quot;&gt;:TD&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;:YTD&lt;/code&gt; in your VIM to view the notes for today and yesterday respectively&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;Read more about &lt;a href=&quot;https://github.com/huynhquancam/worque&quot;&gt;worque&lt;/a&gt;.
+Read more about &lt;a href=&quot;https://github.com/huynhquancam/vim-worque&quot;&gt;vim-worque&lt;/a&gt;.
+View more in my &lt;a href=&quot;https://github.com/huynhquancam/dotfiles&quot;&gt;dotfiles&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Happy Reporting!!!&lt;/p&gt;
+
+&lt;p&gt;Any thoughts or ideas are welcome!!!&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 21 Jul 2016 00:00:00 +0700</pubDate>
+        <link>https://hqc.io/2016/07/21/introduce-worque.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/07/21/introduce-worque.html</guid>
+        
+        <category>ruby</category>
+        
+        <category>productivity</category>
+        
+        
       </item>
-    {% endfor %}
+    
+      <item>
+        <title>Sign Git commits with Keybase</title>
+        <description>&lt;p&gt;Keybase is an public key crypto for everyone, maps your identity to your public keys, and vice versa.&lt;/p&gt;
+
+&lt;p&gt;This post will show you how to sign your Git commit with Keybase GPG key, and how to publish your key to Github&lt;/p&gt;
+
+&lt;h2 id=&quot;generate-a-new-gpg-key&quot;&gt;Generate a new GPG key&lt;/h2&gt;
+
+&lt;p&gt;In case you haven’t had any GPG keys on Keybase&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;keybase pgp gen --multi
+
+&lt;span class=&quot;c&quot;&gt;# then follow the instruction, select &quot;Upload your key to Keybase&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;import-gpg-key-from-keybase&quot;&gt;Import GPG key from Keybase&lt;/h2&gt;
+
+&lt;p&gt;In case you already have GPG keys on Keybase&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# Import secret key from keybase&lt;/span&gt;
+keybase pgp &lt;span class=&quot;nb&quot;&gt;export&lt;/span&gt; --secret | gpg --allow-secret-key-import --import&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;To check if your key has been imported into your local GPG secret keys&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;gpg --list-secret-keys&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;This is how it looks like if successfully imported.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;&lt;span class=&quot;c&quot;&gt;# Private key basic information&lt;/span&gt;
+
+sec   4096R/BC775C77 2016-04-09 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;expires: 2032-04-05]
+uid                  John Doe &amp;lt;john.doe@gmail.com&amp;gt;
+ssb   4096R/7BDF34CD 2016-04-09&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;sign-git-commit&quot;&gt;Sign Git commit&lt;/h2&gt;
+
+&lt;p&gt;If you want to sign your Git commit with the key generated/imported&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;git config --global user.signingkey &amp;lt;key-id&amp;gt;
+&lt;span class=&quot;c&quot;&gt;# key-id is **BC775C77** for the sample private key above&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;import-public-key-to-github&quot;&gt;Import Public key to Github&lt;/h2&gt;
+
+&lt;p&gt;To get your commit verified by Github like below&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/87b504be-fa41-11e5-9140-6dc8b7203c31.png_6xb7qpwfxi&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To get your public key&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-shell&quot; data-lang=&quot;shell&quot;&gt;keybase pgp &lt;span class=&quot;nb&quot;&gt;export&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Then attach the key to Github&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://s3-ap-southeast-1.amazonaws.com/kipalog.com/gpg-key-paste.png_p3u0cg5vcw&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That’s it! Feel free to leave your comments.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 03 Jul 2016 00:00:00 +0700</pubDate>
+        <link>https://hqc.io/2016/07/03/sign-git-commit-with-keybase.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/07/03/sign-git-commit-with-keybase.html</guid>
+        
+        <category>productivity</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>You don&#39;t need RVM gemset</title>
+        <description>&lt;p&gt;We can’t deny the contribution RVM gemset gave up to the Ruby community, but do we really need gemsets to isolate our project dependencies these days?&lt;/p&gt;
+
+&lt;h3 id=&quot;where-the-idea-of-gemset-came-from&quot;&gt;Where the idea of gemset came from?&lt;/h3&gt;
+
+&lt;p&gt;In around 2010, RVM introduced gemset, a huge improvement which changes how the whole Ruby world deals with dependency isolation. From then on, separating Ruby environments on local computers wasn’t tough anymore. Just imagine you’re starting a fresh Rails 5 project while maintaining a Rails 2.3 application, without gemset.&lt;/p&gt;
+
+&lt;p&gt;Read &lt;a href=&quot;http://everydayrails.com/2010/09/13/rvm-project-gemsets.html&quot;&gt;this post&lt;/a&gt; and you will understand the excitement RVM gemset brought to the world at that moment.&lt;/p&gt;
+
+&lt;h3 id=&quot;but-you-dont-need-that-anymore&quot;&gt;But you don’t need that anymore&lt;/h3&gt;
+
+&lt;p&gt;Because &lt;code class=&quot;highlighter-rouge&quot;&gt;bundler&lt;/code&gt; only got you covered with bundle path.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# This will install all gems into vendor/gems directory of your current project root, and this is a remembered option.&lt;/span&gt;
+bundle install --path vendor/gems --retry 3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You might want to setup an alias to save your time remembering the path.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# in your .zshrc&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;bi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;bundler install --path vendor/gems --retry 3 --jobs 4
+&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;be&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;bundler &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Any thoughts are welcomed!&lt;/p&gt;
+</description>
+        <pubDate>Wed, 04 May 2016 00:00:00 +0700</pubDate>
+        <link>https://hqc.io/2016/05/04/you-dont-need-rvm-gemset.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/05/04/you-dont-need-rvm-gemset.html</guid>
+        
+        <category>ruby</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Using Factory Girl with Hanami model</title>
+        <description>&lt;p&gt;Hanami is one of the most popular and trending Ruby frameworks today, well-known for its clean architecture and testability. In this post we are going to explore how we can use Hanami Model with Factory for fast testing data generation.&lt;/p&gt;
+
+&lt;h1 id=&quot;data-persistence-in-hanami&quot;&gt;Data Persistence in Hanami&lt;/h1&gt;
+
+&lt;p&gt;Model is one of the best features of Hanami, with the separation of Entity and Repository, following the architecture of Domain Driven Design. Entity holds the domain logic, whilst Repository is responsible for persistence.&lt;/p&gt;
+
+&lt;p&gt;Here is the code example to persist data with Hanami Model.&lt;/p&gt;
+
+&lt;div class=&quot;language-rb highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Book&lt;/span&gt;
+  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Hanami&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Entity&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;attribute&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:author&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BookRepository&lt;/span&gt;
+  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Hanami&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Repository&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# And to persist&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;book&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Book&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;title: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Ruby Under a Microscope&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;author: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Pat Shaughnessy&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;BookRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;book&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;using-factory-girl-for-test-data-production&quot;&gt;Using Factory Girl for test data production&lt;/h1&gt;
+
+&lt;p&gt;Factory Girl has been widely adopted for testing data production by the Ruby on Rails community, but it could be used in PORO way. So let’s see how we can integrate Factory Girl in our Hanami application for testing.&lt;/p&gt;
+
+&lt;p&gt;Generally here is how you generate data with Factory Girl in RSpec.&lt;/p&gt;
+
+&lt;div class=&quot;language-rb highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;no&quot;&gt;FactoryGirl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:book&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;The sample book&#39;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;John Cena&#39;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Book&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;does something&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;book&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:book&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;By default, Factory Girl will call the &lt;code class=&quot;highlighter-rouge&quot;&gt;#save!&lt;/code&gt; method of the instance. But in Hanami we use Repository to persist data, as mentioned above.&lt;/p&gt;
+
+&lt;p&gt;But Factory Girl already got you covered.&lt;/p&gt;
+
+&lt;div class=&quot;language-rb highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;no&quot;&gt;FactoryGirl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:book&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;The sample book&#39;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;John Cena&#39;&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Add your custom method here to persist object&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;to_create&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;BookRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;That’s it! Enjoy coding!&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 12 Apr 2016 00:00:00 +0700</pubDate>
+        <link>https://hqc.io/2016/04/12/factory-girl-with-hanami.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/04/12/factory-girl-with-hanami.html</guid>
+        
+        <category>testing</category>
+        
+        <category>ruby</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Monkey Patching for good</title>
+        <description>&lt;p&gt;Monkey-patching has been widely considered as bad practice in software development, in terms of source code management and maintainability.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/monkey_patch.jpg&quot; alt=&quot;Monkey Patch For Good&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Anyway, I believe everything has its own reason to exist, and below are something might change your mind about Monkey Patching.&lt;/p&gt;
+
+&lt;h3 id=&quot;find-yourself-in-development-environment&quot;&gt;Find yourself in development environment&lt;/h3&gt;
+
+&lt;p&gt;Tired of keep typing something like &lt;code class=&quot;highlighter-rouge&quot;&gt;User.find_by_username(&#39;jack&#39;)&lt;/code&gt; in Rails console? Use this.&lt;/p&gt;
+
+&lt;p&gt;Monkey patch your object class in &lt;code class=&quot;highlighter-rouge&quot;&gt;.irbrc&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/ruby&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;irb/completion&#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;irb/ext/save-history&#39;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;find_me&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;find_by_username&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;cam@example.com&#39;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then now &lt;code class=&quot;highlighter-rouge&quot;&gt;User.find_me&lt;/code&gt; will return your favourite test user.&lt;/p&gt;
+
+&lt;h3 id=&quot;inspect-object&quot;&gt;Inspect Object&lt;/h3&gt;
+
+&lt;p&gt;Tired of keep typing this?&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;all&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_sql&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;username: :desc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_sql&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then this might save your time.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;show_me&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;tap&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# then now&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;show_me&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:to_sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;username: :desc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;show_me&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:to_a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Convinced yet? Leave your thoughts below!&lt;/p&gt;
+</description>
+        <pubDate>Sun, 10 Apr 2016 00:00:00 +0700</pubDate>
+        <link>https://hqc.io/2016/04/10/monkey-patching-for-good.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/04/10/monkey-patching-for-good.html</guid>
+        
+        <category>ruby</category>
+        
+        <category>productivity</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Provision AliCloud</title>
+        <description>&lt;p&gt;Last month we @ Dadadee were pretty excited to start moving off from Amazon Web Service to AliCloud.
+This post shares how our application, written in Ruby on Rails, is built and deployed.&lt;/p&gt;
+
+&lt;p&gt;Note: I assume you have some experience with Ansible and Docker.&lt;/p&gt;
+
+&lt;h3 id=&quot;create-your-instance-on-alicloud&quot;&gt;Create your instance on AliCloud&lt;/h3&gt;
+
+&lt;p&gt;Let’s initiate a Generation II, 2-core and 4GB RAM instance.&lt;/p&gt;
+
+&lt;p&gt;Although sometimes the console is buggy, generally AliCloud is quite easy to start off.&lt;/p&gt;
+
+&lt;p&gt;Please note to set your root password, in order to SSH later.&lt;/p&gt;
+
+&lt;h3 id=&quot;provision-your-server-with-ansible&quot;&gt;Provision your server with Ansible&lt;/h3&gt;
+
+&lt;p&gt;As of I wrote this post, AliCloud’s apt mirror was still inaccessible, so we will need to choose another alternative mirror
+&lt;script src=&quot;https://gist.github.com/huynhquancam/3f4095496720304d79d3.js&quot;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Your sources.list could be like this
+&lt;script src=&quot;https://gist.github.com/huynhquancam/54e4fb5f527710f03a2c.js&quot;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s set up some prerequisite packages&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/huynhquancam/625d110f2531b46f5506.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;Then let’s install Docker&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/huynhquancam/3d66cb90662f4449575c.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;OK, let’s pull our docker image from Registry (AWS ECR, Docker Hub or Quay, etc.)&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/huynhquancam/fe5296227f94e6b9994c.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;Run the image&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/huynhquancam/ea2515828a4b0473570a.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;That’s it! Feel free to leave your comments below! :-)&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 14 Mar 2016 00:00:00 +0700</pubDate>
+        <link>https://hqc.io/2016/03/14/provision-alicloud.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/03/14/provision-alicloud.html</guid>
+        
+        <category>devops</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>My Heroku Checklist</title>
+        <description>&lt;p&gt;&lt;a href=&quot;http://heroku.com&quot;&gt;Heroku&lt;/a&gt; makes deployment dead easy for developer, but sometimes checklist
+is a great thing to ensure I won’t miss out any stupid things.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Make sure you have &lt;code class=&quot;highlighter-rouge&quot;&gt;rails_12factor&lt;/code&gt; gem included in your Gemfile.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Use &lt;a href=&quot;https://github.com/defunkt/unicorn&quot;&gt;Unicorn&lt;/a&gt;, &lt;a href=&quot;https://www.phusionpassenger.com/&quot;&gt;Passenger&lt;/a&gt;
+or &lt;a href=&quot;http://puma.io/&quot;&gt;Puma&lt;/a&gt; kind of server, don’t use WEBrick the default Rails server.
+It is only suitable for development and can only one request at a time.&lt;/p&gt;
+
+    &lt;p&gt;Click &lt;a href=&quot;https://devcenter.heroku.com/articles/rails-unicorn&quot;&gt;here&lt;/a&gt; to see how to setup Unicorn on Heroku.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Sign up for a log service. (Loggy, PaperTrail)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Make sure you have environment variables set properly in your app.&lt;/p&gt;
+
+    &lt;p&gt;Sometimes your app was broken mysteriously and you will spend an hour to figure out that’s because of those unset variables.
+So please make sure you have them set properly.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Ensure there is no redundant gem in the Gemfile.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;If your application has Facebook, Google authentication, make sure you have configured them correctly.&lt;/p&gt;
+
+    &lt;p&gt;Go config your Facebook, Google app, make sure the app url, callback works on production.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Register for a Mailing service (SendGrid).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Tag the release in your commit so we know exactly which code in running in production.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Check your scheduler, background tasks, cron jobs settings.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Ensure there is no &lt;strong&gt;PASSWORD&lt;/strong&gt;, &lt;strong&gt;TOKEN&lt;/strong&gt; in the source code.&lt;/p&gt;
+
+    &lt;p&gt;Put them into your environment variables.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Fri, 19 Sep 2014 00:00:00 +0700</pubDate>
+        <link>https://hqc.io/2014/09/19/heroku-checklist.html</link>
+        <guid isPermaLink="true">https://hqc.io/2014/09/19/heroku-checklist.html</guid>
+        
+        <category>heroku</category>
+        
+        <category>rails</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Thói xấu của dev Việt</title>
+        <description>&lt;p&gt;Hôm nay trò chuyện chém gió với một anh bạn người Singapore làm chung ngành và sống làm việc tại Sài Gòn khá lâu, anh ta ngồi ba hoa và chán nản với những thói xấu của hầu hết dev Việt:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Họ &lt;strong&gt;thụ động&lt;/strong&gt;, không chịu tự tìm hiểu, toàn chờ người ta đến mớm kiến thức cho.&lt;/li&gt;
+  &lt;li&gt;Họ &lt;strong&gt;không biết tự ý thức bản thân&lt;/strong&gt;, có sếp đốc thúc thì làm, không có sếp thì … ngồi nghe nhạc, xem phim.&lt;/li&gt;
+  &lt;li&gt;Dev Việt &lt;strong&gt;kém và không biết giải quyết vấn đề&lt;/strong&gt;, bằng chứng là chẳng có công ty top thế giới nào đến mở development house tại Việt Nam cả, nếu có đến thì cũng ba giò bốn cẳng mà chạy khỏi.&lt;/li&gt;
+  &lt;li&gt;Rất nhiều dev Việt thích &lt;strong&gt;làm freelancing work trong giờ làm việc&lt;/strong&gt;.&lt;/li&gt;
+  &lt;li&gt;Làm việc &lt;strong&gt;không có tâm&lt;/strong&gt;, làm cho đủ số giờ rồi đi về. Không những vậy, nhiều dev còn viện cớ OT để ở lại làm freelance kiếm thêm thu nhập.&lt;/li&gt;
+  &lt;li&gt;Cứ đi phỏng vấn là dev Việt hỏi ngay: &lt;strong&gt;“Công ty có company dinner không?”&lt;/strong&gt;, &lt;strong&gt;“Công ty có tổ chức team building hay company trip không?”&lt;/strong&gt;, trong khi những câu hỏi cần thiết như là: “Trách nhiệm của công việc này là gì?”, “Công việc này đòi hỏi kĩ năng ra sao?”, hay thậm chí là “Công ty có những phúc lợi gì giúp tôi phát triển bản thân hay không?” thì không hỏi. Các bạn cần đi &lt;strong&gt;chơi&lt;/strong&gt; và đi &lt;strong&gt;ăn&lt;/strong&gt; đến thế sao?&lt;/li&gt;
+  &lt;li&gt;Dev Việt rất thích &lt;strong&gt;nghỉ nửa ngày&lt;/strong&gt; vì lý do bệnh? Bạn hãy liệt kê thử có cái bệnh nào mà nửa ngày  khỏi bệnh xem, ngoại trừ bệnh lười?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Mình ngồi nghe mà mặt hơi sượng, không biết là nó có chừa mình ra chưa. :cry:&lt;/p&gt;
+
+&lt;p&gt;Còn bạn, bạn thấy nó đã chừa bạn ra chưa?&lt;/p&gt;
+</description>
+        <pubDate>Mon, 18 Aug 2014 00:00:00 +0700</pubDate>
+        <link>https://hqc.io/2014/08/18/thoi-xau-cua-dev-viet.html</link>
+        <guid isPermaLink="true">https://hqc.io/2014/08/18/thoi-xau-cua-dev-viet.html</guid>
+        
+        <category>thoughts</category>
+        
+        <category>vietnamese</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Refactor Controller - Extract LoggedIn-Controller</title>
+        <description>&lt;p&gt;Sometimes your controllers actions require authentication and it makes your code look messy. This post is going to show you the idea of extracting them into &lt;code class=&quot;highlighter-rouge&quot;&gt;LoggedInController&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;what-is-the-idea&quot;&gt;What is the idea?&lt;/h3&gt;
+
+&lt;p&gt;I bet you have seen something like this&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ProductsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;before_filter&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:authenticate_user!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;except: :index&lt;/span&gt;
+
+  &lt;span class=&quot;kp&quot;&gt;protected&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;authenticate_user!&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_login_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;notice: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Hey man! Log in first please!&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_logged_in?&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;These lines of code are to filter users who are not logged in yet, redirect them and give them a nice alert.
+But the problem here is to which the responsibility of user authentication should belong.
+It is obviously not the job of &lt;code class=&quot;highlighter-rouge&quot;&gt;ProductsController&lt;/code&gt;, as the products controller should not know the knowledge of how to filter an user.&lt;/p&gt;
+
+&lt;h3 id=&quot;just-shift-it-to-applicationcontroller---no-please-dont&quot;&gt;Just shift it to ApplicationController? - “No, please don’t”.&lt;/h3&gt;
+
+&lt;p&gt;Why ApplicationController is not a good idea?&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ApplicationController should not know how to authenticate an user.&lt;/li&gt;
+  &lt;li&gt;Although we move &lt;code class=&quot;highlighter-rouge&quot;&gt;authenticate_user!&lt;/code&gt; to ApplicationController, ProductsController should not know which actions should be filtered
+and how user is being redirected.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;extract-productscontroller-bases-on-authentication-context&quot;&gt;Extract ProductsController bases on authentication context&lt;/h3&gt;
+
+&lt;p&gt;My idea is to split ProductsController into two controllers: &lt;code class=&quot;highlighter-rouge&quot;&gt;LoggedIn::ProductsController&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Public::ProductsController&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;PublicController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LoggedInController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;before_filter&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:authenticate_user!&lt;/span&gt;
+
+  &lt;span class=&quot;kp&quot;&gt;protected&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;authenticate_user!&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_login_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;notice: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Hey man! Log in first please!&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_logged_in?&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And this is how your ProductsController looks like&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# app/controllers/public/products_controller.rb&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Public&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ProductsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;PublicController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Your code here&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# app/controllers/logged_in/products_controller.rb&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LoggedIn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ProductsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;LoggedInController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Your code here&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;how-to-test-it-with-rspec&quot;&gt;How to test it with RSpec&lt;/h3&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# spec/controllers/logged_in_controller_spec.rb&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;rails_helper&#39;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;LoggedInController&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# stub an action to the controller&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;controller&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;LoggedInController&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;nothing: &lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;#authenticate_user!&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;before&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;devise.mapping&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Devise&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;mappings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;do_request&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:index&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;authenticated user&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;before&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sign_in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;before&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;do_request&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+      &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;is_expected&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_user_session_path&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;public user&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;before&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;do_request&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+      &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;is_expected&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_user_session_path&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+</description>
+        <pubDate>Mon, 18 Aug 2014 00:00:00 +0700</pubDate>
+        <link>https://hqc.io/2014/08/18/refactor-controller-extract-logged-in-controller.html</link>
+        <guid isPermaLink="true">https://hqc.io/2014/08/18/refactor-controller-extract-logged-in-controller.html</guid>
+        
+        <category>ruby</category>
+        
+        <category>rails</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>How to BEM your front-end code with sass</title>
+        <description>&lt;p&gt;I tried to refactor my CSS about two months ago when I started to realize that my CSS became unmaintainable, slow and messy.&lt;/p&gt;
+
+&lt;p&gt;This is what my markup looks like&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;products&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;product&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;left&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;img&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;photo&#39;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;url/to/photo.jpg&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;description&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;Just a short description...&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;price&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;$100.00&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;right&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;buttons-group&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;wishlist&#39;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;url/to/wishlist&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Add to my wishlist&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;buy&#39;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;url/to/wishlist&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Add to cart&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And my SCSS&lt;/p&gt;
+
+&lt;div class=&quot;language-scss highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;.products&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nc&quot;&gt;.product&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nc&quot;&gt;.left&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;nc&quot;&gt;.photo&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;cm&quot;&gt;/* photo style here */&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+      &lt;span class=&quot;nc&quot;&gt;.description&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;cm&quot;&gt;/* description style here */&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+      &lt;span class=&quot;nc&quot;&gt;.price&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;cm&quot;&gt;/* price */&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nc&quot;&gt;.right&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;nc&quot;&gt;.button-group&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;.wishlist&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;cm&quot;&gt;/* wishlist style here */&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;nc&quot;&gt;.buy&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;cm&quot;&gt;/* buy style here */&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;dig-a-bit-deeper&quot;&gt;Dig a bit deeper&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;What does the generated CSS look like?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-css highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;nc&quot;&gt;.products&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.product&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.left&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.photo&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;.products&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.product&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.left&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.description&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;/* or */&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;.products&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.product&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.right&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.buttons-group&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.wishlist&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.or_deeper&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Apparently, it is not good.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;What is wrong with it?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;First of all, I would say that it is a &lt;strong&gt;bad&lt;/strong&gt; idea to nest your CSS selectors. 
+Unnecessary nesting will only increase the specificity of our css and make it unreusable.&lt;/p&gt;
+
+&lt;p&gt;One of the biggest confusions of mine(or ours?) about CSS is to mistakenly assume that browsers read css left-to-right. 
+For selector like &lt;code class=&quot;highlighter-rouge&quot;&gt;.products .product a&lt;/code&gt; we always thought that browsers were looking for &lt;code class=&quot;highlighter-rouge&quot;&gt;.products&lt;/code&gt; and then &lt;code class=&quot;highlighter-rouge&quot;&gt;.product&lt;/code&gt; and applying styles to all the inside &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; tags.
+But actually, browsers read right-to-left. It means that browsers see an &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; in a &lt;code class=&quot;highlighter-rouge&quot;&gt;.product&lt;/code&gt; class of a &lt;code class=&quot;highlighter-rouge&quot;&gt;.products&lt;/code&gt; class.&lt;/p&gt;
+
+&lt;p&gt;Harry Roberts wrote a very cool series about &lt;a href=&quot;http://csswizardry.com/2012/05/keep-your-css-selectors-short/&quot;&gt;the selectors&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;bem-it-ftw&quot;&gt;BEM it FTW!!!&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://bem.info/method/definitions&quot;&gt;BEM&lt;/a&gt; stands for Blocks, Elements and Modifiers, is a front-end programming methodology and developed by &lt;a href=&quot;http://www.yandex.com/&quot;&gt;Yandex&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;One of the most common examples of a methodology in programming is Object-Oriented Programming. It’s a programming paradigm embodied by many languages. In some ways, BEM is similar to OOP. It’s a way of describing reality in code, a range of patterns, and a way of thinking about program entities regardless of programming languages being used.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;According to the definition of BEM, our structure will be:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Product is our Block.&lt;/li&gt;
+  &lt;li&gt;Photo, Button are the Elements&lt;/li&gt;
+  &lt;li&gt;Wishlist, Buy are the modifiers of our Button&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;products&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;product&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;product__left&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;product__photo&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;product__right&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;product__button-group&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;product__button product__button--wishlist&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Add to Wishlist&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;product__button product__button--buy&#39;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Add to cart&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And our CSS would be&lt;/p&gt;
+
+&lt;div class=&quot;language-scss highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;.products&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;.product&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;.product__left&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;.product__photo&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;.product__button-group&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;.product__button&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;.product__button--wishlist&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;.product__button--buy&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;how-to-apply-to-my-sass&quot;&gt;How to apply to my SASS?&lt;/h3&gt;
+
+&lt;p&gt;The idea of BEM is really great to me and I wanted to implement it in my refacoring.
+But as a spoiled Rails programmer, it is just like going back to the Stone Age with the pure CSS syntax.&lt;/p&gt;
+
+&lt;p&gt;Luckily, &lt;a href=&quot;http://robots.thoughtbot.com/sasss-content-directive&quot;&gt;the sass &lt;code class=&quot;highlighter-rouge&quot;&gt;@content&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;@at-root&lt;/code&gt; directives saved my life.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I added &lt;code class=&quot;highlighter-rouge&quot;&gt;element&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;modifier&lt;/code&gt; mixins to my &lt;code class=&quot;highlighter-rouge&quot;&gt;mixins.scss&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-scss highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;@mixin&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;@at-root&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;__&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;@content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;@mixin&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;modifier&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;@at-root&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;@content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now I can write somethings cool like this.&lt;/p&gt;
+
+&lt;div class=&quot;language-scss highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;.product&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;@include&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;/* content here */&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;@include&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;photo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;/* content here */&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;@include&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;button&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;@include&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;modifier&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wishlist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;cm&quot;&gt;/* content here */&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;@include&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;modifier&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;cm&quot;&gt;/* content here */&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;in-conclusion&quot;&gt;In conclusion&lt;/h3&gt;
+
+&lt;p&gt;So that’s how I got my html classes and css BEMed and refactored! Fortunately, it is still working perfectly so far.&lt;/p&gt;
+
+&lt;p&gt;BEM really makes my front-end code clearer, single responsibility, easier to read, understand and extend.&lt;/p&gt;
+
+&lt;p&gt;So, what are you waiting for? Go and BEM it!!!&lt;/p&gt;
+</description>
+        <pubDate>Sat, 02 Aug 2014 00:00:00 +0700</pubDate>
+        <link>https://hqc.io/2014/08/02/how-to-bem-your-front-end-with-sass.html</link>
+        <guid isPermaLink="true">https://hqc.io/2014/08/02/how-to-bem-your-front-end-with-sass.html</guid>
+        
+        <category>bem</category>
+        
+        <category>css</category>
+        
+        
+      </item>
+    
   </channel>
 </rss>

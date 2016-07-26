@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>hqc.io | Cẩm Huỳnh | How to BEM your front-end code with sass</title>
+
+  <meta name="description" content="I became a fan of BEM two months ago and this is how I BEM my code with Sass">
+  <meta name="author" content="Cẩm Huỳnh <huynhquancam@gmail.com>">
+  <meta name="og:image" content="https://c1.staticflickr.com/5/4059/5135403866_a6a65ec65e_b.jpg">
+
+  <link rel="canonical" href="https://hqc.io/2014/08/02/how-to-bem-your-front-end-with-sass.html">
+  <link rel="alternate" type="application/rss+xml" title="hqc.io | Cẩm Huỳnh" href="https://hqc.io/feed.xml">
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+  <body>
+    <header class="header">
+  <div class="header-content">
+    <div class="brand">
+      <a href="/">hqc.io</a>
+    </div>
+  </div>
+</header>
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post-detail" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">How to BEM your front-end code with sass</h1>
+    <p class="post-meta">
+      Published on <time datetime="2014-08-02T00:00:00+07:00" itemprop="datePublished">Aug 2, 2014</time>
+      
+      <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+        by
+        <i class="fa fa-user"></i>
+        <span itemprop="name">Cẩm Huỳnh</span>
+      </span>
+      
+    </p>
+  </header>
+  <div class="post-content" itemprop="articleBody">
+    <p>I tried to refactor my CSS about two months ago when I started to realize that my CSS became unmaintainable, slow and messy.</p>
+
+<p>This is what my markup looks like</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'products'</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'product'</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'left'</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;img</span> <span class="na">class=</span><span class="s">'photo'</span> <span class="na">src=</span><span class="s">'url/to/photo.jpg'</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'description'</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;p&gt;</span>Just a short description...<span class="nt">&lt;/p&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'price'</span><span class="nt">&gt;</span>$100.00<span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'right'</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'buttons-group'</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">'wishlist'</span> <span class="na">href=</span><span class="s">'url/to/wishlist'</span><span class="nt">&gt;</span>Add to my wishlist<span class="nt">&lt;/a&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">'buy'</span> <span class="na">href=</span><span class="s">'url/to/wishlist'</span><span class="nt">&gt;</span>Add to cart<span class="nt">&lt;/a&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<p>And my SCSS</p>
+
+<div class="language-scss highlighter-rouge"><pre class="highlight"><code><span class="nc">.products</span> <span class="p">{</span>
+  <span class="nc">.product</span> <span class="p">{</span>
+    <span class="nc">.left</span> <span class="p">{</span>
+      <span class="nc">.photo</span> <span class="p">{</span>
+        <span class="cm">/* photo style here */</span>
+      <span class="p">}</span>
+
+      <span class="nc">.description</span> <span class="p">{</span>
+        <span class="cm">/* description style here */</span>
+      <span class="p">}</span>
+
+      <span class="nc">.price</span> <span class="p">{</span>
+        <span class="cm">/* price */</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nc">.right</span> <span class="p">{</span>
+      <span class="nc">.button-group</span> <span class="p">{</span>
+        <span class="nc">.wishlist</span> <span class="p">{</span>
+          <span class="cm">/* wishlist style here */</span>
+        <span class="p">}</span>
+
+        <span class="nc">.buy</span> <span class="p">{</span>
+          <span class="cm">/* buy style here */</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<h3 id="dig-a-bit-deeper">Dig a bit deeper</h3>
+
+<p><strong>What does the generated CSS look like?</strong></p>
+
+<div class="language-css highlighter-rouge"><pre class="highlight"><code>
+<span class="nc">.products</span> <span class="nc">.product</span> <span class="nc">.left</span> <span class="nc">.photo</span> <span class="p">{}</span>
+<span class="nc">.products</span> <span class="nc">.product</span> <span class="nc">.left</span> <span class="nc">.description</span> <span class="p">{}</span>
+<span class="c">/* or */</span>
+<span class="nc">.products</span> <span class="nc">.product</span> <span class="nc">.right</span> <span class="nc">.buttons-group</span> <span class="nc">.wishlist</span> <span class="nc">.or_deeper</span> <span class="p">{}</span>
+</code></pre>
+</div>
+
+<p>Apparently, it is not good.</p>
+
+<p><strong>What is wrong with it?</strong></p>
+
+<p>First of all, I would say that it is a <strong>bad</strong> idea to nest your CSS selectors. 
+Unnecessary nesting will only increase the specificity of our css and make it unreusable.</p>
+
+<p>One of the biggest confusions of mine(or ours?) about CSS is to mistakenly assume that browsers read css left-to-right. 
+For selector like <code class="highlighter-rouge">.products .product a</code> we always thought that browsers were looking for <code class="highlighter-rouge">.products</code> and then <code class="highlighter-rouge">.product</code> and applying styles to all the inside <code class="highlighter-rouge">a</code> tags.
+But actually, browsers read right-to-left. It means that browsers see an <code class="highlighter-rouge">a</code> in a <code class="highlighter-rouge">.product</code> class of a <code class="highlighter-rouge">.products</code> class.</p>
+
+<p>Harry Roberts wrote a very cool series about <a href="http://csswizardry.com/2012/05/keep-your-css-selectors-short/">the selectors</a>.</p>
+
+<h3 id="bem-it-ftw">BEM it FTW!!!</h3>
+
+<p><a href="http://bem.info/method/definitions">BEM</a> stands for Blocks, Elements and Modifiers, is a front-end programming methodology and developed by <a href="http://www.yandex.com/">Yandex</a>.</p>
+
+<blockquote>
+  <p>One of the most common examples of a methodology in programming is Object-Oriented Programming. It’s a programming paradigm embodied by many languages. In some ways, BEM is similar to OOP. It’s a way of describing reality in code, a range of patterns, and a way of thinking about program entities regardless of programming languages being used.</p>
+</blockquote>
+
+<p>According to the definition of BEM, our structure will be:</p>
+
+<ul>
+  <li>Product is our Block.</li>
+  <li>Photo, Button are the Elements</li>
+  <li>Wishlist, Buy are the modifiers of our Button</li>
+</ul>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'products'</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'product'</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'product__left'</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'product__photo'</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'product__right'</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">'product__button-group'</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">'product__button product__button--wishlist'</span><span class="nt">&gt;</span>Add to Wishlist<span class="nt">&lt;/a&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">'product__button product__button--buy'</span><span class="nt">&gt;</span>Add to cart<span class="nt">&lt;/a&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<p>And our CSS would be</p>
+
+<div class="language-scss highlighter-rouge"><pre class="highlight"><code><span class="nc">.products</span> <span class="p">{}</span>
+<span class="nc">.product</span> <span class="p">{}</span>
+<span class="nc">.product__left</span> <span class="p">{}</span>
+<span class="nc">.product__photo</span> <span class="p">{}</span>
+<span class="nc">.product__button-group</span> <span class="p">{}</span>
+<span class="nc">.product__button</span> <span class="p">{}</span>
+<span class="nc">.product__button--wishlist</span> <span class="p">{}</span>
+<span class="nc">.product__button--buy</span> <span class="p">{}</span>
+</code></pre>
+</div>
+
+<h3 id="how-to-apply-to-my-sass">How to apply to my SASS?</h3>
+
+<p>The idea of BEM is really great to me and I wanted to implement it in my refacoring.
+But as a spoiled Rails programmer, it is just like going back to the Stone Age with the pure CSS syntax.</p>
+
+<p>Luckily, <a href="http://robots.thoughtbot.com/sasss-content-directive">the sass <code class="highlighter-rouge">@content</code> and <code class="highlighter-rouge">@at-root</code> directives saved my life.</a></p>
+
+<p>I added <code class="highlighter-rouge">element</code> and <code class="highlighter-rouge">modifier</code> mixins to my <code class="highlighter-rouge">mixins.scss</code></p>
+
+<div class="language-scss highlighter-rouge"><pre class="highlight"><code><span class="k">@mixin</span> <span class="nf">element</span><span class="p">(</span><span class="nv">$name</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">@at-root</span> <span class="k">&amp;</span><span class="nt">__</span><span class="si">#{</span><span class="nv">$name</span><span class="si">}</span> <span class="p">{</span>
+    <span class="k">@content</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">@mixin</span> <span class="nf">modifier</span><span class="p">(</span><span class="nv">$name</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">@at-root</span> <span class="k">&amp;</span><span class="nt">--</span><span class="si">#{</span><span class="nv">$name</span><span class="si">}</span> <span class="p">{</span>
+    <span class="k">@content</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>Now I can write somethings cool like this.</p>
+
+<div class="language-scss highlighter-rouge"><pre class="highlight"><code><span class="nc">.product</span> <span class="p">{</span>
+  <span class="k">@include</span> <span class="nd">element</span><span class="p">(</span><span class="nb">left</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/* content here */</span>
+  <span class="p">}</span>
+
+  <span class="k">@include</span> <span class="nd">element</span><span class="p">(</span><span class="n">photo</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/* content here */</span>
+  <span class="p">}</span>
+
+  <span class="k">@include</span> <span class="nd">element</span><span class="p">(</span><span class="n">button</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">@include</span> <span class="nd">modifier</span><span class="p">(</span><span class="n">wishlist</span><span class="p">)</span> <span class="p">{</span>
+      <span class="cm">/* content here */</span>
+    <span class="p">}</span>
+
+    <span class="k">@include</span> <span class="nd">modifier</span><span class="p">(</span><span class="n">buy</span><span class="p">)</span> <span class="p">{</span>
+      <span class="cm">/* content here */</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<h3 id="in-conclusion">In conclusion</h3>
+
+<p>So that’s how I got my html classes and css BEMed and refactored! Fortunately, it is still working perfectly so far.</p>
+
+<p>BEM really makes my front-end code clearer, single responsibility, easier to read, understand and extend.</p>
+
+<p>So, what are you waiting for? Go and BEM it!!!</p>
+
+  </div>
+  
+    <div id="disqus_thread"></div>
+<script>
+  /**
+   * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+   * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+   */
+/*
+ var disqus_config = function () {
+ this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+ this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+ };
+ */
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+
+  s.src = '//huynhquancam.disqus.com/embed.js';
+
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  
+</article>
+
+      </div>
+    </div>
+
+    
+      <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', "UA-71343659-1", 'auto');
+  ga('send', 'pageview');
+</script>
+
+    
+  </body>
+</html>

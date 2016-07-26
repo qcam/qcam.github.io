@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>hqc.io | Cẩm Huỳnh | Worque - CLI that manages your daily notes</title>
+
+  <meta name="description" content="Worque is a CLI tool to manage all your daily notes like a boss, and (of course) vim-friendly.">
+  <meta name="author" content="Cẩm Huỳnh <huynhquancam@gmail.com>">
+  <meta name="og:image" content="https://c1.staticflickr.com/5/4059/5135403866_a6a65ec65e_b.jpg">
+
+  <link rel="canonical" href="https://hqc.io/2016/07/21/introduce-worque.html">
+  <link rel="alternate" type="application/rss+xml" title="hqc.io | Cẩm Huỳnh" href="https://hqc.io/feed.xml">
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+  <body>
+    <header class="header">
+  <div class="header-content">
+    <div class="brand">
+      <a href="/">hqc.io</a>
+    </div>
+  </div>
+</header>
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post-detail" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Worque - CLI that manages your daily notes</h1>
+    <p class="post-meta">
+      Published on <time datetime="2016-07-21T00:00:00+07:00" itemprop="datePublished">Jul 21, 2016</time>
+      
+      <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+        by
+        <i class="fa fa-user"></i>
+        <span itemprop="name">Cẩm Huỳnh</span>
+      </span>
+      
+    </p>
+  </header>
+  <div class="post-content" itemprop="articleBody">
+    <p>I would like to introduce <a href="https://github.com/huynhquancam/worque">Worque</a> (pronounced as <code class="highlighter-rouge">work</code>),
+which is a CLI to manage all your daily notes like a boss, with vim integration.</p>
+
+<h3 id="why-worque">Why Worque?</h3>
+
+<p><strong>Coders hate report. Yes, let me recap: CODERS HATE REPORT!</strong></p>
+
+<ul>
+  <li>Ever got stunned when your boss suddenly asked what you’ve done yesterday?</li>
+  <li>To look back at your tasks for today without leaving your beloved terminal and VIM.</li>
+</ul>
+
+<p>If so, worque might be a fit for you.</p>
+
+<h3 id="installation">Installation</h3>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>gem install worque
+</code></pre>
+</div>
+
+<h3 id="how-to-use-worque">How to use Worque?</h3>
+
+<p>Add this to your <code class="highlighter-rouge">.bash_profile</code></p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>  <span class="nb">export </span><span class="nv">WORQUE_PATH</span><span class="o">=</span><span class="s1">'/path/to/your/lovely/notes'</span>
+</code></pre>
+</div>
+
+<p>Personally I’d like to map it to my Dropbox.</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nb">export </span><span class="nv">WORQUE_PATH</span><span class="o">=</span><span class="s1">'~/Dropbox/Notes/Todos'</span>
+</code></pre>
+</div>
+
+<p>After that, executing the command below will create a today’s note for you</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>worque todo --for<span class="o">=</span>today
+<span class="c"># ~/notes/checklist-2016-07-19.md</span>
+</code></pre>
+</div>
+
+<p>Or look back what’s done yesterday.</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>workque todo --for yebsterday
+<span class="c"># ~/notes/checklist-2016-07-18.md</span>
+</code></pre>
+</div>
+
+<p>Oops! Today is Monday? No worries, worque got you covered</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="c"># If today is Monday 25-07-2016</span>
+workque todo --for yesterday
+<span class="c"># ~/notes/checklist-2016-07-22.md</span>
+</code></pre>
+</div>
+
+<p>It’s chain-able with other commands</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>vim worque
+vim <span class="k">$(</span>worque todo --for<span class="o">=</span>yesterday<span class="k">)</span>
+cat <span class="k">$(</span>worque todo --for<span class="o">=</span>yesterday<span class="k">)</span> | grep pending
+</code></pre>
+</div>
+
+<p>Anyway this is how I alias it in my <code class="highlighter-rouge">.zshrc</code> or <code class="highlighter-rouge">.bash_profile</code>.
+See <a href="https://github.com/huynhquancam/dotfiles/blob/master/zsh/aliases.zsh#L35">https://github.com/huynhquancam/dotfiles/blob/master/zsh/aliases.zsh#L35</a></p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nb">alias </span><span class="nv">today</span><span class="o">=</span><span class="s2">"vim </span><span class="k">$(</span>worque todo --for today<span class="k">)</span><span class="s2"> +':cd </span><span class="nv">$WORQUE_PATH</span><span class="s2">'"</span>
+<span class="nb">alias </span><span class="nv">ytd</span><span class="o">=</span><span class="s2">"vim </span><span class="k">$(</span>worque todo --for yesterday<span class="k">)</span><span class="s2"> +':cd </span><span class="nv">$WORQUE_PATH</span><span class="s2">'"</span>
+</code></pre>
+</div>
+
+<h3 id="slack-integration">Slack Integration</h3>
+
+<p>Yes, you can publish your daily notes to Slack too!</p>
+
+<p>Just make sure you have set <code class="highlighter-rouge">SLACK_API_TOKEN</code> accordingly to spare your fingers typing everytime. See <a href="https://get.slack.help/hc/en-us/articles/215770388-Creating-and-regenerating-API-tokens">this post</a> to get an idea of how to generate Slack API Token.</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nb">export </span><span class="nv">SLACK_API_TOKEN</span><span class="o">=</span><span class="s2">"something-very-secret"</span>
+</code></pre>
+</div>
+
+<p>Then you can use <code class="highlighter-rouge">worque push</code> to push your notes to Slack</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>worque push --channel<span class="o">=</span>daily-report
+
+<span class="c"># or forgot do it yesterday? No worries!</span>
+
+worque push --channel<span class="o">=</span>daily-report --for<span class="o">=</span>yesterday
+</code></pre>
+</div>
+
+<h3 id="vim-integration">VIM Integration</h3>
+
+<p>Yes, <strong><em>worque</em></strong> loves VIM too!!!</p>
+
+<p>Add this to your vimrc</p>
+
+<div class="language-viml highlighter-rouge"><pre class="highlight"><code>Plug <span class="s1">'huynhquancam/vim-worque'</span> # <span class="k">if</span> you'<span class="k">re</span> using <span class="k">vim</span><span class="p">-</span>plug
+Plugin <span class="s1">'huynhquancam/vim-worque'</span> # or Vundle
+</code></pre>
+</div>
+
+<p>Then try <code class="highlighter-rouge">:TD</code>, <code class="highlighter-rouge">:YTD</code> in your VIM to view the notes for today and yesterday respectively</p>
+
+<h3 id="references">References</h3>
+
+<p>Read more about <a href="https://github.com/huynhquancam/worque">worque</a>.
+Read more about <a href="https://github.com/huynhquancam/vim-worque">vim-worque</a>.
+View more in my <a href="https://github.com/huynhquancam/dotfiles">dotfiles</a></p>
+
+<p>Happy Reporting!!!</p>
+
+<p>Any thoughts or ideas are welcome!!!</p>
+
+
+  </div>
+  
+    <div id="disqus_thread"></div>
+<script>
+  /**
+   * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+   * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+   */
+/*
+ var disqus_config = function () {
+ this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+ this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+ };
+ */
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+
+  s.src = '//huynhquancam.disqus.com/embed.js';
+
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  
+</article>
+
+      </div>
+    </div>
+
+    
+      <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', "UA-71343659-1", 'auto');
+  ga('send', 'pageview');
+</script>
+
+    
+  </body>
+</html>

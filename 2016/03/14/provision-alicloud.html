@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>hqc.io | Cẩm Huỳnh | Provision AliCloud</title>
+
+  <meta name="description" content="This post shares how our application Dadadee, which is written in Ruby on Rails, is built and deployed.">
+  <meta name="author" content="Cẩm Huỳnh <huynhquancam@gmail.com>">
+  <meta name="og:image" content="https://c1.staticflickr.com/5/4059/5135403866_a6a65ec65e_b.jpg">
+
+  <link rel="canonical" href="https://hqc.io/2016/03/14/provision-alicloud.html">
+  <link rel="alternate" type="application/rss+xml" title="hqc.io | Cẩm Huỳnh" href="https://hqc.io/feed.xml">
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+  <body>
+    <header class="header">
+  <div class="header-content">
+    <div class="brand">
+      <a href="/">hqc.io</a>
+    </div>
+  </div>
+</header>
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post-detail" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Provision AliCloud</h1>
+    <p class="post-meta">
+      Published on <time datetime="2016-03-14T00:00:00+07:00" itemprop="datePublished">Mar 14, 2016</time>
+      
+      <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+        by
+        <i class="fa fa-user"></i>
+        <span itemprop="name">Cẩm Huỳnh</span>
+      </span>
+      
+    </p>
+  </header>
+  <div class="post-content" itemprop="articleBody">
+    <p>Last month we @ Dadadee were pretty excited to start moving off from Amazon Web Service to AliCloud.
+This post shares how our application, written in Ruby on Rails, is built and deployed.</p>
+
+<p>Note: I assume you have some experience with Ansible and Docker.</p>
+
+<h3 id="create-your-instance-on-alicloud">Create your instance on AliCloud</h3>
+
+<p>Let’s initiate a Generation II, 2-core and 4GB RAM instance.</p>
+
+<p>Although sometimes the console is buggy, generally AliCloud is quite easy to start off.</p>
+
+<p>Please note to set your root password, in order to SSH later.</p>
+
+<h3 id="provision-your-server-with-ansible">Provision your server with Ansible</h3>
+
+<p>As of I wrote this post, AliCloud’s apt mirror was still inaccessible, so we will need to choose another alternative mirror
+<script src="https://gist.github.com/huynhquancam/3f4095496720304d79d3.js"></script></p>
+
+<p>Your sources.list could be like this
+<script src="https://gist.github.com/huynhquancam/54e4fb5f527710f03a2c.js"></script></p>
+
+<p>Let’s set up some prerequisite packages</p>
+
+<script src="https://gist.github.com/huynhquancam/625d110f2531b46f5506.js"></script>
+
+<p>Then let’s install Docker</p>
+
+<script src="https://gist.github.com/huynhquancam/3d66cb90662f4449575c.js"></script>
+
+<p>OK, let’s pull our docker image from Registry (AWS ECR, Docker Hub or Quay, etc.)</p>
+
+<script src="https://gist.github.com/huynhquancam/fe5296227f94e6b9994c.js"></script>
+
+<p>Run the image</p>
+
+<script src="https://gist.github.com/huynhquancam/ea2515828a4b0473570a.js"></script>
+
+<p>That’s it! Feel free to leave your comments below! :-)</p>
+
+
+  </div>
+  
+    <div id="disqus_thread"></div>
+<script>
+  /**
+   * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+   * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+   */
+/*
+ var disqus_config = function () {
+ this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+ this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+ };
+ */
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+
+  s.src = '//huynhquancam.disqus.com/embed.js';
+
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  
+</article>
+
+      </div>
+    </div>
+
+    
+      <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', "UA-71343659-1", 'auto');
+  ga('send', 'pageview');
+</script>
+
+    
+  </body>
+</html>

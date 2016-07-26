@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>hqc.io | Cẩm Huỳnh | Refactor Controller - Extract LoggedIn-Controller</title>
+
+  <meta name="description" content="Sometimes your controllers actions require authentication and it makes your code look messy. This post is going to show you the idea of extracting them into LoggedInController">
+  <meta name="author" content="Cẩm Huỳnh <huynhquancam@gmail.com>">
+  <meta name="og:image" content="https://c1.staticflickr.com/5/4059/5135403866_a6a65ec65e_b.jpg">
+
+  <link rel="canonical" href="https://hqc.io/2014/08/18/refactor-controller-extract-logged-in-controller.html">
+  <link rel="alternate" type="application/rss+xml" title="hqc.io | Cẩm Huỳnh" href="https://hqc.io/feed.xml">
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+  <body>
+    <header class="header">
+  <div class="header-content">
+    <div class="brand">
+      <a href="/">hqc.io</a>
+    </div>
+  </div>
+</header>
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post-detail" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Refactor Controller - Extract LoggedIn-Controller</h1>
+    <p class="post-meta">
+      Published on <time datetime="2014-08-18T00:00:00+07:00" itemprop="datePublished">Aug 18, 2014</time>
+      
+      <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+        by
+        <i class="fa fa-user"></i>
+        <span itemprop="name">Cẩm Huỳnh</span>
+      </span>
+      
+    </p>
+  </header>
+  <div class="post-content" itemprop="articleBody">
+    <p>Sometimes your controllers actions require authentication and it makes your code look messy. This post is going to show you the idea of extracting them into <code class="highlighter-rouge">LoggedInController</code></p>
+
+<h3 id="what-is-the-idea">What is the idea?</h3>
+
+<p>I bet you have seen something like this</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ProductsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="n">before_filter</span> <span class="ss">:authenticate_user!</span><span class="p">,</span> <span class="ss">except: :index</span>
+
+  <span class="kp">protected</span>
+  <span class="k">def</span> <span class="nf">authenticate_user!</span>
+    <span class="n">redirect_to</span> <span class="n">user_login_url</span><span class="p">,</span> <span class="ss">notice: </span><span class="s1">'Hey man! Log in first please!'</span> <span class="k">unless</span> <span class="n">user_logged_in?</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<p>These lines of code are to filter users who are not logged in yet, redirect them and give them a nice alert.
+But the problem here is to which the responsibility of user authentication should belong.
+It is obviously not the job of <code class="highlighter-rouge">ProductsController</code>, as the products controller should not know the knowledge of how to filter an user.</p>
+
+<h3 id="just-shift-it-to-applicationcontroller---no-please-dont">Just shift it to ApplicationController? - “No, please don’t”.</h3>
+
+<p>Why ApplicationController is not a good idea?</p>
+
+<ul>
+  <li>ApplicationController should not know how to authenticate an user.</li>
+  <li>Although we move <code class="highlighter-rouge">authenticate_user!</code> to ApplicationController, ProductsController should not know which actions should be filtered
+and how user is being redirected.</li>
+</ul>
+
+<h3 id="extract-productscontroller-bases-on-authentication-context">Extract ProductsController bases on authentication context</h3>
+
+<p>My idea is to split ProductsController into two controllers: <code class="highlighter-rouge">LoggedIn::ProductsController</code> and <code class="highlighter-rouge">Public::ProductsController</code></p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">PublicController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span><span class="p">;</span> <span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">LoggedInController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="n">before_filter</span> <span class="ss">:authenticate_user!</span>
+
+  <span class="kp">protected</span>
+  <span class="k">def</span> <span class="nf">authenticate_user!</span>
+    <span class="n">redirect_to</span> <span class="n">user_login_url</span><span class="p">,</span> <span class="ss">notice: </span><span class="s1">'Hey man! Log in first please!'</span> <span class="k">unless</span> <span class="n">user_logged_in?</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<p>And this is how your ProductsController looks like</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="c1"># app/controllers/public/products_controller.rb</span>
+<span class="k">class</span> <span class="nc">Public</span><span class="o">::</span><span class="no">ProductsController</span> <span class="o">&lt;</span> <span class="no">PublicController</span>
+  <span class="k">def</span> <span class="nf">index</span>
+    <span class="c1"># Your code here</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># app/controllers/logged_in/products_controller.rb</span>
+<span class="k">class</span> <span class="nc">LoggedIn</span><span class="o">::</span><span class="no">ProductsController</span> <span class="o">&lt;</span> <span class="no">LoggedInController</span>
+  <span class="k">def</span> <span class="nf">new</span>
+    <span class="c1"># Your code here</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<h3 id="how-to-test-it-with-rspec">How to test it with RSpec</h3>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="c1"># spec/controllers/logged_in_controller_spec.rb</span>
+<span class="nb">require</span> <span class="s1">'rails_helper'</span>
+
+<span class="n">describe</span> <span class="no">LoggedInController</span> <span class="k">do</span>
+  <span class="c1"># stub an action to the controller</span>
+  <span class="n">controller</span><span class="p">(</span><span class="no">LoggedInController</span><span class="p">)</span> <span class="k">do</span>
+    <span class="k">def</span> <span class="nf">index</span>
+      <span class="n">render</span> <span class="ss">nothing: </span><span class="kp">true</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="n">describe</span> <span class="s1">'#authenticate_user!'</span> <span class="k">do</span>
+    <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="n">create</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span>
+
+    <span class="n">before</span> <span class="p">{</span> <span class="vi">@request</span><span class="p">.</span><span class="nf">env</span><span class="p">[</span><span class="s1">'devise.mapping'</span><span class="p">]</span> <span class="o">=</span> <span class="no">Devise</span><span class="p">.</span><span class="nf">mappings</span><span class="p">[</span><span class="ss">:user</span><span class="p">]</span> <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">do_request</span>
+      <span class="n">get</span> <span class="ss">:index</span>
+    <span class="k">end</span>
+
+    <span class="n">context</span> <span class="s1">'authenticated user'</span> <span class="k">do</span>
+      <span class="n">before</span> <span class="p">{</span> <span class="n">sign_in</span> <span class="n">user</span> <span class="p">}</span>
+      <span class="n">before</span> <span class="p">{</span> <span class="n">do_request</span> <span class="p">}</span>
+
+      <span class="n">it</span> <span class="p">{</span> <span class="n">is_expected</span><span class="p">.</span><span class="nf">to_not</span> <span class="n">redirect_to</span> <span class="n">new_user_session_path</span> <span class="p">}</span>
+    <span class="k">end</span>
+
+    <span class="n">context</span> <span class="s1">'public user'</span> <span class="k">do</span>
+      <span class="n">before</span> <span class="p">{</span> <span class="n">do_request</span> <span class="p">}</span>
+
+      <span class="n">it</span> <span class="p">{</span> <span class="n">is_expected</span><span class="p">.</span><span class="nf">to</span> <span class="n">redirect_to</span> <span class="n">new_user_session_path</span> <span class="p">}</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+
+  </div>
+  
+    <div id="disqus_thread"></div>
+<script>
+  /**
+   * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+   * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+   */
+/*
+ var disqus_config = function () {
+ this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+ this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+ };
+ */
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+
+  s.src = '//huynhquancam.disqus.com/embed.js';
+
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  
+</article>
+
+      </div>
+    </div>
+
+    
+      <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', "UA-71343659-1", 'auto');
+  ga('send', 'pageview');
+</script>
+
+    
+  </body>
+</html>
