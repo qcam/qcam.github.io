@@ -26,15 +26,15 @@
   </div>
 </header>
 
-    <div class="page-content">
-      <div class="wrapper">
-        <article class="post-detail" itemscope itemtype="http://schema.org/BlogPosting">
-  <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Worque - CLI that manages your daily notes</h1>
-    <p class="post-meta">
+    <div class="site">
+      <div class="site__content">
+        <article class="post post--detail">
+  <header class="post__header">
+    <h1 class="page-heading post__title" itemprop="name headline">Worque - CLI that manages your daily notes</h1>
+    <p class="post__metadata">
       Published on <time datetime="2016-07-21T00:00:00+07:00" itemprop="datePublished">Jul 21, 2016</time>
       
-      <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span>
         by
         <i class="fa fa-user"></i>
         <span itemprop="name">Cẩm Huỳnh</span>
@@ -55,7 +55,7 @@
       </span>
     </p>
   </header>
-  <div class="post-content" itemprop="articleBody">
+  <div class="post__content">
     <p>I would like to introduce <a href="https://github.com/huynhquancam/worque">Worque</a> (pronounced as <code class="highlighter-rouge">work</code>),
 which is a CLI to manage all your daily notes like a boss, with vim integration.</p>
 
@@ -72,7 +72,7 @@ which is a CLI to manage all your daily notes like a boss, with vim integration.
 
 <h3 id="installation">Installation</h3>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>gem install worque
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gem install worque
 </code></pre>
 </div>
 
@@ -80,26 +80,26 @@ which is a CLI to manage all your daily notes like a boss, with vim integration.
 
 <p>Add this to your <code class="highlighter-rouge">.bash_profile</code></p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>  <span class="nb">export </span><span class="nv">WORQUE_PATH</span><span class="o">=</span><span class="s1">'/path/to/your/lovely/notes'</span>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">WORQUE_PATH</span><span class="o">=</span><span class="s1">'/path/to/your/lovely/notes'</span>
 </code></pre>
 </div>
 
 <p>Personally I’d like to map it to my Dropbox.</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nb">export </span><span class="nv">WORQUE_PATH</span><span class="o">=</span><span class="s1">'~/Dropbox/Notes/Todos'</span>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">WORQUE_PATH</span><span class="o">=</span><span class="s1">'~/Dropbox/Notes/Todos'</span>
 </code></pre>
 </div>
 
 <p>After that, executing the command below will create a today’s note for you</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>worque todo --for<span class="o">=</span>today
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>worque todo --for<span class="o">=</span>today
 <span class="c"># ~/notes/checklist-2016-07-19.md</span>
 </code></pre>
 </div>
 
 <p>Or look back what’s done yesterday.</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>workque todo --for yebsterday
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>workque todo --for yebsterday
 <span class="c"># ~/notes/checklist-2016-07-18.md</span>
 </code></pre>
 </div>
@@ -107,24 +107,24 @@ which is a CLI to manage all your daily notes like a boss, with vim integration.
 <p>Oops! Today is Monday? No worries, worque got you covered</p>
 
 <div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="c"># If today is Monday 25-07-2016</span>
-workque todo --for yesterday
+<span class="gp">$ </span>workque todo --for yesterday
 <span class="c"># ~/notes/checklist-2016-07-22.md</span>
 </code></pre>
 </div>
 
 <p>It’s chain-able with other commands</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>vim worque
-vim <span class="k">$(</span>worque todo --for<span class="o">=</span>yesterday<span class="k">)</span>
-cat <span class="k">$(</span>worque todo --for<span class="o">=</span>yesterday<span class="k">)</span> | grep pending
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>vim worque
+<span class="gp">$ </span>vim <span class="k">$(</span>worque todo --for<span class="o">=</span>yesterday<span class="k">)</span>
+<span class="gp">$ </span>cat <span class="k">$(</span>worque todo --for<span class="o">=</span>yesterday<span class="k">)</span> | grep pending
 </code></pre>
 </div>
 
 <p>Anyway this is how I alias it in my <code class="highlighter-rouge">.zshrc</code> or <code class="highlighter-rouge">.bash_profile</code>.
 See <a href="https://github.com/huynhquancam/dotfiles/blob/master/zsh/aliases.zsh#L35">https://github.com/huynhquancam/dotfiles/blob/master/zsh/aliases.zsh#L35</a></p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nb">alias </span><span class="nv">today</span><span class="o">=</span><span class="s2">"vim </span><span class="k">$(</span>worque todo --for today<span class="k">)</span><span class="s2"> +':cd </span><span class="nv">$WORQUE_PATH</span><span class="s2">'"</span>
-<span class="nb">alias </span><span class="nv">ytd</span><span class="o">=</span><span class="s2">"vim </span><span class="k">$(</span>worque todo --for yesterday<span class="k">)</span><span class="s2"> +':cd </span><span class="nv">$WORQUE_PATH</span><span class="s2">'"</span>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">alias </span><span class="nv">today</span><span class="o">=</span><span class="s2">"vim </span><span class="k">$(</span>worque todo --for today<span class="k">)</span><span class="s2"> +':cd </span><span class="nv">$WORQUE_PATH</span><span class="s2">'"</span>
+<span class="gp">$ </span><span class="nb">alias </span><span class="nv">ytd</span><span class="o">=</span><span class="s2">"vim </span><span class="k">$(</span>worque todo --for yesterday<span class="k">)</span><span class="s2"> +':cd </span><span class="nv">$WORQUE_PATH</span><span class="s2">'"</span>
 </code></pre>
 </div>
 
@@ -134,17 +134,17 @@ See <a href="https://github.com/huynhquancam/dotfiles/blob/master/zsh/aliases.zs
 
 <p>Just make sure you have set <code class="highlighter-rouge">SLACK_API_TOKEN</code> accordingly to spare your fingers typing everytime. See <a href="https://get.slack.help/hc/en-us/articles/215770388-Creating-and-regenerating-API-tokens">this post</a> to get an idea of how to generate Slack API Token.</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nb">export </span><span class="nv">SLACK_API_TOKEN</span><span class="o">=</span><span class="s2">"something-very-secret"</span>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">SLACK_API_TOKEN</span><span class="o">=</span><span class="s2">"something-very-secret"</span>
 </code></pre>
 </div>
 
 <p>Then you can use <code class="highlighter-rouge">worque push</code> to push your notes to Slack</p>
 
-<div class="language-sh highlighter-rouge"><pre class="highlight"><code>worque push --channel<span class="o">=</span>daily-report
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>worque push --channel<span class="o">=</span>daily-report
 
 <span class="c"># or forgot do it yesterday? No worries!</span>
 
-worque push --channel<span class="o">=</span>daily-report --for<span class="o">=</span>yesterday
+<span class="gp">$ </span>worque push --channel<span class="o">=</span>daily-report --for<span class="o">=</span>yesterday
 </code></pre>
 </div>
 
@@ -215,5 +215,25 @@ View more in my <a href="https://github.com/huynhquancam/dotfiles">dotfiles</a><
 </script>
 
     
+    <footer>
+  <ul class="pages">
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <li>
+      <a href="/about">About</a>
+    </li>
+    <li>
+      <a href="/projects">Projects</a>
+    </li>
+    <li>
+      <a href="/essays">Posts</a>
+    </li>
+    <li>
+      <a href="/rbcv">Resume</a>
+    </li>
+  </ul>
+</footer>
+
   </body>
 </html>

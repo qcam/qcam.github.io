@@ -26,15 +26,15 @@
   </div>
 </header>
 
-    <div class="page-content">
-      <div class="wrapper">
-        <article class="post-detail" itemscope itemtype="http://schema.org/BlogPosting">
-  <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Sign Git commits with Keybase</h1>
-    <p class="post-meta">
+    <div class="site">
+      <div class="site__content">
+        <article class="post post--detail">
+  <header class="post__header">
+    <h1 class="page-heading post__title" itemprop="name headline">Sign Git commits with Keybase</h1>
+    <p class="post__metadata">
       Published on <time datetime="2016-07-03T00:00:00+07:00" itemprop="datePublished">Jul 3, 2016</time>
       
-      <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span>
         by
         <i class="fa fa-user"></i>
         <span itemprop="name">Cẩm Huỳnh</span>
@@ -51,7 +51,7 @@
       </span>
     </p>
   </header>
-  <div class="post-content" itemprop="articleBody">
+  <div class="post__content">
     <p>Keybase is an public key crypto for everyone, maps your identity to your public keys, and vice versa.</p>
 
 <p>This post will show you how to sign your Git commit with Keybase GPG key, and how to publish your key to Github</p>
@@ -60,35 +60,45 @@
 
 <p>In case you haven’t had any GPG keys on Keybase</p>
 
-<figure class="highlight"><pre><code class="language-shell" data-lang="shell">keybase pgp gen --multi
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>keybase pgp gen --multi
 
-<span class="c"># then follow the instruction, select "Upload your key to Keybase"</span></code></pre></figure>
+<span class="c"># then follow the instruction, select "Upload your key to Keybase"</span>
+</code></pre>
+</div>
 
 <h2 id="import-gpg-key-from-keybase">Import GPG key from Keybase</h2>
 
 <p>In case you already have GPG keys on Keybase</p>
 
-<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># Import secret key from keybase</span>
-keybase pgp <span class="nb">export</span> --secret | gpg --allow-secret-key-import --import</code></pre></figure>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="c"># Import secret key from keybase</span>
+<span class="gp">$ </span>keybase pgp <span class="nb">export</span> --secret | gpg --allow-secret-key-import --import
+</code></pre>
+</div>
 
 <p>To check if your key has been imported into your local GPG secret keys</p>
 
-<figure class="highlight"><pre><code class="language-shell" data-lang="shell">gpg --list-secret-keys</code></pre></figure>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>gpg --list-secret-keys
+</code></pre>
+</div>
 
 <p>This is how it looks like if successfully imported.</p>
 
-<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><span class="c"># Private key basic information</span>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="c"># Private key basic information</span>
 
 sec   4096R/BC775C77 2016-04-09 <span class="o">[</span>expires: 2032-04-05]
 uid                  John Doe &lt;john.doe@gmail.com&gt;
-ssb   4096R/7BDF34CD 2016-04-09</code></pre></figure>
+ssb   4096R/7BDF34CD 2016-04-09
+</code></pre>
+</div>
 
 <h2 id="sign-git-commit">Sign Git commit</h2>
 
 <p>If you want to sign your Git commit with the key generated/imported</p>
 
-<figure class="highlight"><pre><code class="language-shell" data-lang="shell">git config --global user.signingkey &lt;key-id&gt;
-<span class="c"># key-id is **BC775C77** for the sample private key above</span></code></pre></figure>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git config --global user.signingkey &lt;key-id&gt;
+<span class="c"># key-id is **BC775C77** for the sample private key above</span>
+</code></pre>
+</div>
 
 <h2 id="import-public-key-to-github">Import Public key to Github</h2>
 
@@ -98,7 +108,9 @@ ssb   4096R/7BDF34CD 2016-04-09</code></pre></figure>
 
 <p>To get your public key</p>
 
-<figure class="highlight"><pre><code class="language-shell" data-lang="shell">keybase pgp <span class="nb">export</span></code></pre></figure>
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>keybase pgp <span class="nb">export</span>
+</code></pre>
+</div>
 
 <p>Then attach the key to Github</p>
 
@@ -149,5 +161,25 @@ ssb   4096R/7BDF34CD 2016-04-09</code></pre></figure>
 </script>
 
     
+    <footer>
+  <ul class="pages">
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <li>
+      <a href="/about">About</a>
+    </li>
+    <li>
+      <a href="/projects">Projects</a>
+    </li>
+    <li>
+      <a href="/essays">Posts</a>
+    </li>
+    <li>
+      <a href="/rbcv">Resume</a>
+    </li>
+  </ul>
+</footer>
+
   </body>
 </html>

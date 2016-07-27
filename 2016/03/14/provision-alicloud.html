@@ -26,15 +26,15 @@
   </div>
 </header>
 
-    <div class="page-content">
-      <div class="wrapper">
-        <article class="post-detail" itemscope itemtype="http://schema.org/BlogPosting">
-  <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Provision AliCloud</h1>
-    <p class="post-meta">
+    <div class="site">
+      <div class="site__content">
+        <article class="post post--detail">
+  <header class="post__header">
+    <h1 class="page-heading post__title" itemprop="name headline">Provision AliCloud</h1>
+    <p class="post__metadata">
       Published on <time datetime="2016-03-14T00:00:00+07:00" itemprop="datePublished">Mar 14, 2016</time>
       
-      <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span>
         by
         <i class="fa fa-user"></i>
         <span itemprop="name">Cẩm Huỳnh</span>
@@ -51,8 +51,8 @@
       </span>
     </p>
   </header>
-  <div class="post-content" itemprop="articleBody">
-    <p>Last month we @ Dadadee were pretty excited to start moving off from Amazon Web Service to AliCloud.
+  <div class="post__content">
+    <p>Last month we @ Dadadee were pretty excited to start moving off from <a href="https://aws.amazon.com/">Amazon Web Service</a> to <a href="https://intl.aliyun.com/">AliCloud</a>.
 This post shares how our application, written in Ruby on Rails, is built and deployed.</p>
 
 <p>Note: I assume you have some experience with Ansible and Docker.</p>
@@ -67,27 +67,123 @@ This post shares how our application, written in Ruby on Rails, is built and dep
 
 <h3 id="provision-your-server-with-ansible">Provision your server with Ansible</h3>
 
-<p>As of I wrote this post, AliCloud’s apt mirror was still inaccessible, so we will need to choose another alternative mirror
-<script src="https://gist.github.com/huynhquancam/3f4095496720304d79d3.js"></script></p>
+<p>As of I wrote this post, AliCloud’s apt mirror was still inaccessible, so we will need to choose another alternative mirror</p>
 
-<p>Your sources.list could be like this
-<script src="https://gist.github.com/huynhquancam/54e4fb5f527710f03a2c.js"></script></p>
+<div class="language-yml highlighter-rouge"><pre class="highlight"><code><span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">Update sources.list</span>
+  <span class="s">copy</span><span class="pi">:</span> <span class="s">src="sources.list" dest="/etc/apt/sources.list"</span>
+</code></pre>
+</div>
+
+<p>Your sources.list could be like this</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># Created by Ansible
+
+deb http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse
+</code></pre>
+</div>
 
 <p>Let’s set up some prerequisite packages</p>
 
-<script src="https://gist.github.com/huynhquancam/625d110f2531b46f5506.js"></script>
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">update apt cache</span>
+  <span class="s">apt</span><span class="pi">:</span> <span class="s">update_cache=yes</span>
+  <span class="s">tags</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">setup</span>
+
+<span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">install curl</span>
+  <span class="s">apt</span><span class="pi">:</span> <span class="s">name=curl state=present</span>
+  <span class="s">tags</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">setup</span>
+
+<span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">install python-dev</span>
+  <span class="s">apt</span><span class="pi">:</span> <span class="s">name=python-dev state=present</span>
+  <span class="s">tags</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">setup</span>
+
+<span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">install pip</span>
+  <span class="s">apt</span><span class="pi">:</span> <span class="s">name=python-pip state=present</span>
+  <span class="s">tags</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">setup</span>
+
+<span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">update pip to latest version</span>
+  <span class="s">pip</span><span class="pi">:</span> <span class="s">name=pip state=latest</span>
+  <span class="s">tags</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">setup</span>
+
+<span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">setup ansible env</span>
+  <span class="s">setup</span><span class="pi">:</span>
+  <span class="s">tags</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">setup</span>
+
+<span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">make sure pt-transport-https is installed</span>
+  <span class="s">apt</span><span class="pi">:</span> <span class="s">name=apt-transport-https state=installed</span>
+  <span class="s">tags</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">setup</span>
+</code></pre>
+</div>
 
 <p>Then let’s install Docker</p>
 
-<script src="https://gist.github.com/huynhquancam/3d66cb90662f4449575c.js"></script>
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">add docker server and host key</span>
+  <span class="s">apt_key</span><span class="pi">:</span> <span class="s">keyserver="hkp://p80.pool.sks-keyservers.net:80" id="58118E89F3A912897C070ADBF76221572C52609D" state=present</span>
+
+<span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">add docker repo and update apt cache</span>
+  <span class="s">apt_repository</span><span class="pi">:</span> <span class="s">repo="deb https://apt.dockerproject.org/repo ubuntu-trusty main" update_cache=yes state=present</span>
+
+<span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">install docker</span>
+  <span class="s">apt</span><span class="pi">:</span> <span class="s">name=docker-engine state=present</span>
+
+<span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">install docker-py</span>
+  <span class="s">pip</span><span class="pi">:</span> <span class="s">name=docker-py version=1.1.0 state=present</span>
+
+<span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">create deploy user (this is optional)</span>
+  <span class="s">user</span><span class="pi">:</span>
+    <span class="s">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">john"</span>
+    <span class="s">comment</span><span class="pi">:</span> <span class="s2">"</span><span class="s">john"</span>
+    <span class="s">group</span><span class="pi">:</span> <span class="s">sudo</span>
+    <span class="s">password</span><span class="pi">:</span> <span class="s2">"</span><span class="s">pa$$w0rd"</span>
+    <span class="s">generate_ssh_key</span><span class="pi">:</span> <span class="s2">"</span><span class="s">yes"</span>
+    <span class="s">createhome</span><span class="pi">:</span> <span class="s2">"</span><span class="s">yes"</span>
+    <span class="s">state</span><span class="pi">:</span> <span class="s2">"</span><span class="s">present"</span>
+
+<span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">set authorized key (this is optional)</span>
+  <span class="s">authorized_key</span><span class="pi">:</span>
+    <span class="s">user</span><span class="pi">:</span> <span class="s2">"</span><span class="s">john"</span>
+    <span class="s">key</span><span class="pi">:</span> <span class="s2">"</span><span class="s">"</span>
+    <span class="s">state</span><span class="pi">:</span> <span class="s2">"</span><span class="s">present"</span>
+</code></pre>
+</div>
 
 <p>OK, let’s pull our docker image from Registry (AWS ECR, Docker Hub or Quay, etc.)</p>
 
-<script src="https://gist.github.com/huynhquancam/fe5296227f94e6b9994c.js"></script>
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">login to ECR registry</span>
+  <span class="s">shell</span><span class="pi">:</span> <span class="s2">"</span><span class="s">$(aws</span><span class="nv"> </span><span class="s">ecr</span><span class="nv"> </span><span class="s">get-login</span><span class="nv"> </span><span class="s">--region</span><span class="nv"> </span><span class="s">us-east-1)"</span>
+
+<span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">pull Docker image from ECR</span>
+  <span class="s">shell</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docker</span><span class="nv"> </span><span class="s">pull</span><span class="nv"> </span><span class="s">your-hub.io/your-app:latest"</span>
+</code></pre>
+</div>
 
 <p>Run the image</p>
 
-<script src="https://gist.github.com/huynhquancam/ea2515828a4b0473570a.js"></script>
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">Up the version</span>
+  <span class="s">docker</span><span class="pi">:</span>
+    <span class="s">image</span><span class="pi">:</span> <span class="s2">"</span><span class="s">your-hub.io/your-app:latest"</span>
+    <span class="s">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">your-app"</span>
+    <span class="s">state</span><span class="pi">:</span> <span class="s">reloaded</span>
+    <span class="s">expose</span><span class="pi">:</span> <span class="s">5000</span>
+    <span class="s">port</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">80:5000"</span>
+</code></pre>
+</div>
 
 <p>That’s it! Feel free to leave your comments below! :-)</p>
 
@@ -135,5 +231,25 @@ This post shares how our application, written in Ruby on Rails, is built and dep
 </script>
 
     
+    <footer>
+  <ul class="pages">
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <li>
+      <a href="/about">About</a>
+    </li>
+    <li>
+      <a href="/projects">Projects</a>
+    </li>
+    <li>
+      <a href="/essays">Posts</a>
+    </li>
+    <li>
+      <a href="/rbcv">Resume</a>
+    </li>
+  </ul>
+</footer>
+
   </body>
 </html>
