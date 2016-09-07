@@ -6,9 +6,188 @@
 </description>
     <link>https://hqc.io/</link>
     <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 20 Aug 2016 01:23:23 +0700</pubDate>
-    <lastBuildDate>Sat, 20 Aug 2016 01:23:23 +0700</lastBuildDate>
+    <pubDate>Wed, 07 Sep 2016 14:14:45 +0700</pubDate>
+    <lastBuildDate>Wed, 07 Sep 2016 14:14:45 +0700</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>Five Rails Gotchas</title>
+        <description>&lt;p&gt;It’s undeniable that Rails is a great framework to speedily build up your application.
+However, despite of its handiness, like other frameworks, Rails has its own flaws and
+is never a silver bullet. This post is going to show you some of the gotchas (or pitfalls you name it)
+I encountered while working with Rails.&lt;/p&gt;
+
+&lt;h3 id=&quot;associations-writer&quot;&gt;associations writer&lt;/h3&gt;
+
+&lt;p&gt;The code below is supposed to assign posts to a specific user.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;has_many&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:posts&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;belongs_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;find_by_name&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;John&#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;save!&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Of course it works (perfectly)! Then you might ask what’s the problem?  Good question.
+When do you think the posts will get saved?&lt;/p&gt;
+
+&lt;p&gt;For a common people with common sense, &lt;code class=&quot;highlighter-rouge&quot;&gt;posts&lt;/code&gt; will be persisted when you
+invoke &lt;code class=&quot;highlighter-rouge&quot;&gt;user.save!&lt;/code&gt;, then you’re trapped. Right after &lt;code class=&quot;highlighter-rouge&quot;&gt;user.posts&lt;/code&gt; was assigned,
+the persistence will be invoked, so calling &lt;code class=&quot;highlighter-rouge&quot;&gt;User#save!&lt;/code&gt; here is redundant.&lt;/p&gt;
+
+&lt;h3 id=&quot;aftersave-callback&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;after_save&lt;/code&gt; callback&lt;/h3&gt;
+
+&lt;p&gt;I always recommend people not to use Rails callbacks but if you DO have to, use
+&lt;code class=&quot;highlighter-rouge&quot;&gt;after_commit&lt;/code&gt; instead.&lt;/p&gt;
+
+&lt;p&gt;A lot of people has written about this, see
+&lt;a href=&quot;http://www.justinweiss.com/articles/a-couple-callback-gotchas-and-a-rails-5-fix/&quot;&gt;what Justin Weiss said&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;auto-reloading&quot;&gt;auto-(re)loading&lt;/h3&gt;
+
+&lt;p&gt;In the example below, if you invoke &lt;code class=&quot;highlighter-rouge&quot;&gt;User.foo&lt;/code&gt; without preloading
+&lt;code class=&quot;highlighter-rouge&quot;&gt;lib/user/bar.rb&lt;/code&gt;, your code blows up (probably in development environment) with a constant
+not found exception.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# app/models/user.rb&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;
+    &lt;span class=&quot;no&quot;&gt;Bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xyz&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# lib/user/bar.rb&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Bar&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;xyz&lt;/span&gt;
+      &lt;span class=&quot;s2&quot;&gt;&quot;foot&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;But why, didn’t I already define &lt;code class=&quot;highlighter-rouge&quot;&gt;User::Bar&lt;/code&gt; under &lt;code class=&quot;highlighter-rouge&quot;&gt;lib&lt;/code&gt; directory?&lt;/p&gt;
+
+&lt;p&gt;The reason is because Rails treats all missing constants as &lt;code class=&quot;highlighter-rouge&quot;&gt;TOP_LEVEL&lt;/code&gt;
+constants. So when &lt;code class=&quot;highlighter-rouge&quot;&gt;User#foo&lt;/code&gt;, since &lt;code class=&quot;highlighter-rouge&quot;&gt;Bar&lt;/code&gt; is not yet defined, Rails will look
+up in &lt;code class=&quot;highlighter-rouge&quot;&gt;app/models/bar.rb&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;lib/bar.rb&lt;/code&gt;. That’s why &lt;code class=&quot;highlighter-rouge&quot;&gt;Bar&lt;/code&gt; (of course) cannot be found.&lt;/p&gt;
+
+&lt;p&gt;To fix this you can explicitly tell Rails its parent module/class.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# app/models/user.rb&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;User&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;xyz&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;eager-loading&quot;&gt;eager-loading&lt;/h3&gt;
+
+&lt;p&gt;How to avoid N+1 query in Rails? Typically this is how many people will do.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;includes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;But do you know how on earth it works?&lt;/p&gt;
+
+&lt;p&gt;First ActiveRecord will fetch all users, then map them to ActiveRecord::Base
+objects and hold them in memory.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`users`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then it fetches all posts related to those user IDs, and hold them in memory.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`posts`&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`posts`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;`user_id`&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;...,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;N&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then it automatically maps all posts to specific user using Ruby Enumerator (and
+memory).&lt;/p&gt;
+
+&lt;p&gt;For instance, here’s the pseudo code.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;all&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;user_id: &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;pluck&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;user_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This works seamlessly most of the time, but when you reach 100_000 users with 1_000
+posts each, this strategy might not be so efficient, as it consumes up a great
+deal of memory. (Yeah, if you’re gonna debate how cheap hardware is, go tell you
+boss!)&lt;/p&gt;
+
+&lt;h3 id=&quot;sprockets-dependon&quot;&gt;Sprockets &lt;code class=&quot;highlighter-rouge&quot;&gt;depend_on&lt;/code&gt;.&lt;/h3&gt;
+
+&lt;p&gt;You’re probably using SASS &lt;code class=&quot;highlighter-rouge&quot;&gt;@import&lt;/code&gt; instead of traditional &lt;code class=&quot;highlighter-rouge&quot;&gt;//= require&lt;/code&gt; to import
+CSS sub-files. (People said @import is better, I have no idea why, leave your
+comments below if you know)&lt;/p&gt;
+
+&lt;div class=&quot;language-sass highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// app/assets/stylesheets/application.css
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;users/index&quot;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;users/show&quot;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;foo&quot;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;bar&quot;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;But you will find that your &lt;code class=&quot;highlighter-rouge&quot;&gt;application.css&lt;/code&gt; is not re-precompiled
+after you made some changes to the sub-files e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;users/index&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;foo&lt;/code&gt;,
+etc.&lt;/p&gt;
+
+&lt;p&gt;That is because of Rails Sprockets’ caching mechanism, it only re-precompile
+your asset if it (literally) has changed. (and Sprockets is not in the mood to
+talk with SASS @import).&lt;/p&gt;
+
+&lt;p&gt;To have assets re-precompiled after changing its including files, Sprockets
+offers &lt;code class=&quot;highlighter-rouge&quot;&gt;depend_on&lt;/code&gt; directive, to explicitly tell Sprockets to observe the changes
+of the including files.&lt;/p&gt;
+
+&lt;div class=&quot;language-sass highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// app/assets/stylesheets/application.css
+//= depend_on &quot;users/index&quot;;
+//= depend_on &quot;users/show&quot;;
+//= depend_on &quot;foo&quot;;
+//= depend_on &quot;bar&quot;;
+&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;users/index&quot;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;users/show&quot;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;foo&quot;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;bar&quot;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;lessons&quot;&gt;Lessons&lt;/h3&gt;
+
+&lt;p&gt;Good understanding on your tool’s pros/cons is one of the essential things to be a good programmer.&lt;/p&gt;
+
+&lt;h5 id=&quot;happing-programming&quot;&gt;Happing Programming!!!&lt;/h5&gt;
+</description>
+        <pubDate>Wed, 07 Sep 2016 00:00:00 +0700</pubDate>
+        <link>https://hqc.io/2016/09/07/five-rails-gotchas.html</link>
+        <guid isPermaLink="true">https://hqc.io/2016/09/07/five-rails-gotchas.html</guid>
+        
+        <category>ruby</category>
+        
+        <category>rails</category>
+        
+        
+      </item>
     
       <item>
         <title>First seven jobs</title>
@@ -694,35 +873,6 @@ So please make sure you have them set properly.&lt;/p&gt;
         <category>heroku</category>
         
         <category>rails</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Thói xấu của dev Việt</title>
-        <description>&lt;p&gt;Hôm nay trò chuyện chém gió với một anh bạn người Singapore làm chung ngành và sống làm việc tại Sài Gòn khá lâu, anh ta ngồi ba hoa và chán nản với những thói xấu của hầu hết dev Việt:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Họ &lt;strong&gt;thụ động&lt;/strong&gt;, không chịu tự tìm hiểu, toàn chờ người ta đến mớm kiến thức cho.&lt;/li&gt;
-  &lt;li&gt;Họ &lt;strong&gt;không biết tự ý thức bản thân&lt;/strong&gt;, có sếp đốc thúc thì làm, không có sếp thì … ngồi nghe nhạc, xem phim.&lt;/li&gt;
-  &lt;li&gt;Dev Việt &lt;strong&gt;kém và không biết giải quyết vấn đề&lt;/strong&gt;, bằng chứng là chẳng có công ty top thế giới nào đến mở development house tại Việt Nam cả, nếu có đến thì cũng ba giò bốn cẳng mà chạy khỏi.&lt;/li&gt;
-  &lt;li&gt;Rất nhiều dev Việt thích &lt;strong&gt;làm freelancing work trong giờ làm việc&lt;/strong&gt;.&lt;/li&gt;
-  &lt;li&gt;Làm việc &lt;strong&gt;không có tâm&lt;/strong&gt;, làm cho đủ số giờ rồi đi về. Không những vậy, nhiều dev còn viện cớ OT để ở lại làm freelance kiếm thêm thu nhập.&lt;/li&gt;
-  &lt;li&gt;Cứ đi phỏng vấn là dev Việt hỏi ngay: &lt;strong&gt;“Công ty có company dinner không?”&lt;/strong&gt;, &lt;strong&gt;“Công ty có tổ chức team building hay company trip không?”&lt;/strong&gt;, trong khi những câu hỏi cần thiết như là: “Trách nhiệm của công việc này là gì?”, “Công việc này đòi hỏi kĩ năng ra sao?”, hay thậm chí là “Công ty có những phúc lợi gì giúp tôi phát triển bản thân hay không?” thì không hỏi. Các bạn cần đi &lt;strong&gt;chơi&lt;/strong&gt; và đi &lt;strong&gt;ăn&lt;/strong&gt; đến thế sao?&lt;/li&gt;
-  &lt;li&gt;Dev Việt rất thích &lt;strong&gt;nghỉ nửa ngày&lt;/strong&gt; vì lý do bệnh? Bạn hãy liệt kê thử có cái bệnh nào mà nửa ngày  khỏi bệnh xem, ngoại trừ bệnh lười?&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Mình ngồi nghe mà mặt hơi sượng, không biết là nó có chừa mình ra chưa. :cry:&lt;/p&gt;
-
-&lt;p&gt;Còn bạn, bạn thấy nó đã chừa bạn ra chưa?&lt;/p&gt;
-</description>
-        <pubDate>Mon, 18 Aug 2014 00:00:00 +0700</pubDate>
-        <link>https://hqc.io/2014/08/18/thoi-xau-cua-dev-viet.html</link>
-        <guid isPermaLink="true">https://hqc.io/2014/08/18/thoi-xau-cua-dev-viet.html</guid>
-        
-        <category>thoughts</category>
-        
-        <category>vietnamese</category>
         
         
       </item>
