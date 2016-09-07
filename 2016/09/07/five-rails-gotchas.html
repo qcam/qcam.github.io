@@ -169,14 +169,13 @@ objects and hold them in memory.</p>
 </code></pre>
 </div>
 
-<p>Then it fetches all posts related to those user IDs, and hold them in memory.</p>
+<p>Then it fetches all posts related to those user IDs, and holds them in memory.</p>
 
 <div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="nv">`posts`</span> <span class="k">WHERE</span> <span class="nv">`posts`</span><span class="p">.</span><span class="nv">`user_id`</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="p">...,</span> <span class="n">N</span><span class="p">]</span>
 </code></pre>
 </div>
 
-<p>Then it automatically maps all posts to specific user using Ruby Enumerator (and
-memory).</p>
+<p>Then it automatically does some “posts-to-user” mapping using Ruby Enumerator.</p>
 
 <p>For instance, here’s the pseudo code.</p>
 
@@ -191,12 +190,12 @@ memory).</p>
 
 <p>This works seamlessly most of the time, but when you reach 100_000 users with 1_000
 posts each, this strategy might not be so efficient, as it consumes up a great
-deal of memory. (Yeah, if you’re gonna debate how cheap hardware is, go tell you
+deal of memory. (Yeah, if you’re gonna debate how cheap hardware is, go convince your
 boss!)</p>
 
 <h3 id="sprockets-dependon">Sprockets <code class="highlighter-rouge">depend_on</code>.</h3>
 
-<p>You’re probably using SASS <code class="highlighter-rouge">@import</code> instead of traditional <code class="highlighter-rouge">//= require</code> to import
+<p>Probably you’re using SASS <code class="highlighter-rouge">@import</code> instead of traditional <code class="highlighter-rouge">//= require</code> to import
 CSS sub-files. (People said @import is better, I have no idea why, leave your
 comments below if you know)</p>
 
@@ -208,17 +207,16 @@ comments below if you know)</p>
 </code></pre>
 </div>
 
-<p>But you will find that your <code class="highlighter-rouge">application.css</code> is not re-precompiled
-after you made some changes to the sub-files e.g. <code class="highlighter-rouge">users/index</code>, <code class="highlighter-rouge">foo</code>,
-etc.</p>
+<p>But you will find that your <code class="highlighter-rouge">application.css</code> is not re-precompiled after you made some
+changes to the sub-files e.g. <code class="highlighter-rouge">users/index</code>, <code class="highlighter-rouge">foo</code>, etc.</p>
 
-<p>That is because of Rails Sprockets’ caching mechanism, it only re-precompile
-your asset if it (literally) has changed. (and Sprockets is not in the mood to
-talk with SASS @import).</p>
+<p>That is because of Rails Sprockets’ underlying caching mechanism, which is supposed to
+re-precompile your asset if the file has literally changed. On top of that, the caching
+framework also observes all dependent files to invalidate cache accordingly. However,
+the mechanism doesn’t work with SASS’s @import, but its own <code class="highlighter-rouge">require</code> directive.</p>
 
-<p>To have assets re-precompiled after changing its including files, Sprockets
-offers <code class="highlighter-rouge">depend_on</code> directive, to explicitly tell Sprockets to observe the changes
-of the including files.</p>
+<p>To fix the cache invalidation problem above, you need to explicitly declare which files
+Sprockets should observe, by using Sprockets offered <code class="highlighter-rouge">depend_on</code> directive.</p>
 
 <div class="language-sass highlighter-rouge"><pre class="highlight"><code><span class="c1">// app/assets/stylesheets/application.css
 //= depend_on "users/index";

@@ -6,8 +6,8 @@
 </description>
     <link>https://hqc.io/</link>
     <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 07 Sep 2016 14:14:45 +0700</pubDate>
-    <lastBuildDate>Wed, 07 Sep 2016 14:14:45 +0700</lastBuildDate>
+    <pubDate>Wed, 07 Sep 2016 14:50:11 +0700</pubDate>
+    <lastBuildDate>Wed, 07 Sep 2016 14:50:11 +0700</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
@@ -108,14 +108,13 @@ objects and hold them in memory.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;Then it fetches all posts related to those user IDs, and hold them in memory.&lt;/p&gt;
+&lt;p&gt;Then it fetches all posts related to those user IDs, and holds them in memory.&lt;/p&gt;
 
 &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`posts`&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`posts`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;`user_id`&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;...,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;N&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;Then it automatically maps all posts to specific user using Ruby Enumerator (and
-memory).&lt;/p&gt;
+&lt;p&gt;Then it automatically does some “posts-to-user” mapping using Ruby Enumerator.&lt;/p&gt;
 
 &lt;p&gt;For instance, here’s the pseudo code.&lt;/p&gt;
 
@@ -130,12 +129,12 @@ memory).&lt;/p&gt;
 
 &lt;p&gt;This works seamlessly most of the time, but when you reach 100_000 users with 1_000
 posts each, this strategy might not be so efficient, as it consumes up a great
-deal of memory. (Yeah, if you’re gonna debate how cheap hardware is, go tell you
+deal of memory. (Yeah, if you’re gonna debate how cheap hardware is, go convince your
 boss!)&lt;/p&gt;
 
 &lt;h3 id=&quot;sprockets-dependon&quot;&gt;Sprockets &lt;code class=&quot;highlighter-rouge&quot;&gt;depend_on&lt;/code&gt;.&lt;/h3&gt;
 
-&lt;p&gt;You’re probably using SASS &lt;code class=&quot;highlighter-rouge&quot;&gt;@import&lt;/code&gt; instead of traditional &lt;code class=&quot;highlighter-rouge&quot;&gt;//= require&lt;/code&gt; to import
+&lt;p&gt;Probably you’re using SASS &lt;code class=&quot;highlighter-rouge&quot;&gt;@import&lt;/code&gt; instead of traditional &lt;code class=&quot;highlighter-rouge&quot;&gt;//= require&lt;/code&gt; to import
 CSS sub-files. (People said @import is better, I have no idea why, leave your
 comments below if you know)&lt;/p&gt;
 
@@ -147,17 +146,16 @@ comments below if you know)&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;But you will find that your &lt;code class=&quot;highlighter-rouge&quot;&gt;application.css&lt;/code&gt; is not re-precompiled
-after you made some changes to the sub-files e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;users/index&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;foo&lt;/code&gt;,
-etc.&lt;/p&gt;
+&lt;p&gt;But you will find that your &lt;code class=&quot;highlighter-rouge&quot;&gt;application.css&lt;/code&gt; is not re-precompiled after you made some
+changes to the sub-files e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;users/index&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;foo&lt;/code&gt;, etc.&lt;/p&gt;
 
-&lt;p&gt;That is because of Rails Sprockets’ caching mechanism, it only re-precompile
-your asset if it (literally) has changed. (and Sprockets is not in the mood to
-talk with SASS @import).&lt;/p&gt;
+&lt;p&gt;That is because of Rails Sprockets’ underlying caching mechanism, which is supposed to
+re-precompile your asset if the file has literally changed. On top of that, the caching
+framework also observes all dependent files to invalidate cache accordingly. However,
+the mechanism doesn’t work with SASS’s @import, but its own &lt;code class=&quot;highlighter-rouge&quot;&gt;require&lt;/code&gt; directive.&lt;/p&gt;
 
-&lt;p&gt;To have assets re-precompiled after changing its including files, Sprockets
-offers &lt;code class=&quot;highlighter-rouge&quot;&gt;depend_on&lt;/code&gt; directive, to explicitly tell Sprockets to observe the changes
-of the including files.&lt;/p&gt;
+&lt;p&gt;To fix the cache invalidation problem above, you need to explicitly declare which files
+Sprockets should observe, by using Sprockets offered &lt;code class=&quot;highlighter-rouge&quot;&gt;depend_on&lt;/code&gt; directive.&lt;/p&gt;
 
 &lt;div class=&quot;language-sass highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// app/assets/stylesheets/application.css
 //= depend_on &quot;users/index&quot;;
