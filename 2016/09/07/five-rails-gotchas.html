@@ -177,7 +177,7 @@ objects and hold them in memory.</p>
 
 <p>Then it automatically does some “posts-to-user” mapping using Ruby Enumerator.</p>
 
-<p>For instance, here’s the pseudo code.</p>
+<p>For instance, here’s the pseudo code of how <code class="highlighter-rouge">includes</code> works.</p>
 
 <div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="n">users</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">all</span>
 <span class="n">posts</span> <span class="o">=</span> <span class="no">Post</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">user_id: </span><span class="n">users</span><span class="p">.</span><span class="nf">pluck</span><span class="p">(</span><span class="ss">:id</span><span class="p">))</span>
@@ -193,11 +193,10 @@ posts each, this strategy might not be so efficient, as it consumes up a great
 deal of memory. (Yeah, if you’re gonna debate how cheap hardware is, go convince your
 boss!)</p>
 
-<h3 id="sprockets-dependon">Sprockets <code class="highlighter-rouge">depend_on</code>.</h3>
+<h3 id="sprockets-dependon">Sprockets <code class="highlighter-rouge">depend_on</code></h3>
 
 <p>Probably you’re using SASS <code class="highlighter-rouge">@import</code> instead of traditional <code class="highlighter-rouge">//= require</code> to import
-CSS sub-files. (People said @import is better, I have no idea why, leave your
-comments below if you know)</p>
+CSS sub-files. To know why <code class="highlighter-rouge">@import</code> is preferable, see @iain’s comment below.</p>
 
 <div class="language-sass highlighter-rouge"><pre class="highlight"><code><span class="c1">// app/assets/stylesheets/application.css
 </span><span class="k">@import</span> <span class="s">"users/index";</span>

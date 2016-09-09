@@ -6,8 +6,8 @@
 </description>
     <link>https://hqc.io/</link>
     <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 07 Sep 2016 14:50:11 +0700</pubDate>
-    <lastBuildDate>Wed, 07 Sep 2016 14:50:11 +0700</lastBuildDate>
+    <pubDate>Fri, 09 Sep 2016 11:37:00 +0700</pubDate>
+    <lastBuildDate>Fri, 09 Sep 2016 11:37:00 +0700</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
@@ -116,7 +116,7 @@ objects and hold them in memory.&lt;/p&gt;
 
 &lt;p&gt;Then it automatically does some “posts-to-user” mapping using Ruby Enumerator.&lt;/p&gt;
 
-&lt;p&gt;For instance, here’s the pseudo code.&lt;/p&gt;
+&lt;p&gt;For instance, here’s the pseudo code of how &lt;code class=&quot;highlighter-rouge&quot;&gt;includes&lt;/code&gt; works.&lt;/p&gt;
 
 &lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;all&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;user_id: &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;pluck&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
@@ -132,11 +132,10 @@ posts each, this strategy might not be so efficient, as it consumes up a great
 deal of memory. (Yeah, if you’re gonna debate how cheap hardware is, go convince your
 boss!)&lt;/p&gt;
 
-&lt;h3 id=&quot;sprockets-dependon&quot;&gt;Sprockets &lt;code class=&quot;highlighter-rouge&quot;&gt;depend_on&lt;/code&gt;.&lt;/h3&gt;
+&lt;h3 id=&quot;sprockets-dependon&quot;&gt;Sprockets &lt;code class=&quot;highlighter-rouge&quot;&gt;depend_on&lt;/code&gt;&lt;/h3&gt;
 
 &lt;p&gt;Probably you’re using SASS &lt;code class=&quot;highlighter-rouge&quot;&gt;@import&lt;/code&gt; instead of traditional &lt;code class=&quot;highlighter-rouge&quot;&gt;//= require&lt;/code&gt; to import
-CSS sub-files. (People said @import is better, I have no idea why, leave your
-comments below if you know)&lt;/p&gt;
+CSS sub-files. To know why &lt;code class=&quot;highlighter-rouge&quot;&gt;@import&lt;/code&gt; is preferable, see @iain’s comment below.&lt;/p&gt;
 
 &lt;div class=&quot;language-sass highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// app/assets/stylesheets/application.css
 &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;users/index&quot;;&lt;/span&gt;
