@@ -6,9 +6,9 @@
 </description>
     <link>https://hqc.io/</link>
     <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 08 Jan 2017 09:37:11 +0100</pubDate>
-    <lastBuildDate>Sun, 08 Jan 2017 09:37:11 +0100</lastBuildDate>
-    <generator>Jekyll v3.1.6</generator>
+    <pubDate>Sun, 08 Jan 2017 09:56:22 +0100</pubDate>
+    <lastBuildDate>Sun, 08 Jan 2017 09:56:22 +0100</lastBuildDate>
+    <generator>Jekyll v3.3.1</generator>
     
       <item>
         <title>Five Rails Gotchas</title>
@@ -29,7 +29,7 @@ I encountered while working with Rails.&lt;/p&gt;
   &lt;span class=&quot;n&quot;&gt;belongs_to&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
-&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;find_by_name&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;John&#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;find_by_name&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'John'&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;save!&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -42,7 +42,7 @@ When do you think the posts will get saved?&lt;/p&gt;
 invoke &lt;code class=&quot;highlighter-rouge&quot;&gt;user.save!&lt;/code&gt;, then you’re trapped. Right after &lt;code class=&quot;highlighter-rouge&quot;&gt;user.posts&lt;/code&gt; was assigned,
 the persistence will be invoked, so calling &lt;code class=&quot;highlighter-rouge&quot;&gt;User#save!&lt;/code&gt; here is redundant.&lt;/p&gt;
 
-&lt;h3 id=&quot;aftersave-callback&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;after_save&lt;/code&gt; callback&lt;/h3&gt;
+&lt;h3 id=&quot;after_save-callback&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;after_save&lt;/code&gt; callback&lt;/h3&gt;
 
 &lt;p&gt;I always recommend people not to use Rails callbacks but if you DO have to, use
 &lt;code class=&quot;highlighter-rouge&quot;&gt;after_commit&lt;/code&gt; instead.&lt;/p&gt;
@@ -132,7 +132,7 @@ posts each, this strategy might not be so efficient, as it consumes up a great
 deal of memory. (Yeah, if you’re gonna debate how cheap hardware is, go convince your
 boss!)&lt;/p&gt;
 
-&lt;h3 id=&quot;sprockets-dependon&quot;&gt;Sprockets &lt;code class=&quot;highlighter-rouge&quot;&gt;depend_on&lt;/code&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;sprockets-depend_on&quot;&gt;Sprockets &lt;code class=&quot;highlighter-rouge&quot;&gt;depend_on&lt;/code&gt;&lt;/h3&gt;
 
 &lt;p&gt;Probably you’re using SASS &lt;code class=&quot;highlighter-rouge&quot;&gt;@import&lt;/code&gt; instead of traditional &lt;code class=&quot;highlighter-rouge&quot;&gt;//= require&lt;/code&gt; to import
 CSS sub-files. To know why &lt;code class=&quot;highlighter-rouge&quot;&gt;@import&lt;/code&gt; is preferable, see @iain’s comment below.&lt;/p&gt;
@@ -239,7 +239,7 @@ lãnh thổ Trung Quốc chỉ là một nhúm nhỏ (như trong hình).
 Trải qua bao thế kỉ, các quốc gia lân cận Trung Quốc đã từng tồn tại trong lịch sử như Đại Lý, Tây Hạ, Kim, Liêu, Hung Nô …
 đều đã bị thôn tính, và hình thành nên một Trung Quốc rộng lớn của ngày hôm nay.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/xia-dynasty-china.png&quot; alt=&quot;xia dynasty&#39;s China&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/xia-dynasty-china.png&quot; alt=&quot;xia dynasty's China&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;Nguồn: &lt;a href=&quot;https://zh.wikipedia.org/wiki/%E5%A4%8F%E6%9C%9D&quot;&gt;Wikipedia&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 
@@ -261,7 +261,7 @@ hoặc là bạn bị chiếm&lt;/strong&gt;, gần như không có ngoại lệ
 chả có thế lực bên ngoài nào đi giúp bạn để gây xích mích với Trung Quốc cả,
 nhất là khi nó giàu và mạnh thế kia.&lt;/p&gt;
 
-&lt;h2 id=&quot;bi-hc-rt-ra&quot;&gt;Bài học rút ra&lt;/h2&gt;
+&lt;h2 id=&quot;bài-học-rút-ra&quot;&gt;Bài học rút ra&lt;/h2&gt;
 
 &lt;p&gt;Nếu bạn là một quốc gia, hãy cố trở nên mạnh khi còn cơ hội.&lt;/p&gt;
 
@@ -307,13 +307,13 @@ which is a CLI to manage all your daily notes like a boss, with vim integration.
 
 &lt;p&gt;Add this to your &lt;code class=&quot;highlighter-rouge&quot;&gt;.bash_profile&lt;/code&gt;&lt;/p&gt;
 
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;/path/to/your/lovely/notes&#39;&lt;/span&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/path/to/your/lovely/notes'&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 &lt;p&gt;Personally I’d like to map it to my Dropbox.&lt;/p&gt;
 
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;~/Dropbox/Notes/Todos&#39;&lt;/span&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'~/Dropbox/Notes/Todos'&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
@@ -350,8 +350,8 @@ which is a CLI to manage all your daily notes like a boss, with vim integration.
 &lt;p&gt;Anyway this is how I alias it in my &lt;code class=&quot;highlighter-rouge&quot;&gt;.zshrc&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;.bash_profile&lt;/code&gt;.
 See &lt;a href=&quot;https://github.com/huynhquancam/dotfiles/blob/master/zsh/aliases.zsh#L35&quot;&gt;https://github.com/huynhquancam/dotfiles/blob/master/zsh/aliases.zsh#L35&lt;/a&gt;&lt;/p&gt;
 
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;today&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;vim &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for today&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; +&#39;:cd &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&#39;&quot;&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ytd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;vim &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for yesterday&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; +&#39;:cd &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&#39;&quot;&lt;/span&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;today&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;vim &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for today&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; +':cd &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;'&quot;&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ytd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;vim &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for yesterday&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; +':cd &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;'&quot;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
@@ -381,8 +381,8 @@ See &lt;a href=&quot;https://github.com/huynhquancam/dotfiles/blob/master/zsh/al
 
 &lt;p&gt;Add this to your vimrc&lt;/p&gt;
 
-&lt;div class=&quot;language-viml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Plug &lt;span class=&quot;s1&quot;&gt;&#39;huynhquancam/vim-worque&#39;&lt;/span&gt; # &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; you&#39;&lt;span class=&quot;k&quot;&gt;re&lt;/span&gt; using &lt;span class=&quot;k&quot;&gt;vim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;plug
-Plugin &lt;span class=&quot;s1&quot;&gt;&#39;huynhquancam/vim-worque&#39;&lt;/span&gt; # or Vundle
+&lt;div class=&quot;language-viml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Plug &lt;span class=&quot;s1&quot;&gt;'huynhquancam/vim-worque'&lt;/span&gt; # &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; you'&lt;span class=&quot;k&quot;&gt;re&lt;/span&gt; using &lt;span class=&quot;k&quot;&gt;vim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;plug
+Plugin &lt;span class=&quot;s1&quot;&gt;'huynhquancam/vim-worque'&lt;/span&gt; # or Vundle
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
@@ -488,7 +488,7 @@ ssb   4096R/7BDF34CD 2016-04-09
       </item>
     
       <item>
-        <title>You don&#39;t need RVM gemset</title>
+        <title>You don't need RVM gemset</title>
         <description>&lt;p&gt;We can’t deny the contribution RVM gemset gave up to the Ruby community, but do we really need gemsets to isolate our project dependencies these days?&lt;/p&gt;
 
 &lt;h3 id=&quot;where-the-idea-of-gemset-came-from&quot;&gt;Where the idea of gemset came from?&lt;/h3&gt;
@@ -545,7 +545,7 @@ bundle install --path vendor/gems --retry 3
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;# And to persist&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;book&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Book&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;title: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Ruby Under a Microscope&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;author: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Pat Shaughnessy&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;book&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Book&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;title: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Ruby Under a Microscope'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;author: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Pat Shaughnessy'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
 &lt;span class=&quot;no&quot;&gt;BookRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;book&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
@@ -558,13 +558,13 @@ bundle install --path vendor/gems --retry 3
 
 &lt;div class=&quot;language-rb highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;no&quot;&gt;FactoryGirl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:book&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;The sample book&#39;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;John Cena&#39;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'The sample book'&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'John Cena'&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
 &lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Book&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;does something&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'does something'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;book&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:book&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
@@ -577,8 +577,8 @@ bundle install --path vendor/gems --retry 3
 
 &lt;div class=&quot;language-rb highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;no&quot;&gt;FactoryGirl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:book&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;The sample book&#39;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;John Cena&#39;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'The sample book'&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'John Cena'&lt;/span&gt;
 
     &lt;span class=&quot;c1&quot;&gt;# Add your custom method here to persist object&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;to_create&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;BookRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
@@ -611,18 +611,18 @@ bundle install --path vendor/gems --retry 3
 
 &lt;h3 id=&quot;find-yourself-in-development-environment&quot;&gt;Find yourself in development environment&lt;/h3&gt;
 
-&lt;p&gt;Tired of keep typing something like &lt;code class=&quot;highlighter-rouge&quot;&gt;User.find_by_username(&#39;jack&#39;)&lt;/code&gt; in Rails console? Use this.&lt;/p&gt;
+&lt;p&gt;Tired of keep typing something like &lt;code class=&quot;highlighter-rouge&quot;&gt;User.find_by_username('jack')&lt;/code&gt; in Rails console? Use this.&lt;/p&gt;
 
 &lt;p&gt;Monkey patch your object class in &lt;code class=&quot;highlighter-rouge&quot;&gt;.irbrc&lt;/code&gt;&lt;/p&gt;
 
 &lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/ruby&lt;/span&gt;
 
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;irb/completion&#39;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;irb/ext/save-history&#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'irb/completion'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'irb/ext/save-history'&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;find_me&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;find_by_username&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;cam@example.com&#39;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;find_by_username&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'cam@example.com'&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -686,8 +686,8 @@ This post shares how our application, written in Ruby on Rails, is built and dep
 
 &lt;p&gt;As of I wrote this post, AliCloud’s apt mirror was still inaccessible, so we will need to choose another alternative mirror&lt;/p&gt;
 
-&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Update sources.list&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;copy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;src=&quot;sources.list&quot; dest=&quot;/etc/apt/sources.list&quot;&lt;/span&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: Update sources.list
+  copy: src=&quot;sources.list&quot; dest=&quot;/etc/apt/sources.list&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
@@ -710,100 +710,99 @@ deb-src http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted unive
 
 &lt;p&gt;Let’s set up some prerequisite packages&lt;/p&gt;
 
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;update apt cache&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;update_cache=yes&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;tags&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;setup&lt;/span&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: update apt cache
+  apt: update_cache=yes
+  tags:
+    - setup
 
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;install curl&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name=curl state=present&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;tags&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;setup&lt;/span&gt;
+- name: install curl
+  apt: name=curl state=present
+  tags:
+    - setup
 
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;install python-dev&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name=python-dev state=present&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;tags&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;setup&lt;/span&gt;
+- name: install python-dev
+  apt: name=python-dev state=present
+  tags:
+    - setup
 
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;install pip&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name=python-pip state=present&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;tags&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;setup&lt;/span&gt;
+- name: install pip
+  apt: name=python-pip state=present
+  tags:
+    - setup
 
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;update pip to latest version&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;pip&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name=pip state=latest&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;tags&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;setup&lt;/span&gt;
+- name: update pip to latest version
+  pip: name=pip state=latest
+  tags:
+    - setup
 
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;setup ansible env&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;setup&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;tags&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;setup&lt;/span&gt;
+- name: setup ansible env
+  setup:
+  tags:
+    - setup
 
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;make sure pt-transport-https is installed&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name=apt-transport-https state=installed&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;tags&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;setup&lt;/span&gt;
+- name: make sure pt-transport-https is installed
+  apt: name=apt-transport-https state=installed
+  tags:
+    - setup
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 &lt;p&gt;Then let’s install Docker&lt;/p&gt;
 
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;add docker server and host key&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;apt_key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;keyserver=&quot;hkp://p80.pool.sks-keyservers.net:80&quot; id=&quot;58118E89F3A912897C070ADBF76221572C52609D&quot; state=present&lt;/span&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: add docker server and host key
+  apt_key: keyserver=&quot;hkp://p80.pool.sks-keyservers.net:80&quot; id=&quot;58118E89F3A912897C070ADBF76221572C52609D&quot; state=present
 
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;add docker repo and update apt cache&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;apt_repository&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;repo=&quot;deb https://apt.dockerproject.org/repo ubuntu-trusty main&quot; update_cache=yes state=present&lt;/span&gt;
+- name: add docker repo and update apt cache
+  apt_repository: repo=&quot;deb https://apt.dockerproject.org/repo ubuntu-trusty main&quot; update_cache=yes state=present
 
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;install docker&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name=docker-engine state=present&lt;/span&gt;
+- name: install docker
+  apt: name=docker-engine state=present
 
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;install docker-py&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;pip&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name=docker-py version=1.1.0 state=present&lt;/span&gt;
+- name: install docker-py
+  pip: name=docker-py version=1.1.0 state=present
 
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;create deploy user (this is optional)&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;john&quot;&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;john&quot;&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;sudo&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;pa$$w0rd&quot;&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;generate_ssh_key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;yes&quot;&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;createhome&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;yes&quot;&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;present&quot;&lt;/span&gt;
+- name: create deploy user (this is optional)
+  user:
+    name: &quot;john&quot;
+    comment: &quot;john&quot;
+    group: sudo
+    password: &quot;pa$$w0rd&quot;
+    generate_ssh_key: &quot;yes&quot;
+    createhome: &quot;yes&quot;
+    state: &quot;present&quot;
 
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;set authorized key (this is optional)&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;authorized_key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;john&quot;&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;present&quot;&lt;/span&gt;
+- name: set authorized key (this is optional)
+  authorized_key:
+    user: &quot;john&quot;
+    key: &quot;&quot;
+    state: &quot;present&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 &lt;p&gt;OK, let’s pull our docker image from Registry (AWS ECR, Docker Hub or Quay, etc.)&lt;/p&gt;
 
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;login to ECR registry&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;shell&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;$(aws&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;ecr&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;get-login&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--region&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;us-east-1)&quot;&lt;/span&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: login to ECR registry
+  shell: &quot;$(aws ecr get-login --region us-east-1)&quot;
 
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;pull Docker image from ECR&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;shell&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;docker&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;pull&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;your-hub.io/your-app:latest&quot;&lt;/span&gt;
+- name: pull Docker image from ECR
+  shell: &quot;docker pull your-hub.io/your-app:latest&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 &lt;p&gt;Run the image&lt;/p&gt;
 
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Up the version&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;docker&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;your-hub.io/your-app:latest&quot;&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;your-app&quot;&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;reloaded&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;expose&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;5000&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;80:5000&quot;&lt;/span&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: Up the version
+  docker:
+    image: &quot;your-hub.io/your-app:latest&quot;
+    name: &quot;your-app&quot;
+    state: reloaded
+    expose: 5000
+    port:
+      - &quot;80:5000&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 &lt;p&gt;That’s it! Feel free to leave your comments below! :-)&lt;/p&gt;
-
 </description>
         <pubDate>Mon, 14 Mar 2016 00:00:00 +0100</pubDate>
         <link>https://hqc.io/2016/03/14/provision-alicloud.html</link>

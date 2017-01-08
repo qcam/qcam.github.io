@@ -103,7 +103,7 @@ When do you think the posts will get saved?</p>
 invoke <code class="highlighter-rouge">user.save!</code>, then you’re trapped. Right after <code class="highlighter-rouge">user.posts</code> was assigned,
 the persistence will be invoked, so calling <code class="highlighter-rouge">User#save!</code> here is redundant.</p>
 
-<h3 id="aftersave-callback"><code class="highlighter-rouge">after_save</code> callback</h3>
+<h3 id="after_save-callback"><code class="highlighter-rouge">after_save</code> callback</h3>
 
 <p>I always recommend people not to use Rails callbacks but if you DO have to, use
 <code class="highlighter-rouge">after_commit</code> instead.</p>
@@ -193,7 +193,7 @@ posts each, this strategy might not be so efficient, as it consumes up a great
 deal of memory. (Yeah, if you’re gonna debate how cheap hardware is, go convince your
 boss!)</p>
 
-<h3 id="sprockets-dependon">Sprockets <code class="highlighter-rouge">depend_on</code></h3>
+<h3 id="sprockets-depend_on">Sprockets <code class="highlighter-rouge">depend_on</code></h3>
 
 <p>Probably you’re using SASS <code class="highlighter-rouge">@import</code> instead of traditional <code class="highlighter-rouge">//= require</code> to import
 CSS sub-files. To know why <code class="highlighter-rouge">@import</code> is preferable, see @iain’s comment below.</p>
