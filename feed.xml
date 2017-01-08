@@ -6,8 +6,8 @@
 </description>
     <link>https://hqc.io/</link>
     <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 16 Oct 2016 13:49:06 +0700</pubDate>
-    <lastBuildDate>Sun, 16 Oct 2016 13:49:06 +0700</lastBuildDate>
+    <pubDate>Sun, 08 Jan 2017 09:37:11 +0100</pubDate>
+    <lastBuildDate>Sun, 08 Jan 2017 09:37:11 +0100</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
@@ -175,7 +175,7 @@ Sprockets should observe, by using Sprockets offered &lt;code class=&quot;highli
 
 &lt;h5 id=&quot;happing-programming&quot;&gt;Happing Programming!!!&lt;/h5&gt;
 </description>
-        <pubDate>Wed, 07 Sep 2016 00:00:00 +0700</pubDate>
+        <pubDate>Wed, 07 Sep 2016 00:00:00 +0200</pubDate>
         <link>https://hqc.io/2016/09/07/five-rails-gotchas.html</link>
         <guid isPermaLink="true">https://hqc.io/2016/09/07/five-rails-gotchas.html</guid>
         
@@ -200,7 +200,7 @@ Sprockets should observe, by using Sprockets offered &lt;code class=&quot;highli
   &lt;li&gt;Lập trình viên.&lt;/li&gt;
 &lt;/ol&gt;
 </description>
-        <pubDate>Wed, 17 Aug 2016 00:00:00 +0700</pubDate>
+        <pubDate>Wed, 17 Aug 2016 00:00:00 +0200</pubDate>
         <link>https://hqc.io/2016/08/17/first-seven-jobs.html</link>
         <guid isPermaLink="true">https://hqc.io/2016/08/17/first-seven-jobs.html</guid>
         
@@ -270,7 +270,7 @@ nhất là khi nó giàu và mạnh thế kia.&lt;/p&gt;
 &lt;p&gt;Còn không, hãy tập cam chịu sống như một người Trung Quốc.&lt;/p&gt;
 
 </description>
-        <pubDate>Thu, 28 Jul 2016 00:00:00 +0700</pubDate>
+        <pubDate>Thu, 28 Jul 2016 00:00:00 +0200</pubDate>
         <link>https://hqc.io/2016/07/28/man-dam-ve-tay-tang.html</link>
         <guid isPermaLink="true">https://hqc.io/2016/07/28/man-dam-ve-tay-tang.html</guid>
         
@@ -399,7 +399,7 @@ View more in my &lt;a href=&quot;https://github.com/huynhquancam/dotfiles&quot;&
 &lt;p&gt;Any thoughts or ideas are welcome!!!&lt;/p&gt;
 
 </description>
-        <pubDate>Thu, 21 Jul 2016 00:00:00 +0700</pubDate>
+        <pubDate>Thu, 21 Jul 2016 00:00:00 +0200</pubDate>
         <link>https://hqc.io/2016/07/21/introduce-worque.html</link>
         <guid isPermaLink="true">https://hqc.io/2016/07/21/introduce-worque.html</guid>
         
@@ -478,7 +478,7 @@ ssb   4096R/7BDF34CD 2016-04-09
 
 &lt;p&gt;That’s it! Feel free to leave your comments.&lt;/p&gt;
 </description>
-        <pubDate>Sun, 03 Jul 2016 00:00:00 +0700</pubDate>
+        <pubDate>Sun, 03 Jul 2016 00:00:00 +0200</pubDate>
         <link>https://hqc.io/2016/07/03/sign-git-commit-with-keybase.html</link>
         <guid isPermaLink="true">https://hqc.io/2016/07/03/sign-git-commit-with-keybase.html</guid>
         
@@ -516,7 +516,7 @@ bundle install --path vendor/gems --retry 3
 
 &lt;p&gt;Any thoughts are welcomed!&lt;/p&gt;
 </description>
-        <pubDate>Wed, 04 May 2016 00:00:00 +0700</pubDate>
+        <pubDate>Wed, 04 May 2016 00:00:00 +0200</pubDate>
         <link>https://hqc.io/2016/05/04/you-dont-need-rvm-gemset.html</link>
         <guid isPermaLink="true">https://hqc.io/2016/05/04/you-dont-need-rvm-gemset.html</guid>
         
@@ -590,7 +590,7 @@ bundle install --path vendor/gems --retry 3
 &lt;p&gt;That’s it! Enjoy coding!&lt;/p&gt;
 
 </description>
-        <pubDate>Tue, 12 Apr 2016 00:00:00 +0700</pubDate>
+        <pubDate>Tue, 12 Apr 2016 00:00:00 +0200</pubDate>
         <link>https://hqc.io/2016/04/12/factory-girl-with-hanami.html</link>
         <guid isPermaLink="true">https://hqc.io/2016/04/12/factory-girl-with-hanami.html</guid>
         
@@ -656,7 +656,7 @@ bundle install --path vendor/gems --retry 3
 
 &lt;p&gt;Convinced yet? Leave your thoughts below!&lt;/p&gt;
 </description>
-        <pubDate>Sun, 10 Apr 2016 00:00:00 +0700</pubDate>
+        <pubDate>Sun, 10 Apr 2016 00:00:00 +0200</pubDate>
         <link>https://hqc.io/2016/04/10/monkey-patching-for-good.html</link>
         <guid isPermaLink="true">https://hqc.io/2016/04/10/monkey-patching-for-good.html</guid>
         
@@ -805,7 +805,7 @@ deb-src http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted unive
 &lt;p&gt;That’s it! Feel free to leave your comments below! :-)&lt;/p&gt;
 
 </description>
-        <pubDate>Mon, 14 Mar 2016 00:00:00 +0700</pubDate>
+        <pubDate>Mon, 14 Mar 2016 00:00:00 +0100</pubDate>
         <link>https://hqc.io/2016/03/14/provision-alicloud.html</link>
         <guid isPermaLink="true">https://hqc.io/2016/03/14/provision-alicloud.html</guid>
         
@@ -863,7 +863,7 @@ So please make sure you have them set properly.&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Fri, 19 Sep 2014 00:00:00 +0700</pubDate>
+        <pubDate>Fri, 19 Sep 2014 00:00:00 +0200</pubDate>
         <link>https://hqc.io/2014/09/19/heroku-checklist.html</link>
         <guid isPermaLink="true">https://hqc.io/2014/09/19/heroku-checklist.html</guid>
         
