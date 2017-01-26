@@ -6,8 +6,8 @@
 </description>
     <link>https://hqc.io/</link>
     <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 26 Jan 2017 10:54:13 +0100</pubDate>
-    <lastBuildDate>Thu, 26 Jan 2017 10:54:13 +0100</lastBuildDate>
+    <pubDate>Thu, 26 Jan 2017 22:35:39 +0100</pubDate>
+    <lastBuildDate>Thu, 26 Jan 2017 22:35:39 +0100</lastBuildDate>
     <generator>Jekyll v3.3.1</generator>
     
       <item>
@@ -283,7 +283,7 @@ nhất là khi nó giàu và mạnh thế kia.&lt;/p&gt;
     
       <item>
         <title>Worque - CLI that manages your daily notes</title>
-        <description>&lt;p&gt;I would like to introduce &lt;a href=&quot;https://github.com/huynhquancam/worque&quot;&gt;Worque&lt;/a&gt; (pronounced as &lt;code class=&quot;highlighter-rouge&quot;&gt;work&lt;/code&gt;),
+        <description>&lt;p&gt;I would like to introduce &lt;a href=&quot;https://github.com/qcam/worque&quot;&gt;Worque&lt;/a&gt; (pronounced as &lt;code class=&quot;highlighter-rouge&quot;&gt;work&lt;/code&gt;),
 which is a CLI to manage all your daily notes like a boss, with vim integration.&lt;/p&gt;
 
 &lt;h3 id=&quot;why-worque&quot;&gt;Why Worque?&lt;/h3&gt;
@@ -348,7 +348,7 @@ which is a CLI to manage all your daily notes like a boss, with vim integration.
 &lt;/div&gt;
 
 &lt;p&gt;Anyway this is how I alias it in my &lt;code class=&quot;highlighter-rouge&quot;&gt;.zshrc&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;.bash_profile&lt;/code&gt;.
-See &lt;a href=&quot;https://github.com/huynhquancam/dotfiles/blob/master/zsh/aliases.zsh#L35&quot;&gt;https://github.com/huynhquancam/dotfiles/blob/master/zsh/aliases.zsh#L35&lt;/a&gt;&lt;/p&gt;
+See &lt;a href=&quot;https://github.com/qcam/dotfiles/blob/master/zsh/aliases.zsh#L35&quot;&gt;https://github.com/qcam/dotfiles/blob/master/zsh/aliases.zsh#L35&lt;/a&gt;&lt;/p&gt;
 
 &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;today&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;vim &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for today&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; +':cd &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;'&quot;&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ytd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;vim &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;worque todo --for yesterday&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; +':cd &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$WORQUE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;'&quot;&lt;/span&gt;
@@ -381,8 +381,8 @@ See &lt;a href=&quot;https://github.com/huynhquancam/dotfiles/blob/master/zsh/al
 
 &lt;p&gt;Add this to your vimrc&lt;/p&gt;
 
-&lt;div class=&quot;language-viml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Plug &lt;span class=&quot;s1&quot;&gt;'huynhquancam/vim-worque'&lt;/span&gt; # &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; you'&lt;span class=&quot;k&quot;&gt;re&lt;/span&gt; using &lt;span class=&quot;k&quot;&gt;vim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;plug
-Plugin &lt;span class=&quot;s1&quot;&gt;'huynhquancam/vim-worque'&lt;/span&gt; # or Vundle
+&lt;div class=&quot;language-viml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Plug &lt;span class=&quot;s1&quot;&gt;'qcam/vim-worque'&lt;/span&gt; # &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; you'&lt;span class=&quot;k&quot;&gt;re&lt;/span&gt; using &lt;span class=&quot;k&quot;&gt;vim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;plug
+Plugin &lt;span class=&quot;s1&quot;&gt;'qcam/vim-worque'&lt;/span&gt; # or Vundle
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
@@ -390,9 +390,9 @@ Plugin &lt;span class=&quot;s1&quot;&gt;'huynhquancam/vim-worque'&lt;/span&gt; #
 
 &lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
 
-&lt;p&gt;Read more about &lt;a href=&quot;https://github.com/huynhquancam/worque&quot;&gt;worque&lt;/a&gt;.
-Read more about &lt;a href=&quot;https://github.com/huynhquancam/vim-worque&quot;&gt;vim-worque&lt;/a&gt;.
-View more in my &lt;a href=&quot;https://github.com/huynhquancam/dotfiles&quot;&gt;dotfiles&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Read more about &lt;a href=&quot;https://github.com/qcam/worque&quot;&gt;worque&lt;/a&gt;.
+Read more about &lt;a href=&quot;https://github.com/qcam/vim-worque&quot;&gt;vim-worque&lt;/a&gt;.
+View more in my &lt;a href=&quot;https://github.com/qcam/dotfiles&quot;&gt;dotfiles&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Happy Reporting!!!&lt;/p&gt;
 
