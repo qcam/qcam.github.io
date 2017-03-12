@@ -6,16 +6,17 @@
 </description>
     <link>https://hqc.io/</link>
     <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 12 Mar 2017 15:43:09 +0100</pubDate>
-    <lastBuildDate>Sun, 12 Mar 2017 15:43:09 +0100</lastBuildDate>
+    <pubDate>Sun, 12 Mar 2017 15:49:48 +0100</pubDate>
+    <lastBuildDate>Sun, 12 Mar 2017 15:49:48 +0100</lastBuildDate>
     <generator>Jekyll v3.4.2</generator>
     
       <item>
         <title>UX for CLI app</title>
         <description>&lt;p&gt;As a terminal lover, I always want to get &lt;strong&gt;everything&lt;/strong&gt; done on my terminal,
 instead of switching to browser or an external app. I personally built up a
-couple of CLI app for my personal use (&lt;a href=&quot;https://github.com/qcam/worque&quot;&gt;worque&lt;/a&gt;
-and &lt;a href=&quot;https://github.com/qcam/3llo&quot;&gt;3llo&lt;/a&gt;.&lt;/p&gt;
+couple of CLI apps for my personal use (checkout
+&lt;a href=&quot;https://github.com/qcam/worque&quot;&gt;worque&lt;/a&gt; and
+&lt;a href=&quot;https://github.com/qcam/3llo&quot;&gt;3llo&lt;/a&gt;).&lt;/p&gt;
 
 &lt;p&gt;I think every computer software needs UX, as long as it interacts with users.
 So as a user and a developer, here are the experience I would love to see in an
