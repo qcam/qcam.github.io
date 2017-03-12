@@ -6,8 +6,8 @@
 </description>
     <link>https://hqc.io/</link>
     <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 12 Mar 2017 15:49:48 +0100</pubDate>
-    <lastBuildDate>Sun, 12 Mar 2017 15:49:48 +0100</lastBuildDate>
+    <pubDate>Sun, 12 Mar 2017 18:16:22 +0100</pubDate>
+    <lastBuildDate>Sun, 12 Mar 2017 18:16:22 +0100</lastBuildDate>
     <generator>Jekyll v3.4.2</generator>
     
       <item>
@@ -58,6 +58,33 @@ some screenshots.&lt;/p&gt;
         <category>ux</category>
         
         <category>cli</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Bưu điện ở Thụy Điển</title>
+        <description>&lt;p&gt;Nếu bảo tôi kể một thứ đặc biệt ở Thụy Điển, chắc chắn tôi sẽ bảo đó là hệ thống bưu điện.&lt;/p&gt;
+
+&lt;p&gt;Hệ thống bưu điện ở Thụy Điển rất khác so với Việt Nam và thế giới (hay chí ít là những nước tôi biết). Bởi vì ở Thụy Điển không có … cái bưu cục (post office) nào cả.&lt;/p&gt;
+
+&lt;p&gt;Một vài năm trước, Posten (Tổng bưu cục Thụy Điển) đã quyết định tiến hành tái cấu trúc hệ thống bưu điện của họ. Thay vì xây các bưu cục giống như các nước khác trên thế giới, họ quyết định tận dụng các siêu thị, sạp báo, trạm xăng để làm đại lý cho các dịch vụ bưu điện. Bạn có thể làm mọi thứ liên quan đến bưu chính ở các đại lý này như mua tem thư, bì thư. Thường thì cũng sẽ có một cái hộp thư (vâng hộp thư như trong phim ấy) ở gần đó, bạn chỉ việc mua tem dán vào thư bỏ vào là xong.&lt;/p&gt;
+
+&lt;p&gt;Khi bạn mua hàng trên mạng hay bạn bè gửi tặng bạn cái hộp TV chẳng hạn, Posten sẽ gửi cho bạn một tờ giấy thông báo thời gian địa điểm bưu kiện của bạn sẽ được gửi đến. Việc bạn cần làm là mang tờ giấy và ID card đến nhận là xong.&lt;/p&gt;
+
+&lt;p&gt;Ở Việt Nam bưu điện thường được kết hợp với các dịch vụ như thanh toán điện nước, còn ở Thụy Điển các đại lý này chỉ làm đúng công việc bưu chính (tất nhiên nó cũng là cái siêu thị nữa).&lt;/p&gt;
+
+&lt;p&gt;Với hệ thống này thì bưu cục sẽ không cần phải tồn tại nữa, đúng không?&lt;/p&gt;
+
+&lt;p&gt;Tham khảo: &lt;a href=&quot;http://www.uppsalastudentkar.se/international-students/life-uppsala/good-know/swedish-postal-system&quot;&gt;How the Swedish Postal system works&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 12 Mar 2017 00:00:00 +0100</pubDate>
+        <link>https://hqc.io/2017/03/12/buu-dien-o-thuy-dien.html</link>
+        <guid isPermaLink="true">https://hqc.io/2017/03/12/buu-dien-o-thuy-dien.html</guid>
+        
+        <category>vietnamese</category>
+        
+        <category>sweden</category>
         
         
       </item>
@@ -715,152 +742,6 @@ bundle install --path vendor/gems --retry 3
         <category>ruby</category>
         
         <category>productivity</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Provision AliCloud</title>
-        <description>&lt;p&gt;Last month we @ Dadadee were pretty excited to start moving off from &lt;a href=&quot;https://aws.amazon.com/&quot;&gt;Amazon Web Service&lt;/a&gt; to &lt;a href=&quot;https://intl.aliyun.com/&quot;&gt;AliCloud&lt;/a&gt;.
-This post shares how our application, written in Ruby on Rails, is built and deployed.&lt;/p&gt;
-
-&lt;p&gt;Note: I assume you have some experience with Ansible and Docker.&lt;/p&gt;
-
-&lt;h3 id=&quot;create-your-instance-on-alicloud&quot;&gt;Create your instance on AliCloud&lt;/h3&gt;
-
-&lt;p&gt;Let’s initiate a Generation II, 2-core and 4GB RAM instance.&lt;/p&gt;
-
-&lt;p&gt;Although sometimes the console is buggy, generally AliCloud is quite easy to start off.&lt;/p&gt;
-
-&lt;p&gt;Please note to set your root password, in order to SSH later.&lt;/p&gt;
-
-&lt;h3 id=&quot;provision-your-server-with-ansible&quot;&gt;Provision your server with Ansible&lt;/h3&gt;
-
-&lt;p&gt;As of I wrote this post, AliCloud’s apt mirror was still inaccessible, so we will need to choose another alternative mirror&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: Update sources.list
-  copy: src=&quot;sources.list&quot; dest=&quot;/etc/apt/sources.list&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Your sources.list could be like this&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Created by Ansible
-
-deb http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Let’s set up some prerequisite packages&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: update apt cache
-  apt: update_cache=yes
-  tags:
-    - setup
-
-- name: install curl
-  apt: name=curl state=present
-  tags:
-    - setup
-
-- name: install python-dev
-  apt: name=python-dev state=present
-  tags:
-    - setup
-
-- name: install pip
-  apt: name=python-pip state=present
-  tags:
-    - setup
-
-- name: update pip to latest version
-  pip: name=pip state=latest
-  tags:
-    - setup
-
-- name: setup ansible env
-  setup:
-  tags:
-    - setup
-
-- name: make sure pt-transport-https is installed
-  apt: name=apt-transport-https state=installed
-  tags:
-    - setup
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Then let’s install Docker&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: add docker server and host key
-  apt_key: keyserver=&quot;hkp://p80.pool.sks-keyservers.net:80&quot; id=&quot;58118E89F3A912897C070ADBF76221572C52609D&quot; state=present
-
-- name: add docker repo and update apt cache
-  apt_repository: repo=&quot;deb https://apt.dockerproject.org/repo ubuntu-trusty main&quot; update_cache=yes state=present
-
-- name: install docker
-  apt: name=docker-engine state=present
-
-- name: install docker-py
-  pip: name=docker-py version=1.1.0 state=present
-
-- name: create deploy user (this is optional)
-  user:
-    name: &quot;john&quot;
-    comment: &quot;john&quot;
-    group: sudo
-    password: &quot;pa$$w0rd&quot;
-    generate_ssh_key: &quot;yes&quot;
-    createhome: &quot;yes&quot;
-    state: &quot;present&quot;
-
-- name: set authorized key (this is optional)
-  authorized_key:
-    user: &quot;john&quot;
-    key: &quot;&quot;
-    state: &quot;present&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;OK, let’s pull our docker image from Registry (AWS ECR, Docker Hub or Quay, etc.)&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: login to ECR registry
-  shell: &quot;$(aws ecr get-login --region us-east-1)&quot;
-
-- name: pull Docker image from ECR
-  shell: &quot;docker pull your-hub.io/your-app:latest&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Run the image&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- name: Up the version
-  docker:
-    image: &quot;your-hub.io/your-app:latest&quot;
-    name: &quot;your-app&quot;
-    state: reloaded
-    expose: 5000
-    port:
-      - &quot;80:5000&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;That’s it! Feel free to leave your comments below! :-)&lt;/p&gt;
-</description>
-        <pubDate>Mon, 14 Mar 2016 00:00:00 +0100</pubDate>
-        <link>https://hqc.io/2016/03/14/provision-alicloud.html</link>
-        <guid isPermaLink="true">https://hqc.io/2016/03/14/provision-alicloud.html</guid>
-        
-        <category>devops</category>
         
         
       </item>
