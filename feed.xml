@@ -6,9 +6,60 @@
 </description>
     <link>https://hqc.io/</link>
     <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 12 Mar 2017 15:40:16 +0100</pubDate>
-    <lastBuildDate>Sun, 12 Mar 2017 15:40:16 +0100</lastBuildDate>
+    <pubDate>Sun, 12 Mar 2017 15:43:09 +0100</pubDate>
+    <lastBuildDate>Sun, 12 Mar 2017 15:43:09 +0100</lastBuildDate>
     <generator>Jekyll v3.4.2</generator>
+    
+      <item>
+        <title>UX for CLI app</title>
+        <description>&lt;p&gt;As a terminal lover, I always want to get &lt;strong&gt;everything&lt;/strong&gt; done on my terminal,
+instead of switching to browser or an external app. I personally built up a
+couple of CLI app for my personal use (&lt;a href=&quot;https://github.com/qcam/worque&quot;&gt;worque&lt;/a&gt;
+and &lt;a href=&quot;https://github.com/qcam/3llo&quot;&gt;3llo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I think every computer software needs UX, as long as it interacts with users.
+So as a user and a developer, here are the experience I would love to see in an
+ideal CLI app.&lt;/p&gt;
+
+&lt;h3 id=&quot;i-wish-not-to-touch-my-mouse&quot;&gt;I wish not to touch my mouse&lt;/h3&gt;
+
+&lt;p&gt;Some people likes using terminal app because they want to avoid using mouses as
+much as possible. Perhaps you think they are paranoid because mouse is one of
+the best inventions in the computer era. But yes, note that when you design an
+CLI app for other people.&lt;/p&gt;
+
+&lt;h3 id=&quot;do-not-mess-up-my-environment-variables&quot;&gt;Do not mess up my environment variables&lt;/h3&gt;
+
+&lt;p&gt;I have to admit environment variable is a handy way to start up a CLI app
+development. You will see how much I love using them in my CLI apps too. But one
+thing, be careful with naming because your environment variables could crash
+with other CLI apps that share the same name like yours. That’s a kaboom.&lt;/p&gt;
+
+&lt;h3 id=&quot;make-sure-you-have---help&quot;&gt;Make sure you have &lt;code class=&quot;highlighter-rouge&quot;&gt;--help&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;And keep it human readable and up-to-date. CLI users are supposed to be decently
+comfortable with terminal, not all of us are professional hackers though.&lt;/p&gt;
+
+&lt;h3 id=&quot;i-expect-a-setup-instruction&quot;&gt;I expect a setup instruction&lt;/h3&gt;
+
+&lt;p&gt;Let’s say your app needs some sort of API tokens to get working, make sure your
+documentation covers the instruction of how to get them, best with a link and
+some screenshots.&lt;/p&gt;
+
+&lt;h3 id=&quot;and-most-importantly-never-track-user-behaviors&quot;&gt;And most importantly, NEVER TRACK user behaviors&lt;/h3&gt;
+
+&lt;p&gt;Yes, this is the &lt;strong&gt;BEST&lt;/strong&gt; part of using an CLI app.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 12 Mar 2017 00:00:00 +0100</pubDate>
+        <link>https://hqc.io/2017/03/12/cli-ux.html</link>
+        <guid isPermaLink="true">https://hqc.io/2017/03/12/cli-ux.html</guid>
+        
+        <category>ux</category>
+        
+        <category>cli</category>
+        
+        
+      </item>
     
       <item>
         <title>Five Rails Gotchas</title>
@@ -809,67 +860,6 @@ deb-src http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted unive
         <guid isPermaLink="true">https://hqc.io/2016/03/14/provision-alicloud.html</guid>
         
         <category>devops</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>UX for CLI app</title>
-        <description>&lt;p&gt;As a terminal lover, I always want to get &lt;strong&gt;everything&lt;/strong&gt; done on my terminal,
-instead of switching to browser or an external app. I personally built up a
-couple of CLI app for my personal use (&lt;a href=&quot;https://github.com/qcam/worque&quot;&gt;worque&lt;/a&gt;
-and &lt;a href=&quot;https://github.com/qcam/3llo&quot;&gt;3llo&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;I think every computer software needs UX, as long as it interacts with users.
-So as a user and a developer, here are the experience I would love to see in an
-ideal CLI app.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;I wish not to touch my mouse&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Some people likes using terminal app because they want to avoid using mouses as
-much as possible. Perhaps you think they are paranoid because mouse is one of
-the best inventions in the computer era. But yes, note that when you design an
-CLI app for other people.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Do not mess up my environment variables&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;I have to admit environment variable is a handy way to start up a CLI app
-development. You will see how much I love using them in my CLI apps too. But one
-thing, be careful with naming because your environment variables could crash
-with other CLI apps that share the same name like yours. That’s a kaboom.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Make sure you have &lt;code class=&quot;highlighter-rouge&quot;&gt;--help&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;And keep it human readable and up-to-date. CLI users are supposed to be decently
-comfortable with terminal, not all of us are professional hackers though.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;I expect a setup instruction&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Let’s say your app needs some sort of API tokens to get working, make sure your
-documentation covers the instruction of how to get them, best with a link and
-some screenshots.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;And most importantly, NEVER TRACK user behaviors&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Yes, this is the best part of using an CLI app.&lt;/p&gt;
-</description>
-        <pubDate>Sat, 12 Mar 2016 00:00:00 +0100</pubDate>
-        <link>https://hqc.io/2016/03/12/cli-ux.html</link>
-        <guid isPermaLink="true">https://hqc.io/2016/03/12/cli-ux.html</guid>
-        
-        <category>ux</category>
-        
-        <category>cli</category>
         
         
       </item>
