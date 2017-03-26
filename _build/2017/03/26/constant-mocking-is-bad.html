@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>hqc.io | Why constant mocking is a bad idea?</title>
+  <meta name="og:title" content="hqc.io | Why constant mocking is a bad idea?" >
+
+  <meta name="og:site_name" content="Cẩm Huỳnh">
+
+  
+  <meta name="description" content="Mocks are not bad, mutation is bad. This blog post explains why we should never mock constant in our tests." >
+  
+
+  <meta name="author" content="Cẩm Huỳnh" >
+  <meta name="og:url" content="https://hqc.io/2017/03/26/constant-mocking-is-bad.html" >
+  <meta name="og:type" content="article" >
+
+  
+  <meta name="og:image" content="https://c3.staticflickr.com/9/8583/28318985330_8f464b5a12_b.jpg" >
+  
+
+  <meta name="og:locale" content="en_US" >
+
+  <meta name="keywords" content="testing,mock,ruby" >
+  <meta name="language" content="en_US" >
+  <meta name="url" content="https://hqc.io/2017/03/26/constant-mocking-is-bad.html" >
+
+  <link rel="canonical" href="https://hqc.io/2017/03/26/constant-mocking-is-bad.html" >
+  <link rel="alternate" type="application/rss+xml" title="hqc.io" href="https://hqc.io/feed.xml" >
+
+  <link rel="stylesheet" href="/assets/css/main.css" >
+</head>
+
+  <body>
+    <header class="header">
+  <div class="header-content">
+    <div class="brand">
+      <a href="/">hqc.io</a>
+    </div>
+  </div>
+</header>
+
+    <div class="site">
+      <div class="site__content">
+        <article class="post post--detail">
+  <header class="post__header">
+    <h1 class="page-heading post__title" itemprop="name headline">Why constant mocking is a bad idea?</h1>
+    <p class="post__metadata">
+      Published on <time datetime="2017-03-26T00:00:00+01:00" itemprop="datePublished">Mar 26, 2017</time>
+      
+      <span>
+        by
+        <i class="fa fa-user"></i>
+        <span itemprop="name">Cẩm Huỳnh</span>
+      </span>
+      
+    </p>
+    <p>
+      <span class="tagging">
+        
+          <a href="/tags/ruby" class="tagging__item">
+            #ruby
+          </a>
+        
+          <a href="/tags/testing" class="tagging__item">
+            #testing
+          </a>
+        
+          <a href="/tags/mock" class="tagging__item">
+            #mock
+          </a>
+        
+      </span>
+    </p>
+  </header>
+  <div class="post__content">
+    <p>Says we have a <code class="highlighter-rouge">Clock</code> class which returns the current time of the system.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Clock</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">current</span>
+    <span class="no">Time</span><span class="p">.</span><span class="nf">now</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<p>To unit-test this class, RSpec supports an <strong>easy</strong> way to mock test if the
+method has been called.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="n">expect</span><span class="p">(</span><span class="no">Time</span><span class="p">).</span><span class="nf">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:now</span><span class="p">).</span><span class="nf">once</span>
+<span class="no">Clock</span><span class="p">.</span><span class="nf">current</span>
+</code></pre>
+</div>
+
+<p>As easy as ABC no?  But is it as <strong>simple</strong> as it seems to be?</p>
+
+<h3 id="easy--simple">Easy !== simple</h3>
+
+<p>I believe we never understand mock test until we write our own mock framework.
+So off we go.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">expect_called</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+  <span class="n">called</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># method called counter</span>
+  <span class="n">original_method</span> <span class="o">=</span> <span class="n">klass</span><span class="p">.</span><span class="nf">methods</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span> <span class="c1"># keep the original method</span>
+
+  <span class="n">klass</span><span class="p">.</span><span class="nf">define_method</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span> <span class="k">do</span> <span class="c1"># redefine the method</span>
+    <span class="n">called</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># increase the counter every time this method is called</span>
+    <span class="n">original_method</span><span class="p">.</span><span class="nf">call</span> <span class="c1"># invoke the original method</span>
+  <span class="k">end</span>
+  <span class="k">yield</span> <span class="c1"># call the block</span>
+  <span class="n">assert_equal</span><span class="p">(</span><span class="n">called</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span> <span class="c1"># check if method has been called</span>
+<span class="k">end</span>
+
+<span class="c1"># To use it</span>
+<span class="n">expect_called</span><span class="p">(</span><span class="no">Time</span><span class="p">,</span> <span class="ss">:now</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="no">Clock</span><span class="p">.</span><span class="nf">current</span> <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>As you can see, <code class="highlighter-rouge">expect_called</code> needs to “monkey-patch” <code class="highlighter-rouge">klass</code> to count the
+amount of times <code class="highlighter-rouge">:now</code> method being called. We all know mutation is bad and
+could turn things into a disaster. What if there are some core classes or
+third-party libraries we use also require <code class="highlighter-rouge">Time.now</code> to work?</p>
+
+<p>Furthermore, we need some magical mechanisms to “revert” <code class="highlighter-rouge">Time.now</code> back to its
+original state, which I am not going to cover in this blog post. Let me emphasis
+the answer for the question in the previous section, <strong>No, it is not simple</strong>.</p>
+
+<p><code class="highlighter-rouge">expect_called</code> is exactly how <code class="highlighter-rouge">rspec-mocks</code> works under the hood. It redefines
+the method, counts the calls, stubs the return, and reverts it back to the
+original state when tear-down.</p>
+
+<h3 id="dependency-injection">Dependency injection</h3>
+
+<p>Mutation is bad but mocks are not. Mock test is so useful when we want to establish
+a contract between our class and another object without needing that object to really
+exist.</p>
+
+<p>And it’s absolutely possible to write mock test without any mutation needed in
+RSpec.</p>
+
+<p>Let’s change our code a bit, with <code class="highlighter-rouge">Time</code> as an injected dependency.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Clock</span>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">current</span><span class="p">(</span><span class="n">clock</span> <span class="o">=</span> <span class="no">Time</span><span class="p">)</span>
+    <span class="n">clock</span><span class="p">.</span><span class="nf">now</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<p>And writing test is so easy.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="n">now</span> <span class="o">=</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span>
+<span class="n">clock</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="s2">"Time"</span><span class="p">,</span> <span class="ss">now: </span><span class="n">now</span><span class="p">)</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="no">Clock</span><span class="p">.</span><span class="nf">current</span><span class="p">(</span><span class="n">clock</span><span class="p">))</span>
+</code></pre>
+</div>
+
+<p>Although the change is small, the improvement is huge. <code class="highlighter-rouge">clock</code> is a mock object which
+only lives in this test example and does not require any class to be mutated. Also
+we explicitly describe the contract of how the <code class="highlighter-rouge">clock</code> should be. Winning!</p>
+
+<p>We might also want to enhance the test by covering the default case and testing
+its behavior.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="n">assert</span><span class="p">(</span><span class="no">Time</span><span class="p">,</span> <span class="no">Clock</span><span class="p">.</span><span class="nf">current</span><span class="p">.</span><span class="nf">class</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="other-bad-rspec-mock-tests">Other bad RSpec mock tests</h3>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="c1"># From RSpec 2 and RSpec 3 deprecated them.</span>
+<span class="n">allow_any_instance_of</span><span class="p">(</span><span class="no">Widget</span><span class="p">).</span><span class="nf">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:name</span><span class="p">).</span><span class="nf">and_return</span><span class="p">(</span><span class="s2">"Wibble"</span><span class="p">)</span>
+<span class="n">expect_any_instance_of</span><span class="p">(</span><span class="no">Widget</span><span class="p">).</span><span class="nf">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:name</span><span class="p">).</span><span class="nf">and_return</span><span class="p">(</span><span class="s2">"Wobble"</span><span class="p">)</span>
+
+<span class="n">allow</span><span class="p">(</span><span class="no">Invitation</span><span class="p">).</span><span class="nf">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:deliver</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="read-ups">Read-ups</h3>
+
+<p>Some great blog posts about mocks and dependency injection in case you
+want to read further.</p>
+
+<ol>
+  <li><a href="http://blog.plataformatec.com.br/2015/10/mocks-and-explicit-contracts/">Mocks and explicit contracts</a></li>
+  <li><a href="http://solnic.eu/2013/12/17/the-world-needs-another-post-about-dependency-injection-in-ruby.html">The world needs another post about dependency injection</a></li>
+</ol>
+
+  </div>
+  
+    <div id="disqus_thread"></div>
+<script>
+  /**
+   * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+   * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+   */
+/*
+ var disqus_config = function () {
+ this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+ this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+ };
+ */
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+
+  s.src = '//huynhquancam.disqus.com/embed.js';
+
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <ul class="pages">
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <li>
+      <a href="/about">About</a>
+    </li>
+    <li>
+      <a href="https://github.com/qcam?tab=repositories">Projects</a>
+    </li>
+    <li>
+      <a href="/essays">Posts</a>
+    </li>
+    <li>
+      <a href="/rbcv">Resume</a>
+    </li>
+  </ul>
+</footer>
+
+  </body>
+</html>
