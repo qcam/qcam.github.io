@@ -11,7 +11,7 @@
   <meta name="og:site_name" content="Cẩm Huỳnh">
 
   
-  <meta name="description" content="Mocks are not bad, mutation is bad. This blog post explains why you should never mock constant in your tests." >
+  <meta name="description" content="Mocks are not bad, mutation is bad. This blog post explains why we should never mock constant in our tests." >
   
 
   <meta name="author" content="Cẩm Huỳnh" >
@@ -134,10 +134,12 @@ original state when tear-down.</p>
 
 <h3 id="dependency-injection">Dependency injection</h3>
 
-<p>Mutation is bad but mocks are not. Mock test is so useful when you want to establish
-a contract between your class and another class without needing that class to exist.</p>
+<p>Mutation is bad but mocks are not. Mock test is so useful when we want to establish
+a contract between our class and another object without needing that object to really
+exist.</p>
 
-<p>It’s absolutely possible to write mock test without any mutation needed.</p>
+<p>And it’s absolutely possible to write mock test without any mutation needed in
+RSpec.</p>
 
 <p>Let’s change our code a bit, with <code class="highlighter-rouge">Time</code> as an injected dependency.</p>
 

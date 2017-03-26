@@ -6,8 +6,8 @@
 </description>
     <link>https://hqc.io/</link>
     <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 26 Mar 2017 23:49:07 +0200</pubDate>
-    <lastBuildDate>Sun, 26 Mar 2017 23:49:07 +0200</lastBuildDate>
+    <pubDate>Sun, 26 Mar 2017 23:51:23 +0200</pubDate>
+    <lastBuildDate>Sun, 26 Mar 2017 23:51:23 +0200</lastBuildDate>
     <generator>Jekyll v3.4.2</generator>
     
       <item>
@@ -69,10 +69,12 @@ original state when tear-down.&lt;/p&gt;
 
 &lt;h3 id=&quot;dependency-injection&quot;&gt;Dependency injection&lt;/h3&gt;
 
-&lt;p&gt;Mutation is bad but mocks are not. Mock test is so useful when you want to establish
-a contract between your class and another class without needing that class to exist.&lt;/p&gt;
+&lt;p&gt;Mutation is bad but mocks are not. Mock test is so useful when we want to establish
+a contract between our class and another object without needing that object to really
+exist.&lt;/p&gt;
 
-&lt;p&gt;It’s absolutely possible to write mock test without any mutation needed.&lt;/p&gt;
+&lt;p&gt;And it’s absolutely possible to write mock test without any mutation needed in
+RSpec.&lt;/p&gt;
 
 &lt;p&gt;Let’s change our code a bit, with &lt;code class=&quot;highlighter-rouge&quot;&gt;Time&lt;/code&gt; as an injected dependency.&lt;/p&gt;
 
