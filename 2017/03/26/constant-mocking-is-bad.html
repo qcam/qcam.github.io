@@ -104,7 +104,7 @@ So off we go.</p>
 
 <div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">expect_called</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
   <span class="n">called</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># method called counter</span>
-  <span class="n">original_method</span> <span class="o">=</span> <span class="n">klass</span><span class="p">.</span><span class="nf">methods</span><span class="p">(</span><span class="nb">method</span><span class="p">)</span> <span class="c1"># keep the original method</span>
+  <span class="n">original_method</span> <span class="o">=</span> <span class="n">klass</span><span class="p">.</span><span class="nf">methods</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span> <span class="c1"># keep the original method</span>
 
   <span class="n">klass</span><span class="p">.</span><span class="nf">define_method</span><span class="p">(</span><span class="n">method_name</span><span class="p">)</span> <span class="k">do</span> <span class="c1"># redefine the method</span>
     <span class="n">called</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># increase the counter every time this method is called</span>
