@@ -6,8 +6,8 @@
 </description>
     <link>https://hqc.io/</link>
     <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 16 May 2017 21:10:44 +0200</pubDate>
-    <lastBuildDate>Tue, 16 May 2017 21:10:44 +0200</lastBuildDate>
+    <pubDate>Tue, 16 May 2017 21:16:58 +0200</pubDate>
+    <lastBuildDate>Tue, 16 May 2017 21:16:58 +0200</lastBuildDate>
     <generator>Jekyll v3.4.2</generator>
     
       <item>
@@ -148,9 +148,9 @@ What if that gem was … &lt;code class=&quot;highlighter-rouge&quot;&gt;Databas
   &lt;p&gt;Never ever run &lt;code class=&quot;highlighter-rouge&quot;&gt;bundle install&lt;/code&gt; alone, use it with &lt;code class=&quot;highlighter-rouge&quot;&gt;--without&lt;/code&gt;!&lt;/p&gt;
 &lt;/blockquote&gt;
 </description>
-        <pubDate>Sun, 26 Mar 2017 00:00:00 +0100</pubDate>
-        <link>https://hqc.io/2017/03/26/bundler-gotchas.html</link>
-        <guid isPermaLink="true">https://hqc.io/2017/03/26/bundler-gotchas.html</guid>
+        <pubDate>Tue, 16 May 2017 00:00:00 +0200</pubDate>
+        <link>https://hqc.io/2017/05/16/bundler-gotcha.html</link>
+        <guid isPermaLink="true">https://hqc.io/2017/05/16/bundler-gotcha.html</guid>
         
         <category>ruby</category>
         
