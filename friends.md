@@ -24,3 +24,5 @@ So, here are a couple of sites I would recommend you to check out.
 - [The Whole Snack Blog - https://thefullsnack.com](https://thefullsnack.com)
 - [HuyDX's Blog - https://huydx.com](https://huydx.com)
 - [Long Hoang's Blog - https://sfzxc.github.io](https://sfzxc.github.io/)
+- [nguyenquangminh0711's blog -
+https://nguyenquangminh0711.github.io](https://nguyenquangminh0711.github.io)
