@@ -6,9 +6,158 @@
 </description>
     <link>https://hqc.io/</link>
     <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 16 May 2017 12:33:34 +0200</pubDate>
-    <lastBuildDate>Tue, 16 May 2017 12:33:34 +0200</lastBuildDate>
+    <pubDate>Tue, 16 May 2017 21:10:44 +0200</pubDate>
+    <lastBuildDate>Tue, 16 May 2017 21:10:44 +0200</lastBuildDate>
     <generator>Jekyll v3.4.2</generator>
+    
+      <item>
+        <title>Bundler Gotcha</title>
+        <description>&lt;p&gt;A few days ago I encountered a strange behavior of Bundler so this post notes
+down how my experience with it was.&lt;/p&gt;
+
+&lt;h3 id=&quot;whats-up&quot;&gt;What’s up?&lt;/h3&gt;
+
+&lt;p&gt;We know what &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundler&lt;/code&gt; provides &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle.require&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle.setup&lt;/code&gt; to deal with
+dependencies grouping/requiring in our project. With &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle.setup&lt;/code&gt; we can explicitly
+specify which gem groups we want to add to &lt;code class=&quot;highlighter-rouge&quot;&gt;$LOAD_PATH&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Says we have an Gemfile&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;rack&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sinatra&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;puma&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;group: :production&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;As the API tells, we can make only “development” gems available for requiring.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# config.ru&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'bundler'&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;Bundler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;setup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:default&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:development&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'sinatra/base'&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyApp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Sinatra&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;MyApp&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then boot up the server with &lt;code class=&quot;highlighter-rouge&quot;&gt;bundle exec&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle install
+bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;rackup
+
+&lt;span class=&quot;c&quot;&gt;# Puma starting in single mode...&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# * Version 3.8.2 (ruby 2.2.2-p95), codename: Sassy Salamander&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# * Min threads: 0, max threads: 16&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# * Environment: development&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# * Listening on tcp://localhost:9292&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Use Ctrl-C to stop&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;KABOOM 💥! Puma is booted! Why?&lt;/p&gt;
+
+&lt;h3 id=&quot;what-happened&quot;&gt;What happened?&lt;/h3&gt;
+
+&lt;h4 id=&quot;rack&quot;&gt;Rack&lt;/h4&gt;
+
+&lt;p&gt;By default Rack will boot WEBrick if there’s no server found. But it will detect
+for a more powerful server like Puma or Thin and if there is one, Rack will prioritize to
+load that instead.&lt;/p&gt;
+
+&lt;h4 id=&quot;bundler&quot;&gt;Bundler&lt;/h4&gt;
+
+&lt;p&gt;But isn’t Puma un-requireable? Haven’t we grouped that server to only appear on
+&lt;code class=&quot;highlighter-rouge&quot;&gt;production&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundler.setup&lt;/code&gt; should have their job done well?&lt;/p&gt;
+
+&lt;p&gt;The tickle of curiosity drove me to look through the code of &lt;code class=&quot;highlighter-rouge&quot;&gt;bundle exec&lt;/code&gt;. It
+turned out in &lt;a href=&quot;https://github.com/bundler/bundler/blob/909979271a0c2fe0d59f6fc8c4f5a630e597f1ac/lib/bundler/cli/exec.rb#L71&quot;&gt;this line of code&lt;/a&gt;,
+&lt;strong&gt;Bundler tries to setup and brings everything we have in &lt;code class=&quot;highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt; into &lt;code class=&quot;highlighter-rouge&quot;&gt;$LOAD_PATH&lt;/code&gt;.&lt;/strong&gt;
+This part of code is executed way in prior to our &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundler.setup&lt;/code&gt; and once a &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundler.setup&lt;/code&gt;
+is called, all latter ones are void (see my PR below).&lt;/p&gt;
+
+&lt;p&gt;That’s why &lt;code class=&quot;highlighter-rouge&quot;&gt;Rack&lt;/code&gt; could see &lt;code class=&quot;highlighter-rouge&quot;&gt;Puma&lt;/code&gt; and therefor booted the server up.
+Additionally, we can require any gem we have in &lt;code class=&quot;highlighter-rouge&quot;&gt;config.ru&lt;/code&gt; despite of its group
+specified in &lt;code class=&quot;highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;I actually created &lt;a href=&quot;https://github.com/bundler/bundler/issues/5661&quot;&gt;an issue on Bundler’s Github&lt;/a&gt;
+and also &lt;a href=&quot;https://github.com/bundler/bundler/pull/5659&quot;&gt;a pull request&lt;/a&gt; to clarify it.
+Interestingly &lt;a href=&quot;https://github.com/segiddins&quot;&gt;@segiddins&lt;/a&gt;, the repo owner, advised the behavior
+that strange to me (and some people I assume) is sort of … intentional.&lt;/p&gt;
+
+&lt;h3 id=&quot;so-what&quot;&gt;So what?&lt;/h3&gt;
+
+&lt;p&gt;What’d be the possible solution for this case?&lt;/p&gt;
+
+&lt;h4 id=&quot;bundle-config-without&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;bundle config without&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;Never run &lt;code class=&quot;highlighter-rouge&quot;&gt;bundle install&lt;/code&gt; alone, run it with &lt;code class=&quot;highlighter-rouge&quot;&gt;--with&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle install --without production
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;With this option &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundler&lt;/code&gt; will not download the gems in production group.
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Bundler&lt;/code&gt; is smart enough to remember our config and use it for future calls.&lt;/p&gt;
+
+&lt;h4 id=&quot;build-your-own-bundle-exec&quot;&gt;Build your own &lt;code class=&quot;highlighter-rouge&quot;&gt;bundle exec&lt;/code&gt;&lt;/h4&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# bin/bundle-exec&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;rubygems&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;bundler&quot;&lt;/span&gt;
+
+&lt;span class=&quot;no&quot;&gt;Bundle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;setup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:default&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;RACK_ENV&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;development&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_sym&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;use-bundlerreset&quot;&gt;Use &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundler.reset!&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;After digging &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundler&lt;/code&gt;’s codebase here and there, I realize that we can use
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle.reset!&lt;/code&gt; to reset everything, then use &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle.setup&lt;/code&gt; to set up again.&lt;/p&gt;
+
+&lt;p&gt;This doesn’t solve the &lt;code class=&quot;highlighter-rouge&quot;&gt;Puma&lt;/code&gt; problem we have above but at least from our &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle.setup&lt;/code&gt; on,
+there will no gem from other groups can be required.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# config.ru&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;rubygems&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;bundler&quot;&lt;/span&gt;
+
+&lt;span class=&quot;no&quot;&gt;Bundle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;reset!&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;Bundle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;setup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:default&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:development&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Anyway, &lt;strong&gt;this method is untested&lt;/strong&gt;, in fact I never try using or testify it.
+Use it at your own risk, I take no responsible for it.&lt;/p&gt;
+
+&lt;h3 id=&quot;whats-next&quot;&gt;What’s next?&lt;/h3&gt;
+
+&lt;p&gt;Personally I think this behavior of Bundler might cause some false positives.
+What if we accidentally loaded up some gem that’s merely for development or test?
+What if that gem was … &lt;code class=&quot;highlighter-rouge&quot;&gt;DatabaseCleaner&lt;/code&gt; 😱🙀😱🙀😱🙀?&lt;/p&gt;
+
+&lt;p&gt;Also there’s no option in &lt;code class=&quot;highlighter-rouge&quot;&gt;bundle exec&lt;/code&gt; for us to specify the group either.&lt;/p&gt;
+
+&lt;p&gt;So sorry for nagging but once more.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Never ever run &lt;code class=&quot;highlighter-rouge&quot;&gt;bundle install&lt;/code&gt; alone, use it with &lt;code class=&quot;highlighter-rouge&quot;&gt;--without&lt;/code&gt;!&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+        <pubDate>Sun, 26 Mar 2017 00:00:00 +0100</pubDate>
+        <link>https://hqc.io/2017/03/26/bundler-gotchas.html</link>
+        <guid isPermaLink="true">https://hqc.io/2017/03/26/bundler-gotchas.html</guid>
+        
+        <category>ruby</category>
+        
+        <category>bundler</category>
+        
+        
+      </item>
     
       <item>
         <title>Why constant mocking is a bad idea?</title>
@@ -726,82 +875,6 @@ bundle install --path vendor/gems --retry 3
         <pubDate>Wed, 04 May 2016 00:00:00 +0200</pubDate>
         <link>https://hqc.io/2016/05/04/you-dont-need-rvm-gemset.html</link>
         <guid isPermaLink="true">https://hqc.io/2016/05/04/you-dont-need-rvm-gemset.html</guid>
-        
-        <category>ruby</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Using Factory Girl with Hanami model</title>
-        <description>&lt;p&gt;Hanami is one of the most popular and trending Ruby frameworks today, well-known for its clean architecture and testability. In this post we are going to explore how we can use Hanami Model with Factory for fast testing data generation.&lt;/p&gt;
-
-&lt;h1 id=&quot;data-persistence-in-hanami&quot;&gt;Data Persistence in Hanami&lt;/h1&gt;
-
-&lt;p&gt;Model is one of the best features of Hanami, with the separation of Entity and Repository, following the architecture of Domain Driven Design. Entity holds the domain logic, whilst Repository is responsible for persistence.&lt;/p&gt;
-
-&lt;p&gt;Here is the code example to persist data with Hanami Model.&lt;/p&gt;
-
-&lt;div class=&quot;language-rb highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Book&lt;/span&gt;
-  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Hanami&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Entity&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;attribute&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:author&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BookRepository&lt;/span&gt;
-  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Hanami&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Repository&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# And to persist&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;book&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Book&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;title: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Ruby Under a Microscope'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;author: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Pat Shaughnessy'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;span class=&quot;no&quot;&gt;BookRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;book&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h1 id=&quot;using-factory-girl-for-test-data-production&quot;&gt;Using Factory Girl for test data production&lt;/h1&gt;
-
-&lt;p&gt;Factory Girl has been widely adopted for testing data production by the Ruby on Rails community, but it could be used in PORO way. So let’s see how we can integrate Factory Girl in our Hanami application for testing.&lt;/p&gt;
-
-&lt;p&gt;Generally here is how you generate data with Factory Girl in RSpec.&lt;/p&gt;
-
-&lt;div class=&quot;language-rb highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;no&quot;&gt;FactoryGirl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:book&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'The sample book'&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'John Cena'&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Book&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'does something'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;book&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:book&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;By default, Factory Girl will call the &lt;code class=&quot;highlighter-rouge&quot;&gt;#save!&lt;/code&gt; method of the instance. But in Hanami we use Repository to persist data, as mentioned above.&lt;/p&gt;
-
-&lt;p&gt;But Factory Girl already got you covered.&lt;/p&gt;
-
-&lt;div class=&quot;language-rb highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;no&quot;&gt;FactoryGirl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:book&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'The sample book'&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'John Cena'&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;# Add your custom method here to persist object&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;to_create&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;BookRepository&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;That’s it! Enjoy coding!&lt;/p&gt;
-
-</description>
-        <pubDate>Tue, 12 Apr 2016 00:00:00 +0200</pubDate>
-        <link>https://hqc.io/2016/04/12/factory-girl-with-hanami.html</link>
-        <guid isPermaLink="true">https://hqc.io/2016/04/12/factory-girl-with-hanami.html</guid>
-        
-        <category>testing</category>
         
         <category>ruby</category>
         
