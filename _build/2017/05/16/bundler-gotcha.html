@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>hqc.io | Bundler Gotcha</title>
+  <meta name="og:title" content="hqc.io | Bundler Gotcha" >
+
+  <meta name="og:site_name" content="Cẩm Huỳnh">
+
+  
+  <meta name="description" content="Bundler strange behavior that might trap you up" >
+  
+
+  <meta name="author" content="Cẩm Huỳnh" >
+  <meta name="og:url" content="https://hqc.io/2017/05/16/bundler-gotcha.html" >
+  <meta name="og:type" content="article" >
+
+  
+  <meta name="og:image" content="https://c3.staticflickr.com/9/8583/28318985330_8f464b5a12_b.jpg" >
+  
+
+  <meta name="og:locale" content="en_US" >
+
+  <meta name="keywords" content="ruby,bundler" >
+  <meta name="language" content="en_US" >
+  <meta name="url" content="https://hqc.io/2017/05/16/bundler-gotcha.html" >
+
+  <link rel="canonical" href="https://hqc.io/2017/05/16/bundler-gotcha.html" >
+  <link rel="alternate" type="application/rss+xml" title="hqc.io" href="https://hqc.io/feed.xml" >
+
+  <link rel="stylesheet" href="/assets/css/main.css" >
+</head>
+
+  <body>
+    <header class="header">
+  <div class="header-content">
+    <div class="brand">
+      <a href="/">hqc.io</a>
+    </div>
+  </div>
+</header>
+
+    <div class="site">
+      <div class="site__content">
+        <article class="post post--detail">
+  <header class="post__header">
+    <h1 class="page-heading post__title" itemprop="name headline">Bundler Gotcha</h1>
+    <p class="post__metadata">
+      Published on <time datetime="2017-05-16T00:00:00+02:00" itemprop="datePublished">May 16, 2017</time>
+      
+      <span>
+        by
+        <i class="fa fa-user"></i>
+        <span itemprop="name">Cẩm Huỳnh</span>
+      </span>
+      
+    </p>
+    <p>
+      <span class="tagging">
+        
+          <a href="/tags/ruby" class="tagging__item">
+            #ruby
+          </a>
+        
+          <a href="/tags/bundler" class="tagging__item">
+            #bundler
+          </a>
+        
+      </span>
+    </p>
+  </header>
+  <div class="post__content">
+    <p>A few days ago I encountered a strange behavior of Bundler so this post notes
+down how my experience with it was.</p>
+
+<h3 id="whats-up">What’s up?</h3>
+
+<p>We know what <code class="highlighter-rouge">Bundler</code> provides <code class="highlighter-rouge">Bundle.require</code> and <code class="highlighter-rouge">Bundle.setup</code> to deal with
+dependencies grouping/requiring in our project. With <code class="highlighter-rouge">Bundle.setup</code> we can explicitly
+specify which gem groups we want to add to <code class="highlighter-rouge">$LOAD_PATH</code>.</p>
+
+<p>Says we have an Gemfile</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="n">gem</span> <span class="s2">"rack"</span>
+<span class="n">gem</span> <span class="s2">"sinatra"</span>
+<span class="n">gem</span> <span class="s2">"puma"</span><span class="p">,</span> <span class="ss">group: :production</span>
+</code></pre>
+</div>
+
+<p>As the API tells, we can make only “development” gems available for requiring.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="c1"># config.ru</span>
+
+<span class="nb">require</span> <span class="s1">'bundler'</span>
+<span class="no">Bundler</span><span class="p">.</span><span class="nf">setup</span><span class="p">(</span><span class="ss">:default</span><span class="p">,</span> <span class="ss">:development</span><span class="p">)</span>
+
+<span class="nb">require</span> <span class="s1">'sinatra/base'</span>
+<span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="o">::</span><span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span><span class="p">;</span> <span class="k">end</span>
+
+<span class="n">run</span> <span class="no">MyApp</span>
+</code></pre>
+</div>
+
+<p>Then boot up the server with <code class="highlighter-rouge">bundle exec</code></p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>bundle install
+bundle <span class="nb">exec </span>rackup
+
+<span class="c"># Puma starting in single mode...</span>
+<span class="c"># * Version 3.8.2 (ruby 2.2.2-p95), codename: Sassy Salamander</span>
+<span class="c"># * Min threads: 0, max threads: 16</span>
+<span class="c"># * Environment: development</span>
+<span class="c"># * Listening on tcp://localhost:9292</span>
+<span class="c"># Use Ctrl-C to stop</span>
+</code></pre>
+</div>
+
+<p>KABOOM 💥! Puma is booted! Why?</p>
+
+<h3 id="what-happened">What happened?</h3>
+
+<h4 id="rack">Rack</h4>
+
+<p>By default Rack will boot WEBrick if there’s no server found. But it will detect
+for a more powerful server like Puma or Thin and if there is one, Rack will prioritize to
+load that instead.</p>
+
+<h4 id="bundler">Bundler</h4>
+
+<p>But isn’t Puma un-requireable? Haven’t we grouped that server to only appear on
+<code class="highlighter-rouge">production</code> and <code class="highlighter-rouge">Bundler.setup</code> should have their job done well?</p>
+
+<p>The tickle of curiosity drove me to look through the code of <code class="highlighter-rouge">bundle exec</code>. It
+turned out in <a href="https://github.com/bundler/bundler/blob/909979271a0c2fe0d59f6fc8c4f5a630e597f1ac/lib/bundler/cli/exec.rb#L71">this line of code</a>,
+<strong>Bundler tries to setup and brings everything we have in <code class="highlighter-rouge">Gemfile</code> into <code class="highlighter-rouge">$LOAD_PATH</code>.</strong>
+This part of code is executed way in prior to our <code class="highlighter-rouge">Bundler.setup</code> and once a <code class="highlighter-rouge">Bundler.setup</code>
+is called, all latter ones are void (see my PR below).</p>
+
+<p>That’s why <code class="highlighter-rouge">Rack</code> could see <code class="highlighter-rouge">Puma</code> and therefor booted the server up.
+Additionally, we can require any gem we have in <code class="highlighter-rouge">config.ru</code> despite of its group
+specified in <code class="highlighter-rouge">Gemfile</code>.</p>
+
+<p>I actually created <a href="https://github.com/bundler/bundler/issues/5661">an issue on Bundler’s Github</a>
+and also <a href="https://github.com/bundler/bundler/pull/5659">a pull request</a> to clarify it.
+Interestingly <a href="https://github.com/segiddins">@segiddins</a>, the repo owner, advised the behavior
+that strange to me (and some people I assume) is sort of … intentional.</p>
+
+<h3 id="so-what">So what?</h3>
+
+<p>What’d be the possible solution for this case?</p>
+
+<h4 id="bundle-config-without"><code class="highlighter-rouge">bundle config without</code></h4>
+
+<p>Never run <code class="highlighter-rouge">bundle install</code> alone, run it with <code class="highlighter-rouge">--with</code></p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>bundle install --without production
+</code></pre>
+</div>
+
+<p>With this option <code class="highlighter-rouge">Bundler</code> will not download the gems in production group.
+<code class="highlighter-rouge">Bundler</code> is smart enough to remember our config and use it for future calls.</p>
+
+<h4 id="build-your-own-bundle-exec">Build your own <code class="highlighter-rouge">bundle exec</code></h4>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="c1"># bin/bundle-exec</span>
+
+<span class="nb">require</span> <span class="s2">"rubygems"</span>
+<span class="nb">require</span> <span class="s2">"bundler"</span>
+
+<span class="no">Bundle</span><span class="p">.</span><span class="nf">setup</span><span class="p">(</span><span class="ss">:default</span><span class="p">,</span> <span class="no">ENV</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="s2">"RACK_ENV"</span><span class="p">,</span> <span class="s2">"development"</span><span class="p">).</span><span class="nf">to_sym</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h4 id="use-bundlerreset">Use <code class="highlighter-rouge">Bundler.reset!</code></h4>
+
+<p>After digging <code class="highlighter-rouge">Bundler</code>’s codebase here and there, I realize that we can use
+<code class="highlighter-rouge">Bundle.reset!</code> to reset everything, then use <code class="highlighter-rouge">Bundle.setup</code> to set up again.</p>
+
+<p>This doesn’t solve the <code class="highlighter-rouge">Puma</code> problem we have above but at least from our <code class="highlighter-rouge">Bundle.setup</code> on,
+there will no gem from other groups can be required.</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="c1"># config.ru</span>
+
+<span class="nb">require</span> <span class="s2">"rubygems"</span>
+<span class="nb">require</span> <span class="s2">"bundler"</span>
+
+<span class="no">Bundle</span><span class="p">.</span><span class="nf">reset!</span>
+<span class="no">Bundle</span><span class="p">.</span><span class="nf">setup</span><span class="p">(</span><span class="ss">:default</span><span class="p">,</span> <span class="ss">:development</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Anyway, <strong>this method is untested</strong>, in fact I never try using or testify it.
+Use it at your own risk, I take no responsible for it.</p>
+
+<h3 id="whats-next">What’s next?</h3>
+
+<p>Personally I think this behavior of Bundler might cause some false positives.
+What if we accidentally loaded up some gem that’s merely for development or test?
+What if that gem was … <code class="highlighter-rouge">DatabaseCleaner</code> 😱🙀😱🙀😱🙀?</p>
+
+<p>Also there’s no option in <code class="highlighter-rouge">bundle exec</code> for us to specify the group either.</p>
+
+<p>So sorry for nagging but once more.</p>
+
+<blockquote>
+  <p>Never ever run <code class="highlighter-rouge">bundle install</code> alone, use it with <code class="highlighter-rouge">--without</code>!</p>
+</blockquote>
+
+  </div>
+  
+    <div id="disqus_thread"></div>
+<script>
+  /**
+   * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+   * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+   */
+/*
+ var disqus_config = function () {
+ this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+ this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+ };
+ */
+(function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+
+  s.src = '//huynhquancam.disqus.com/embed.js';
+
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  
+</article>
+
+      </div>
+    </div>
+
+    <footer>
+  <ul class="pages">
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <li>
+      <a href="/about">About</a>
+    </li>
+    <li>
+      <a href="https://github.com/qcam?tab=repositories">Projects</a>
+    </li>
+    <li>
+      <a href="/essays">Posts</a>
+    </li>
+    <li>
+      <a href="/friends">Friends</a>
+    </li>
+    <li>
+      <a href="/rbcv">Resume</a>
+    </li>
+  </ul>
+</footer>
+
+  </body>
+</html>

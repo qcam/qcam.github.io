@@ -1,7 +1,7 @@
 ---
 layout: "post"
 title: Bundler Gotcha
-date: 2017-03-26
+date: 2017-05-16
 description: Bundler strange behavior that might trap you up
 keywords:
   - ruby
