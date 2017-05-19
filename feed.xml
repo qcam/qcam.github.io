@@ -6,9 +6,21 @@
 </description>
     <link>https://hqc.io/</link>
     <atom:link href="https://hqc.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 19 May 2017 16:48:57 +0200</pubDate>
-    <lastBuildDate>Fri, 19 May 2017 16:48:57 +0200</lastBuildDate>
+    <pubDate>Fri, 19 May 2017 21:51:49 +0200</pubDate>
+    <lastBuildDate>Fri, 19 May 2017 21:51:49 +0200</lastBuildDate>
     <generator>Jekyll v3.4.2</generator>
+    
+      <item>
+        <title>FC Barcelona - Villarreal</title>
+        <description>FC Barcelona - Villarreal 2016/2017</description>
+        <pubDate>Fri, 19 May 2017 00:00:00 +0200</pubDate>
+        <link>https://hqc.io/2017/05/19/fc-barcelona-villarreal.html</link>
+        <guid isPermaLink="true">https://hqc.io/2017/05/19/fc-barcelona-villarreal.html</guid>
+        
+        <category>football</category>
+        
+        
+      </item>
     
       <item>
         <title>Bundler Gotcha</title>
