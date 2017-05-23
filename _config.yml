@@ -3,8 +3,7 @@ site_name: "Cẩm Huỳnh"
 email: "huynhquancam@gmail.com"
 author: "Cẩm Huỳnh"
 description: >
-  Cẩm Huỳnh is a Chelsea fan and full-stack developer with four-year experience working in web development field. He is currently based in Sai Gon, Vietnam.
-  He loves reading books, playing soccer, listening to C-pop (he idolizes Jay Chou). Contact him at: huynhquancam at gmail dot com
+  Cẩm Huỳnh's personal website and random writings about programming, web development, and other stuff that interests his life.
 
 # Serve settings
 baseurl: ""
@@ -43,6 +42,7 @@ defaults:
 # Extra settings
 extras:
   handler:
-    global: huynhquancam
+    global: qcam
     github: qcam
-    twitter: hqcam
+    twitter: __qcam
+    reddit: qqcam
